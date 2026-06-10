@@ -1,0 +1,25 @@
+# Python environment and bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+jarvis-env/
+
+# Local memory and database files
+jarvis_memory/
+*.db
+*.sqlite
+*.sqlite3
+
+# ChromaDB persistence artifacts
+chroma_db/
+*.parquet
+*.pkl
+*.jsonl
+
+# API keys
+config/api_keys.json
+
+.env

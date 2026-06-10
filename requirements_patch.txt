@@ -1,0 +1,7 @@
+chromadb
+sentence-transformers
+
+# Playwright Stealth Deep Scraper for web_search.py
+playwright-stealth
+playwright
+requests

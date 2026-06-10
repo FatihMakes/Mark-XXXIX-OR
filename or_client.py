@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import time
 import base64
@@ -11,6 +12,15 @@ import requests
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("openrouter_client")
 
+# Try to load .env configuration
+try:
+    from dotenv import load_dotenv
+    load_dotenv()  # Load from project root
+    HAS_DOTENV = True
+except ImportError:
+    HAS_DOTENV = False
+
+
 def _get_base_dir() -> Path:
     if getattr(sys, "frozen", False):
         return Path(sys.executable).parent
@@ -20,7 +30,35 @@ def _get_base_dir() -> Path:
 BASE_DIR     = _get_base_dir()
 API_KEY_PATH = BASE_DIR / "config" / "api_keys.json"
 
+
+def _get_env_api_key(key_name: str) -> str | None:
+    """
+    Load API key from environment variable with fallback to JSON config.
+    Prioritizes .env file, then os.environ, then api_keys.json.
+    """
+    # First try environment variable (from .env or system)
+    value = os.getenv(key_name)
+    if value:
+        return value
+
+    # Fallback to JSON config if .env not available
+    if API_KEY_PATH.exists():
+        try:
+            data = json.loads(API_KEY_PATH.read_text(encoding="utf-8"))
+            return data.get(key_name.lower(), "")
+        except Exception as exc:
+            logger.warning(f"[OpenRouter] Failed to load API key from JSON: {exc}")
+    return None
+
+
 def _load_api_key() -> str:
+    """Load OpenRouter API key from environment or JSON config."""
+    # First try environment variable
+    key = _get_env_api_key("OPENROUTER_API_KEY")
+    if key:
+        return key
+
+    # Fallback to JSON config
     try:
         with open(API_KEY_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)

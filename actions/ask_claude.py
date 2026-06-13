@@ -15,7 +15,32 @@ from pathlib import Path
 from actions.project_resolver import resolve
 
 _SESSIONS_FILE = Path(__file__).resolve().parent.parent / "memory" / "claude_sessions.json"
-_DEFAULT_TIMEOUT = 300  # seconds; raise once Copilot builds are wired in (Phase 3)
+_DEFAULT_TIMEOUT = 600  # seconds; builds (Copilot + tests) can take a few minutes
+
+
+def _orchestration_prompt(project_dir: Path) -> str:
+    return (
+        "You are the architect half of a voice-driven dev loop. The user speaks to a "
+        "voice assistant (Jarvis), which relays their request to you here in the terminal. "
+        f"You are working ONLY inside: {project_dir}\n\n"
+        "Roles & rules:\n"
+        "- The user makes the top-level / architecture decisions; you turn them into action.\n"
+        "- QUESTION or BRIEFING (e.g. 'what's the next phase', 'explain X'): just answer. "
+        "Do NOT change code.\n"
+        "- BUILD request (e.g. 'build X', 'implement Y'): do NOT write the bulk code yourself. "
+        "Instead:\n"
+        "  1. Decide the framework-level approach (architecture + tests); leave small "
+        "implementation choices to Copilot.\n"
+        "  2. Hand the actual coding to Copilot with a precise prompt:\n"
+        f'     copilot -p "<your detailed prompt>" --allow-all-tools --add-dir "{project_dir}"\n'
+        "  3. After Copilot writes the code, YOU run the tests and review the diff (git diff).\n"
+        "  4. Commit on a NEW branch. NEVER commit to main. NEVER push. NEVER merge.\n"
+        "  5. Report: what was built, test results, your verdict.\n"
+        "- Boundary: never touch anything outside the project directory above.\n"
+        "- The user pushes and merges themselves — you never do.\n\n"
+        "Every reply is read aloud by a voice assistant: keep it SHORT, plain English, "
+        "a few sentences, no code dumps."
+    )
 
 
 def _claude_bin() -> str:
@@ -86,6 +111,7 @@ def ask_claude(
         "--output-format", "json",
         "--permission-mode", "bypassPermissions",
         "--add-dir", str(project_dir),
+        "--append-system-prompt", _orchestration_prompt(project_dir),
     ]
     if sid and not new_session:
         cmd += ["--resume", sid]

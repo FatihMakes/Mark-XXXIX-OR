@@ -137,30 +137,35 @@ def update_memory(memory_update: dict) -> dict:
     return memory
 
 
+# Local signals that a turn might hold a personal fact worth saving.
+# Cheap heuristic gate so we DON'T spend an LLM call on every single utterance —
+# the costly extract_memory() pass only runs when one of these appears.
+_MEMORY_SIGNALS = (
+    "my name", "call me", "i am ", "i'm ", "i was born", "my birthday",
+    "i live", "i'm from", "i am from", "my number", "my email",
+    "i like", "i love", "i prefer", "i hate", "i don't like",
+    "favorite", "favourite",
+    "i work", "my job", "i study", "my school", "my project",
+    "i'm working on", "i am working on", "i have a", "i've got",
+    "i want to", "i'd like to", "i plan to", "remind me", "remember that",
+    "my brother", "my sister", "my mom", "my mother", "my dad", "my father",
+    "my wife", "my husband", "my girlfriend", "my boyfriend", "my friend",
+    "my partner", "my son", "my daughter", "my dog", "my cat",
+)
+
+
 def should_extract_memory(user_text: str, jarvis_text: str, api_key: str = "") -> bool:
-    try:
-        from or_client import client
+    """Local heuristic gate — no network call.
 
-        combined = f"User: {user_text[:300]}\nJarvis: {jarvis_text[:1000]}"
-
-        result = client.chat(
-            f"Does this conversation contain ANY of the following?\n"
-            f"- Personal facts (name, age, city, job, birthday, nationality)\n"
-            f"- Preferences or favorites (food, color, music, sport, game, film, book, etc.)\n"
-            f"- Active projects or goals the user is working on\n"
-            f"- People in the user's life (friends, family, partner, colleagues)\n"
-            f"- Things the user wants to do or buy in the future\n"
-            f"- Any other fact worth remembering long-term\n\n"
-            f"Reply only YES or NO.\n\nConversation:\n{combined}",
-            system="You are a memory relevance checker. Reply only YES or NO.",
-            max_tokens=5,
-            temperature=0.0,
-        )
-        return "YES" in result.upper()
-
-    except Exception as e:
-        print(f"[Memory] ⚠️ Stage1 check failed: {e}")
+    Returns True only when the user's text shows a plausible personal-fact
+    signal, so the (LLM-backed) extract_memory() runs rarely instead of on
+    every transcribed fragment. English-centric; extend _MEMORY_SIGNALS for
+    other languages as needed.
+    """
+    text = (user_text or "").lower()
+    if len(text) < 8:
         return False
+    return any(sig in text for sig in _MEMORY_SIGNALS)
 
 
 def extract_memory(user_text: str, jarvis_text: str, api_key: str = "") -> dict:

@@ -5,6 +5,13 @@ import sys
 import traceback
 from pathlib import Path
 
+# Ensure console can print emoji/Unicode on Windows (cp1252 consoles otherwise crash).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+
 import sounddevice as sd
 from google import genai
 from google.genai import types
@@ -28,6 +35,7 @@ from actions.browser_control   import browser_control
 from actions.file_controller   import file_controller
 from actions.code_helper       import code_helper
 from actions.dev_agent         import dev_agent
+from actions.ask_claude        import ask_claude
 from actions.web_search        import web_search as web_search_action
 from actions.computer_control  import computer_control
 from actions.game_updater      import game_updater
@@ -297,6 +305,26 @@ TOOL_DECLARATIONS = [
                 "timeout":      {"type": "INTEGER", "description": "Run timeout in seconds (default: 30)"},
             },
             "required": ["description"]
+        }
+    },
+    {
+        "name": "ask_claude",
+        "description": (
+            "Ask Claude — the architect running in the terminal — about the current project. "
+            "Use for briefings, design decisions, planning the next phase, reviewing, or building "
+            "features (Claude briefs Copilot to write the code). Works on whichever project is open "
+            "in VS Code unless a project is named. Examples: 'ask Claude what the next phase is', "
+            "'have Claude design the login flow', 'ask Claude to build phase 4'. "
+            "Conversation is remembered across turns."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "request":     {"type": "STRING", "description": "What to ask Claude — the user's question or instruction"},
+                "project":     {"type": "STRING", "description": "Optional project-name override; omit to auto-follow the open VS Code folder"},
+                "new_session": {"type": "BOOLEAN", "description": "True to start a fresh conversation instead of continuing the last one"},
+            },
+            "required": ["request"]
         }
     },
     {
@@ -660,6 +688,10 @@ class JarvisLive:
             elif name == "dev_agent":
                 r = await loop.run_in_executor(None, lambda: dev_agent(parameters=args, player=self.ui, speak=self.speak))
                 result = r or "Done."
+
+            elif name == "ask_claude":
+                r = await loop.run_in_executor(None, lambda: ask_claude(parameters=args, player=self.ui, speak=self.speak))
+                result = r or "Claude returned nothing, sir."
 
             elif name == "agent_task":
                 from agent.task_queue import get_queue, TaskPriority

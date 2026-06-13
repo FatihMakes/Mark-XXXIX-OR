@@ -1,0 +1,26 @@
+# Secrets — never commit real API keys
+config/api_keys.json
+
+# Runtime state (per-machine, not code)
+memory/claude_sessions.json
+memory/current_project.json
+memory/long_term.json
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -2,7 +2,14 @@ import asyncio
 import threading
 import json
 import sys
+if sys.platform.startswith("win"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except AttributeError:
+        pass
 import traceback
+import time
 from pathlib import Path
 
 import sounddevice as sd
@@ -11,7 +18,7 @@ from google.genai import types
 from ui import JarvisUI
 from memory.memory_manager import (
     load_memory, update_memory, format_memory_for_prompt,
-    should_extract_memory, extract_memory
+    should_extract_memory, extract_memory, save_chat_history
 )
 
 from actions.file_processor import file_processor
@@ -31,6 +38,8 @@ from actions.dev_agent         import dev_agent
 from actions.web_search        import web_search as web_search_action
 from actions.computer_control  import computer_control
 from actions.game_updater      import game_updater
+from actions.cmd_control       import cmd_control
+from actions.world_monitor      import world_monitor
 
 
 def get_base_dir():
@@ -42,11 +51,14 @@ def get_base_dir():
 BASE_DIR        = get_base_dir()
 API_CONFIG_PATH = BASE_DIR / "config" / "api_keys.json"
 PROMPT_PATH     = BASE_DIR / "core" / "prompt.txt"
-LIVE_MODEL          = "models/gemini-2.5-flash-native-audio-preview-12-2025"
+LIVE_MODEL          = "models/gemini-2.5-flash-native-audio-latest"
 CHANNELS            = 1
 SEND_SAMPLE_RATE    = 16000
 RECEIVE_SAMPLE_RATE = 24000
 CHUNK_SIZE          = 1024
+
+force_offline = False
+last_offline_time = 0.0
 
 
 def _get_api_key() -> str:
@@ -83,10 +95,10 @@ def _update_memory_async(user_text: str, jarvis_text: str) -> None:
         data = extract_memory(user_text, jarvis_text, api_key)
         if data:
             update_memory(data)
-            print(f"[Memory] ✅ {list(data.keys())}")
+            print(f"[Memory] [Success] {list(data.keys())}")
     except Exception as e:
         if "429" not in str(e):
-            print(f"[Memory] ⚠️ {e}")
+            print(f"[Memory] [Warning] {e}")
 
 TOOL_DECLARATIONS = [
     {
@@ -119,6 +131,29 @@ TOOL_DECLARATIONS = [
                 "aspect": {"type": "STRING", "description": "price | specs | reviews"}
             },
             "required": ["query"]
+        }
+    },
+    {
+        "name": "world_monitor",
+        "description": (
+            "Real-time global intelligence brief from 60+ curated live news feeds "
+            "(geopolitics, regions, finance, defense). Use whenever the user asks what's "
+            "happening in the world / a region, latest news, world situation, market or "
+            "defense developments, or to update the World Monitor dashboard."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "category": {
+                    "type": "STRING",
+                    "description": "One of: world, us, europe, middleeast, asia, africa, latam, tech, ai, finance, energy, defense, crisis. Default 'world'."
+                },
+                "brief": {
+                    "type": "BOOLEAN",
+                    "description": "True (default) = spoken AI-synthesized brief. False = raw headline list."
+                }
+            },
+            "required": []
         }
     },
     {
@@ -489,7 +524,95 @@ TOOL_DECLARATIONS = [
             "required": ["category", "key", "value"]
         }
     },
+    {
+        "name": "cmd_control",
+        "description": (
+            "Executes commands in CMD or PowerShell on the Windows system. "
+            "Use this for: running git pull/clone, pip/npm installs, running custom python/node scripts, "
+            "running batch files, managing files, checking process states, or any system execution."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "command": {
+                    "type": "STRING",
+                    "description": "The command line string to run."
+                }
+            },
+            "required": ["command"]
+        }
+    },
+    {
+        "name": "moltbot_control",
+        "description": "Controls moltbot: query health, open control center dashboard, or run onboarding daemon.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "action": {
+                    "type": "STRING",
+                    "description": "health | dashboard | onboard"
+                }
+            },
+            "required": ["action"]
+        }
+    },
+    {
+        "name": "self_training",
+        "description": "Trains J.A.R.V.I.S. by reading past chat history from MongoDB, extracting your profile, habits, preferences, and corrections, and saving them to long term memory registry.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "limit": {
+                    "type": "INTEGER",
+                    "description": "Number of recent chat logs to analyze (default is 100)."
+                }
+            }
+        }
+    },
+    {
+        "name": "github_updater",
+        "description": "Clones a specified GitHub repository to a scratch folder, studies its documentation and python scripts, and writes a features study report artifact so J.A.R.V.I.S. can write actions to update himself.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "repo_url": {
+                    "type": "STRING",
+                    "description": "The URL of the GitHub repository to study and update from (e.g. https://github.com/username/repo)."
+                }
+            },
+            "required": ["repo_url"]
+        }
+    },
+    {
+        "name": "self_upgrade",
+        "description": (
+            "Build a NEW skill/capability for yourself. Given a capability description "
+            "(and optionally a GitHub repo URL for reference), you generate a new Python "
+            "skill, it is compile-checked and installed, and becomes a usable tool after a "
+            "restart. Use when the user asks you to learn/add a new ability or integrate a repo."
+        ),
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "capability": {"type": "STRING", "description": "Plain description of the new ability to build."},
+                "repo_url":   {"type": "STRING", "description": "Optional GitHub repo URL to learn from."},
+                "name":       {"type": "STRING", "description": "Optional short name for the skill."}
+            },
+            "required": []
+        }
+    },
 ]
+
+# --- Dynamic self-extending skills: auto-load anything in skills/ as a tool ---
+try:
+    from skills.loader import load_skills
+    _SKILL_DECLS, _SKILL_DISPATCH = load_skills()
+    if _SKILL_DECLS:
+        TOOL_DECLARATIONS.extend(_SKILL_DECLS)
+    print(f"[Skills] Loaded {len(_SKILL_DISPATCH)} dynamic skill(s): {list(_SKILL_DISPATCH)}")
+except Exception as e:
+    _SKILL_DECLS, _SKILL_DISPATCH = [], {}
+    print(f"[Skills] Loader error: {e}")
 
 
 class JarvisLive:
@@ -503,6 +626,10 @@ class JarvisLive:
         self._is_speaking   = False
         self._speaking_lock = threading.Lock()
         self.ui.on_text_command = self._on_text_command
+        self._turn_complete_received = False
+        self._session_handle = None   # for seamless session resumption across reconnects
+        self._last_speak_end = 0.0    # timestamp speech last ended (mic echo cooldown)
+        self.ECHO_COOLDOWN = 0.4      # seconds to keep mic gated after Jarvis stops talking
 
     def _on_text_command(self, text: str):
         if not self._loop or not self.session:
@@ -518,6 +645,11 @@ class JarvisLive:
     def set_speaking(self, value: bool):
         with self._speaking_lock:
             self._is_speaking = value
+            if not value:
+                # Record when speech ended so the mic can stay gated through the
+                # speaker buffer's tail (prevents Jarvis's own echo from triggering
+                # a false "interrupt" that cuts the next reply mid-sentence).
+                self._last_speak_end = time.time()
         if value:
             self.ui.set_state("SPEAKING")
         elif not self.ui.muted:
@@ -544,6 +676,8 @@ class JarvisLive:
 
         memory     = load_memory()
         mem_str    = format_memory_for_prompt(memory)
+        num_notes = len(memory.get('notes', {}))
+        self.ui.write_log(f"MEMORY: Loaded context ({num_notes} facts loaded from local DB).")
         sys_prompt = _load_system_prompt()
 
         now      = datetime.now()
@@ -565,7 +699,6 @@ class JarvisLive:
             input_audio_transcription={},
             system_instruction="\n".join(parts),
             tools=[{"function_declarations": TOOL_DECLARATIONS}],
-            session_resumption=types.SessionResumptionConfig(),
             speech_config=types.SpeechConfig(
                 voice_config=types.VoiceConfig(
                     prebuilt_voice_config=types.PrebuiltVoiceConfig(
@@ -573,21 +706,35 @@ class JarvisLive:
                     )
                 )
             ),
+            # Keep the session alive indefinitely: compress old context instead of
+            # letting the server hit its window cap and close the socket mid-sentence.
+            context_window_compression=types.ContextWindowCompressionConfig(
+                sliding_window=types.SlidingWindow()
+            ),
+            # Let us resume the SAME session after a server-side drop so the voice
+            # continues seamlessly instead of cold-restarting (the "awaz atakti hai" bug).
+            session_resumption=types.SessionResumptionConfig(handle=self._session_handle),
         )
 
     async def _execute_tool(self, fc) -> types.FunctionResponse:
         name = fc.name
         args = dict(fc.args or {})
 
-        print(f"[JARVIS] 🔧 {name}  {args}")
-        self.ui.set_state("THINKING")
+        print(f"[JARVIS] [Tool Call] {name}  {args}")
+        self.ui.set_state("EXECUTING")
+        self.ui.set_tool_state(name, "active")
+        self.ui.write_timeline(f"Tool running: {name} (Params: {json.dumps(args)})")
+        self.ui.update_intent("", f"Executing Tool: {name}")
+        
         if name == "save_memory":
             category = args.get("category", "notes")
             key      = args.get("key", "")
             value    = args.get("value", "")
             if key and value:
                 update_memory({category: {key: {"value": value}}})
-                print(f"[Memory] 💾 save_memory: {category}/{key} = {value}")
+                print(f"[Memory] [Sync] save_memory: {category}/{key} = {value}")
+                self.ui.write_log(f"MEMORY: Saved to {category}/{key} -> {value}")
+            self.ui.set_tool_state(name, "idle")
             if not self.ui.muted:
                 self.ui.set_state("LISTENING")
             return types.FunctionResponse(
@@ -597,6 +744,8 @@ class JarvisLive:
 
         loop   = asyncio.get_event_loop()
         result = "Done."
+        
+        self.ui.write_log(f"TOOL: Running '{name}' with params: {json.dumps(args)}")
 
         try:
             if name == "open_app":
@@ -683,6 +832,41 @@ class JarvisLive:
             elif name == "flight_finder":
                 r = await loop.run_in_executor(None, lambda: flight_finder(parameters=args, player=self.ui))
                 result = r or "Done."
+
+            elif name == "cmd_control":
+                r = await loop.run_in_executor(None, lambda: cmd_control(parameters=args, player=self.ui))
+                result = r or "Done."
+
+            elif name == "world_monitor":
+                r = await loop.run_in_executor(None, lambda: world_monitor(parameters=args, player=self.ui, speak=self.speak))
+                result = r or "Done."
+
+            elif name == "moltbot_control":
+                action = args.get("action", "health").lower()
+                cmd = f"clawdbot {action}"
+                r = await loop.run_in_executor(None, lambda: cmd_control(parameters={"command": cmd}, player=self.ui))
+                result = r or "Done."
+            elif name == "self_training":
+                limit = args.get("limit", 100)
+                from actions.self_training import run_self_training
+                r = await loop.run_in_executor(None, lambda: run_self_training(limit=limit))
+                result = r or "Done."
+            elif name == "github_updater":
+                repo_url = args.get("repo_url", "")
+                from actions.github_updater import run_github_updater
+                r = await loop.run_in_executor(None, lambda: run_github_updater(repo_url=repo_url))
+                result = r or "Done."
+            elif name == "self_upgrade":
+                from actions.self_upgrade import run_self_upgrade
+                r = await loop.run_in_executor(None, lambda: run_self_upgrade(
+                    capability=args.get("capability", ""),
+                    repo_url=args.get("repo_url", ""),
+                    name=args.get("name", "")))
+                result = r or "Done."
+            elif name in _SKILL_DISPATCH:
+                fn = _SKILL_DISPATCH[name]
+                r = await loop.run_in_executor(None, lambda: fn(parameters=args, player=self.ui, speak=self.speak))
+                result = r or "Done."
             elif name == "shutdown_jarvis":
                 self.ui.write_log("SYS: Shutdown requested.")
                 self.speak("Goodbye, sir.")
@@ -700,11 +884,20 @@ class JarvisLive:
             result = f"Tool '{name}' failed: {e}"
             traceback.print_exc()
             self.speak_error(name, e)
+            self.ui.set_tool_state(name, "failed")
+            self.ui.write_log(f"ERR: Tool '{name}' failed: {e}")
+            self.ui.write_timeline(f"Tool failed: {name} - {str(e)[:60]}")
+            self.ui.update_intent("", f"Failed Tool: {name}")
+        else:
+            self.ui.set_tool_state(name, "idle")
+            self.ui.write_log(f"TOOL: Finished '{name}' successfully.")
+            self.ui.write_timeline(f"Tool success: {name}")
+            self.ui.update_intent("", f"Finished Tool: {name}")
 
         if not self.ui.muted:
             self.ui.set_state("LISTENING")
 
-        print(f"[JARVIS] 📤 {name} → {str(result)[:80]}")
+        print(f"[JARVIS] [Tool Output] {name} -> {str(result)[:80]}")
 
         return types.FunctionResponse(
             id=fc.id, name=name,
@@ -717,17 +910,20 @@ class JarvisLive:
             await self.session.send_realtime_input(media=msg)
 
     async def _listen_audio(self):
-        print("[JARVIS] 🎤 Mic started")
+        print("[JARVIS] [Mic] Mic started")
         loop = asyncio.get_event_loop()
 
         def callback(indata, frames, time_info, status):
             with self._speaking_lock:
                 jarvis_speaking = self._is_speaking
-            if not jarvis_speaking and not self.ui.muted:
+            # Stay gated during speech AND for a short cooldown after, so the
+            # speaker's audio tail / room echo can't trigger a false interruption.
+            in_cooldown = (time.time() - self._last_speak_end) < self.ECHO_COOLDOWN
+            if not jarvis_speaking and not in_cooldown and not self.ui.muted:
                 data = indata.tobytes()
                 loop.call_soon_threadsafe(
                     self.out_queue.put_nowait,
-                    {"data": data, "mime_type": "audio/pcm"}
+                    {"data": data, "mime_type": "audio/pcm;rate=16000"}
                 )
 
         try:
@@ -738,26 +934,57 @@ class JarvisLive:
                 blocksize=CHUNK_SIZE,
                 callback=callback,
             ):
-                print("[JARVIS] 🎤 Mic stream open")
+                print("[JARVIS] [Mic] Mic stream open")
                 while True:
                     await asyncio.sleep(0.1)
         except Exception as e:
-            print(f"[JARVIS] ❌ Mic: {e}")
+            print(f"[JARVIS] [Error] Mic: {e}")
             raise
 
     async def _receive_audio(self):
-        print("[JARVIS] 👂 Recv started")
+        print("[JARVIS] [Receiver] Receiver started")
         out_buf, in_buf = [], []
+        thinking_started = False
 
         try:
-            while True:
-                async for response in self.session.receive():
+            async for response in self.session.receive():
 
-                    if response.data:
-                        self.audio_in_queue.put_nowait(response.data)
+                    # Save the resumption handle so a reconnect continues this same session.
+                    if getattr(response, "session_resumption_update", None):
+                        upd = response.session_resumption_update
+                        if upd.resumable and upd.new_handle:
+                            self._session_handle = upd.new_handle
+
+                    # Server is about to close this socket; the handle above lets us
+                    # reconnect seamlessly. Just log it — don't treat as a hard failure.
+                    if getattr(response, "go_away", None):
+                        print(f"[JARVIS] [Connection] Server go_away (time_left={response.go_away.time_left}); will resume session.")
+
+                    if response.server_content and response.server_content.model_turn:
+                        for part in response.server_content.model_turn.parts:
+                            if part.inline_data and part.inline_data.data:
+                                self.audio_in_queue.put_nowait(part.inline_data.data)
 
                     if response.server_content:
                         sc = response.server_content
+                        if sc.interrupted:
+                            print("[JARVIS] Model interrupted by user.")
+                            while not self.audio_in_queue.empty():
+                                try:
+                                    self.audio_in_queue.get_nowait()
+                                except asyncio.QueueEmpty:
+                                    break
+                            self.set_speaking(False)
+                            self._turn_complete_received = False
+
+                        # Stream thinking parts to UI
+                        if sc.model_turn and sc.model_turn.parts:
+                            for part in sc.model_turn.parts:
+                                if getattr(part, 'thought', False) and part.text:
+                                    if not thinking_started:
+                                        self.ui.write_timeline("Thought: Cognitive reasoning started...")
+                                        thinking_started = True
+                                    self.ui.write_thought(part.text)
 
                         if sc.output_transcription and sc.output_transcription.text:
                             self.set_speaking(True)
@@ -769,19 +996,35 @@ class JarvisLive:
                             txt = sc.input_transcription.text.strip()
                             if txt:
                                 in_buf.append(txt)
+                                self.ui.update_intent(txt, "Transcribing...")
 
                         if sc.turn_complete:
-                            self.set_speaking(False)
+                            self._turn_complete_received = True
+                            if self.audio_in_queue.empty() and not self._is_speaking:
+                                self.set_speaking(False)
+                                self._turn_complete_received = False
 
+                            thinking_started = False
                             full_in = " ".join(in_buf).strip()
                             if full_in:
                                 self.ui.write_log(f"You: {full_in}")
+                                self.ui.update_intent(full_in, "Reasoning...")
+                                self.ui.write_timeline(f"You: {full_in}")
+                                self.ui.clear_thoughts()
                             in_buf = []
 
                             full_out = " ".join(out_buf).strip()
                             if full_out:
                                 self.ui.write_log(f"Jarvis: {full_out}")
+                                self.ui.write_timeline(f"Jarvis: {full_out}")
                             out_buf = []
+
+                            if full_in or full_out:
+                                threading.Thread(
+                                    target=save_chat_history,
+                                    args=(full_in, full_out),
+                                    daemon=True
+                                ).start()
 
                             if full_in and len(full_in) > 5:
                                 threading.Thread(
@@ -793,41 +1036,64 @@ class JarvisLive:
                     if response.tool_call:
                         fn_responses = []
                         for fc in response.tool_call.function_calls:
-                            print(f"[JARVIS] 📞 {fc.name}")
+                            print(f"[JARVIS] [Tool Request] {fc.name}")
                             fr = await self._execute_tool(fc)
                             fn_responses.append(fr)
                         await self.session.send_tool_response(
                             function_responses=fn_responses
                         )
+            
+            # If receive completes without error, it means the connection closed
+            raise ConnectionError("Live connection closed by server")
 
         except Exception as e:
-            print(f"[JARVIS] ❌ Recv: {e}")
+            print(f"[JARVIS] [Error] Recv: {e}")
             traceback.print_exc()
             raise
 
     async def _play_audio(self):
-        print("[JARVIS] 🔊 Play started")
+        print("[JARVIS] [Speaker] Speaker playback started")
         loop = asyncio.get_event_loop()
 
         stream = sd.RawOutputStream(
             samplerate=RECEIVE_SAMPLE_RATE,
             channels=CHANNELS,
             dtype="int16",
-            blocksize=CHUNK_SIZE,
+            blocksize=0,        # let PortAudio choose — avoids tiny-block underruns
+            latency="high",     # larger output buffer absorbs network jitter -> no mid-word gaps
         )
         stream.start()
         try:
             while True:
                 chunk = await self.audio_in_queue.get()
-                self.set_speaking(True)
-                await asyncio.to_thread(stream.write, chunk)
+                if not self._is_speaking:
+                    self.set_speaking(True)
+                # Coalesce all immediately-available chunks into one larger write so the
+                # device buffer never starves between many small writes (the "halka atak").
+                buf = bytearray(chunk)
+                while not self.audio_in_queue.empty():
+                    try:
+                        buf += self.audio_in_queue.get_nowait()
+                    except asyncio.QueueEmpty:
+                        break
+                await asyncio.to_thread(stream.write, bytes(buf))
+                # Only stop speaking once the turn is done AND the buffer is drained.
+                if self._turn_complete_received and self.audio_in_queue.empty():
+                    self.set_speaking(False)
+                    self._turn_complete_received = False
         except Exception as e:
-            print(f"[JARVIS] ❌ Play: {e}")
-            raise
+            if "cannot schedule new futures" in str(e):
+                pass
+            else:
+                print(f"[JARVIS] [Error] Play: {e}")
+                raise
         finally:
             self.set_speaking(False)
-            stream.stop()
-            stream.close()
+            try:
+                stream.stop()
+                stream.close()
+            except Exception:
+                pass
 
     async def run(self):
         client = genai.Client(
@@ -835,12 +1101,17 @@ class JarvisLive:
             http_options={"api_version": "v1beta"}
         )
 
+        consecutive_failures = 0
+
         while True:
             try:
-                print("[JARVIS] 🔌 Connecting...")
+                print("[JARVIS] [Connection] Connecting...")
                 self.ui.set_state("THINKING")
+                self.ui.write_log("THOUGHT: Initializing session & connecting to neural core...")
+                self.ui.write_timeline("Connecting to neural core...")
                 config = self._build_config()
 
+                t_start = time.time()
                 async with (
                     client.aio.live.connect(model=LIVE_MODEL, config=config) as session,
                     asyncio.TaskGroup() as tg,
@@ -848,36 +1119,308 @@ class JarvisLive:
                     self.session        = session
                     self._loop          = asyncio.get_event_loop()
                     self.audio_in_queue = asyncio.Queue()
-                    self.out_queue      = asyncio.Queue(maxsize=10)
+                    self.out_queue      = asyncio.Queue()
 
-                    print("[JARVIS] ✅ Connected.")
+                    print("[JARVIS] [Connection] Connected.")
                     self.ui.set_state("LISTENING")
                     self.ui.write_log("SYS: JARVIS online.")
+                    self.ui.write_timeline("Neural link online. JARVIS is ready.")
 
                     tg.create_task(self._send_realtime())
                     tg.create_task(self._listen_audio())
                     tg.create_task(self._receive_audio())
                     tg.create_task(self._play_audio())
                     
-            except Exception as e:
-                print(f"[JARVIS] ⚠️ {e}")
+            except BaseException as e:
+                if isinstance(e, (KeyboardInterrupt, SystemExit)):
+                    raise
+                print(f"[JARVIS] [Warning] Connection exception: {e}")
                 traceback.print_exc()
+
+                # A clean, resumable drop is NOT a failure: we have a handle and will
+                # continue the same session on reconnect. Reset the counter so seamless
+                # resumes never trip the offline fallback.
+                is_policy_error = "1008" in str(e) or "policy violation" in str(e).lower() or "not implemented" in str(e).lower()
+                if self._session_handle and not is_policy_error and check_internet():
+                    consecutive_failures = 0
+                elif time.time() - t_start < 300 or is_policy_error:
+                    # Quick failure / policy / quota error before any working session.
+                    consecutive_failures += 1
+                else:
+                    consecutive_failures = 1
+
+                print(f"[JARVIS] DEBUG: consecutive_failures={consecutive_failures}, duration={time.time() - t_start:.2f}s, is_policy_error={is_policy_error}")
+                self.ui.write_log(f"ERR: Neural link disconnected. Attempt {consecutive_failures} failed.")
+                self.ui.write_timeline(f"Neural link disconnected (Attempt {consecutive_failures}/2).")
+                
+                # If internet connection is lost, too many attempts fail, or it's a policy error, fall back to offline core
+                if not check_internet() or consecutive_failures >= 2 or is_policy_error:
+                    print("[JARVIS] Falling back to offline core.")
+                    global force_offline, last_offline_time
+                    force_offline = True
+                    last_offline_time = time.time()
+                    break
 
             self.set_speaking(False)
             self.ui.set_state("THINKING")
-            print("[JARVIS] 🔄 Reconnecting in 3s...")
+            print("[JARVIS] [Connection] Reconnecting in 3s...")
             await asyncio.sleep(3)
+
+def check_internet() -> bool:
+    import socket
+    try:
+        socket.setdefaulttimeout(1.5)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        return True
+    except Exception:
+        return False
+
+
+class JarvisOffline:
+    def __init__(self, ui: JarvisUI):
+        self.ui = ui
+        self.ui.on_text_command = self._on_text_command
+        self.running = True
+        self.whisper = None
+        self.speaker = None
+        self.is_speaking = False
+        self.last_speak_end_time = 0.0
+        
+        # Load local memory context
+        try:
+            memory = load_memory()
+            mem_str = format_memory_for_prompt(memory)
+        except Exception as e:
+            print(f"[Offline Memory Error] {e}")
+            mem_str = ""
+
+        # Initialize history
+        sys_prompt = (
+            "You are JARVIS, Tony Stark's AI assistant, currently running in local OFFLINE MODE. "
+            "Be extremely brief and direct. Speak as JARVIS. "
+            "You do not have access to live internet search or external tools right now. "
+            "Keep your responses concise and ready for spoken delivery.\n\n"
+        )
+        if mem_str:
+            sys_prompt += mem_str
+
+        self.history = [{"role": "system", "content": sys_prompt}]
+
+    def _on_text_command(self, text: str):
+        threading.Thread(target=self.process_query, args=(text,), daemon=True).start()
+
+    def speak(self, text: str):
+        self.is_speaking = True
+        self.ui.write_log(f"Jarvis: {text}")
+        self.ui.write_timeline(f"Jarvis: {text}")
+        self.ui.start_speaking()
+        try:
+            import pythoncom
+            import win32com.client
+            pythoncom.CoInitialize()
+            speaker = win32com.client.Dispatch("SAPI.SpVoice")
+            speaker.Speak(text)
+        except Exception as e:
+            print(f"[Offline TTS Error] {e}")
+        finally:
+            import time
+            self.ui.stop_speaking()
+            self.last_speak_end_time = time.time()
+            self.is_speaking = False
+
+    def query_local_llm(self, text: str) -> str:
+        import requests
+        
+        # 1. Try Ollama (OpenAI compatible chat completions endpoint)
+        try:
+            url = "http://localhost:11434/v1/chat/completions"
+            payload = {
+                "model": "qwen2.5:1.5b",
+                "messages": self.history + [{"role": "user", "content": text}],
+                "temperature": 0.7
+            }
+            res = requests.post(url, json=payload, timeout=8)
+            if res.status_code == 200:
+                return res.json()["choices"][0]["message"]["content"]
+        except Exception:
+            pass
+
+        # 2. Try Odysseus chat endpoint
+        try:
+            url = "http://localhost:7000/api/chat"
+            payload = {
+                "message": text
+            }
+            res = requests.post(url, json=payload, timeout=8)
+            if res.status_code == 200:
+                data = res.json()
+                if isinstance(data, dict):
+                    return data.get("response", str(data))
+                return res.text
+        except Exception:
+            pass
+
+        return "I am currently offline, and I could not connect to local AI models. Please ensure Ollama or Odysseus is running."
+
+    def process_query(self, text: str):
+        self.ui.write_log(f"You: {text}")
+        self.ui.write_timeline(f"You: {text}")
+        self.ui.update_intent(text, "Local Reasoning...")
+        self.ui.set_state("OFFLINE_THINKING")
+
+        # Basic offline matched actions
+        lower_text = text.lower()
+        matched_app = None
+        if "open" in lower_text:
+            for app in ["chrome", "notepad", "calculator", "spotify", "discord", "cmd", "explorer"]:
+                if app in lower_text:
+                    matched_app = app
+                    break
+                    
+        if matched_app:
+            self.ui.write_log(f"TOOL: Offline command matched, opening {matched_app}")
+            try:
+                from actions.open_app import open_app
+                open_app(parameters={"app_name": matched_app}, response=None, player=self.ui)
+                reply = f"Opening {matched_app}, sir."
+            except Exception as e:
+                reply = f"I tried to open {matched_app}, but encountered an error: {e}"
+        else:
+            # Query local LLM
+            reply = self.query_local_llm(text)
+
+        self.ui.clear_thoughts()
+        self.ui.write_timeline("Local thought finished.")
+
+        # Update history
+        self.history.append({"role": "user", "content": text})
+        self.history.append({"role": "assistant", "content": reply})
+        if len(self.history) > 15:
+            self.history = [self.history[0]] + self.history[-12:]
+
+        self.speak(reply)
+
+    def run(self):
+        import speech_recognition as sr
+        import numpy as np
+        import win32com.client
+        from faster_whisper import WhisperModel
+        import time
+
+        self.ui.write_log("SYS: Initializing local AI components...")
+        self.ui.set_state("OFFLINE_THINKING")
+
+        # Initialize TTS
+        try:
+            self.speaker = win32com.client.Dispatch("SAPI.SpVoice")
+            self.ui.write_log("SYS: local SAPI5 Text-to-Speech initialized.")
+        except Exception as e:
+            self.ui.write_log(f"ERR: SAPI5 TTS failed: {e}")
+
+        # Initialize faster-whisper
+        try:
+            self.ui.write_log("SYS: Loading faster-whisper model...")
+            self.whisper = WhisperModel("base", device="cpu", compute_type="int8")
+            self.ui.write_log("SYS: Local Speech-to-Text model loaded.")
+        except Exception as e:
+            self.ui.write_log(f"ERR: Speech-to-Text init failed: {e}")
+
+        recognizer = sr.Recognizer()
+        microphone = sr.Microphone()
+
+        try:
+            with microphone as source:
+                self.ui.write_log("SYS: Calibrating microphone for ambient noise...")
+                recognizer.adjust_for_ambient_noise(source, duration=1.5)
+                self.ui.write_log("SYS: Calibration complete.")
+        except Exception as e:
+            self.ui.write_log(f"ERR: Mic calibration failed: {e}")
+
+        self.ui.set_state("OFFLINE_LISTENING")
+        self.ui.write_log("SYS: JARVIS offline core ready.")
+        self.ui.write_timeline("Offline mode active. Standing by.")
+
+        # Main offline listen loop
+        while self.running:
+            # Check if cooling down period over
+            global force_offline, last_offline_time
+            if force_offline and (time.time() - last_offline_time > 3600):
+                print("[JARVIS] Offline cooling-down period over. Enabling online retry.")
+                force_offline = False
+
+            # Check if internet restored
+            if check_internet() and not force_offline:
+                self.ui.write_log("SYS: Internet connection restored. Returning online.")
+                self.ui.write_timeline("Internet connection restored. Switching to Online Mode.")
+                break
+
+            if self.ui.muted:
+                time.sleep(0.5)
+                continue
+
+            # If SAPI5 is currently speaking, wait until it completes before listening
+            while self.is_speaking:
+                time.sleep(0.2)
+
+            try:
+                self.ui.set_state("OFFLINE_LISTENING")
+                with microphone as source:
+                    audio = recognizer.listen(source, timeout=3.0, phrase_time_limit=10.0)
+
+                if self.ui.muted:
+                    continue
+
+                # Discard audio recorded during or immediately after SAPI5 speaks
+                if time.time() - self.last_speak_end_time < 1.5:
+                    print("[Offline Mic] Discarded speech input overlap with SAPI5 voice output.")
+                    continue
+
+                self.ui.set_state("OFFLINE_THINKING")
+                self.ui.write_timeline("Transcribing local speech...")
+
+                raw_data = audio.get_raw_data(convert_rate=16000, convert_width=2)
+                audio_np = np.frombuffer(raw_data, dtype=np.int16).astype(np.float32) / 32768.0
+
+                if self.whisper:
+                    segments, _ = self.whisper.transcribe(audio_np, beam_size=3, vad_filter=True)
+                    text = " ".join(s.text for s in segments).strip()
+                    if text:
+                        self.process_query(text)
+            except sr.WaitTimeoutError:
+                continue
+            except Exception as e:
+                print(f"[Offline Loop Error] {e}")
+                time.sleep(0.5)
+
 
 def main():
     ui = JarvisUI("face.png")
 
     def runner():
+        global force_offline, last_offline_time
+        import time
         ui.wait_for_api_key()
-        jarvis = JarvisLive(ui)
-        try:
-            asyncio.run(jarvis.run())
-        except KeyboardInterrupt:
-            print("\n🔴 Shutting down...")
+        while True:
+            # Check if cooling down period is over
+            if force_offline and (time.time() - last_offline_time > 3600):
+                print("[JARVIS] Offline cooling-down period over. Retrying online connection...")
+                force_offline = False
+
+            if check_internet() and not force_offline:
+                print("[JARVIS] Internet connection detected. Running in Online Mode.")
+                jarvis = JarvisLive(ui)
+                try:
+                    asyncio.run(jarvis.run())
+                except Exception as e:
+                    print(f"[JARVIS] Online loop stopped: {e}")
+            else:
+                print("[JARVIS] Running in Offline Mode.")
+                jarvis_offline = JarvisOffline(ui)
+                try:
+                    jarvis_offline.run()
+                except Exception as e:
+                    print(f"[JARVIS] Offline loop stopped: {e}")
+            time.sleep(3)
 
     threading.Thread(target=runner, daemon=True).start()
     ui.root.mainloop()

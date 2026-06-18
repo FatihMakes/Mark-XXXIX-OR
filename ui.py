@@ -25,7 +25,8 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import (
     QApplication, QFileDialog, QFrame, QHBoxLayout, QLabel, QLineEdit,
     QMainWindow, QPushButton, QScrollArea, QSizePolicy, QTextEdit,
-    QVBoxLayout, QWidget, QProgressBar,
+    QVBoxLayout, QWidget, QProgressBar, QTabWidget, QListWidget,
+    QListWidgetItem, QGridLayout, QGroupBox
 )
 
 def _base_dir() -> Path:
@@ -79,6 +80,24 @@ class _SysMetrics:
         self.net  = 0.0   
         self.gpu  = -1.0  
         self.tmp  = -1.0  
+        self.services = {
+            "ollama": False,
+            "odysseus": False,
+            "gateway": False,
+            "ts_jarvis": False,
+            "backend": False,
+            "frontend": False,
+            "wa_forwarder": False,
+            "hud_gui": True
+        }
+        self.ports = {
+            "ollama": False,
+            "odysseus": False,
+            "gateway": False,
+            "ts_jarvis": False,
+            "frontend": False,
+            "mongodb": False
+        }
         self._lock = threading.Lock()
         self._last_net = psutil.net_io_counters()
         self._last_net_t = time.time()
@@ -93,6 +112,52 @@ class _SysMetrics:
             except Exception:
                 pass
             time.sleep(1.5)
+
+    def _check_port(self, port: int) -> bool:
+        import socket
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.15)
+                return s.connect_ex(('127.0.0.1', port)) == 0
+        except Exception:
+            return False
+
+    def _get_services(self) -> dict:
+        status = {
+            "ollama": False,
+            "odysseus": False,
+            "gateway": False,
+            "ts_jarvis": False,
+            "backend": False,
+            "frontend": False,
+            "wa_forwarder": False,
+            "hud_gui": True
+        }
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                cmd = proc.info.get('cmdline')
+                if not cmd:
+                    continue
+                cmd_str = " ".join(cmd).lower()
+                if "ollama" in cmd_str:
+                    status["ollama"] = True
+                elif "uvicorn" in cmd_str and "7000" in cmd_str:
+                    status["odysseus"] = True
+                elif "clawdbot" in cmd_str and "gateway" in cmd_str:
+                    status["gateway"] = True
+                elif "bun" in cmd_str and ("start" in cmd_str or "daemon" in cmd_str or "index.ts" in cmd_str):
+                    status["ts_jarvis"] = True
+                elif "node" in cmd_str and "server.js" in cmd_str:
+                    status["backend"] = True
+                elif "node" in cmd_str and "vite.js" in cmd_str:
+                    status["frontend"] = True
+                elif "node" in cmd_str and "app.js" in cmd_str:
+                    status["wa_forwarder"] = True
+                elif "python" in cmd_str and "main.py" in cmd_str:
+                    status["hud_gui"] = True
+            except Exception:
+                pass
+        return status
 
     def _update(self):
         cpu = psutil.cpu_percent(interval=None)
@@ -111,8 +176,17 @@ class _SysMetrics:
         self._last_net_t = now
 
         gpu = self._get_gpu()
-
         tmp = self._get_temp()
+        
+        services = self._get_services()
+        ports = {
+            "ollama": self._check_port(11434),
+            "odysseus": self._check_port(7000),
+            "gateway": self._check_port(18789),
+            "ts_jarvis": self._check_port(3142),
+            "frontend": self._check_port(3000),
+            "mongodb": self._check_port(27017)
+        }
 
         with self._lock:
             self.cpu = cpu
@@ -120,6 +194,8 @@ class _SysMetrics:
             self.net = net
             self.gpu = gpu
             self.tmp = tmp
+            self.services = services
+            self.ports = ports
 
     def _get_gpu(self) -> float:
         # NVIDIA
@@ -237,6 +313,8 @@ class _SysMetrics:
                 "net": self.net,
                 "gpu": self.gpu,
                 "tmp": self.tmp,
+                "services": self.services,
+                "ports": self.ports
             }
 
 
@@ -352,8 +430,18 @@ class HudCanvas(QWidget):
         cx, cy = W / 2, H / 2
         fw = min(W, H)
 
+        # Dynamic primary colors based on online/offline state
+        if self.state.startswith("OFFLINE"):
+            pri_col = C.RED
+            pri_dim = "#991f33"
+            pri_gho = "#2e050a"
+        else:
+            pri_col = C.PRI
+            pri_dim = C.PRI_DIM
+            pri_gho = C.PRI_GHO
+
         # grid dots
-        p.setPen(QPen(qcol(C.PRI_GHO), 1))
+        p.setPen(QPen(qcol(pri_gho), 1))
         for x in range(0, W, 48):
             for y in range(0, H, 48):
                 p.drawPoint(x, y)
@@ -365,14 +453,14 @@ class HudCanvas(QWidget):
             r   = r_face * (1.8 - i * 0.08)
             frc = 1.0 - i / 10
             a   = max(0, min(255, int(self._halo * 0.085 * frc)))
-            col = qcol(C.MUTED_C if self.muted else C.PRI, a)
+            col = qcol(C.MUTED_C if self.muted else pri_col, a)
             p.setPen(QPen(col, 1.5)); p.setBrush(Qt.BrushStyle.NoBrush)
             p.drawEllipse(QRectF(cx - r, cy - r, r * 2, r * 2))
 
         # pulse rings
         for pr in self._pulses:
             a   = max(0, int(230 * (1.0 - pr / (fw * 0.74))))
-            col = qcol(C.MUTED_C if self.muted else C.PRI, a)
+            col = qcol(C.MUTED_C if self.muted else pri_col, a)
             p.setPen(QPen(col, 1.5)); p.setBrush(Qt.BrushStyle.NoBrush)
             p.drawEllipse(QRectF(cx - pr, cy - pr, pr * 2, pr * 2))
 
@@ -383,7 +471,7 @@ class HudCanvas(QWidget):
             ring_r = fw * r_frac
             base   = self._rings[idx]
             a_val  = max(0, min(255, int(self._halo * (1.0 - idx * 0.18))))
-            col    = qcol(C.MUTED_C if self.muted else C.PRI, a_val)
+            col    = qcol(C.MUTED_C if self.muted else pri_col, a_val)
             p.setPen(QPen(col, w_r)); p.setBrush(Qt.BrushStyle.NoBrush)
             angle = base
             rect  = QRectF(cx - ring_r, cy - ring_r, ring_r * 2, ring_r * 2)
@@ -395,7 +483,7 @@ class HudCanvas(QWidget):
         sr = fw * 0.50
         sa = min(255, int(self._halo * 1.5))
         ex = 75 if self.speaking else 44
-        p.setPen(QPen(qcol(C.MUTED_C if self.muted else C.PRI, sa), 2.5))
+        p.setPen(QPen(qcol(C.MUTED_C if self.muted else pri_col, sa), 2.5))
         p.setBrush(Qt.BrushStyle.NoBrush)
         srect = QRectF(cx - sr, cy - sr, sr * 2, sr * 2)
         p.drawArc(srect, int(self._scan * 16), int(ex * 16))
@@ -404,7 +492,7 @@ class HudCanvas(QWidget):
 
         # tick marks
         t_out, t_in = fw * 0.497, fw * 0.474
-        p.setPen(QPen(qcol(C.PRI, 140), 1))
+        p.setPen(QPen(qcol(pri_col, 140), 1))
         for deg in range(0, 360, 10):
             rad = math.radians(deg)
             inn = t_in if deg % 30 == 0 else t_in + 6
@@ -415,7 +503,7 @@ class HudCanvas(QWidget):
 
         # crosshair
         ch_r, gap_h = fw * 0.51, fw * 0.16
-        p.setPen(QPen(qcol(C.PRI, int(self._halo * 0.5)), 1))
+        p.setPen(QPen(qcol(pri_col, int(self._halo * 0.5)), 1))
         p.drawLine(QPointF(cx - ch_r, cy), QPointF(cx - gap_h, cy))
         p.drawLine(QPointF(cx + gap_h, cy), QPointF(cx + ch_r, cy))
         p.drawLine(QPointF(cx, cy - ch_r), QPointF(cx, cy - gap_h))
@@ -423,7 +511,7 @@ class HudCanvas(QWidget):
 
         # corner brackets
         bl = 24
-        bc = qcol(C.PRI, 210)
+        bc = qcol(pri_col, 210)
         hl, hr = cx - fw // 2, cx + fw // 2
         ht, hb = cy - fw // 2, cy + fw // 2
         p.setPen(QPen(bc, 2))
@@ -432,17 +520,32 @@ class HudCanvas(QWidget):
             p.drawLine(QPointF(bx, by), QPointF(bx, by + dy * bl))
 
         # face
+        r_face = fw * 0.31
         if self._face_px:
-            fsz    = int(fw * 0.62 * self._scale)
+            fsz    = int(fw * 0.60 * self._scale)
             scaled = self._face_px.scaled(
                 fsz, fsz,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )
+            # Set opacity depending on thinking/processing
+            if self.state in ["THINKING", "PROCESSING", "OFFLINE_THINKING"]:
+                p.setOpacity(0.35)
+            else:
+                p.setOpacity(0.85)
             p.drawPixmap(int(cx - fsz / 2), int(cy - fsz / 2), scaled)
+            p.setOpacity(1.0)
+            
+            # Circular border around user avatar
+            p.setPen(QPen(qcol(pri_dim if not self.speaking else C.ACC, 180), 2))
+            p.setBrush(Qt.BrushStyle.NoBrush)
+            p.drawEllipse(QRectF(cx - fsz/2, cy - fsz/2, fsz, fsz))
         else:
             orb_r = int(fw * 0.27 * self._scale)
-            oc    = (200, 0, 50) if self.muted else (0, 60, 110)
+            if self.state.startswith("OFFLINE"):
+                oc = (180, 20, 0) if self.muted else (150, 40, 0)
+            else:
+                oc = (200, 0, 50) if self.muted else (0, 60, 110)
             for i in range(8, 0, -1):
                 r2  = int(orb_r * i / 8)
                 frc = i / 8
@@ -450,22 +553,138 @@ class HudCanvas(QWidget):
                 p.setBrush(QBrush(QColor(int(oc[0]*frc), int(oc[1]*frc), int(oc[2]*frc), a)))
                 p.setPen(Qt.PenStyle.NoPen)
                 p.drawEllipse(QRectF(cx - r2, cy - r2, r2 * 2, r2 * 2))
-            p.setPen(QPen(qcol(C.PRI, min(255, int(self._halo * 2))), 1))
+            p.setPen(QPen(qcol(pri_col, min(255, int(self._halo * 2))), 1))
             p.setFont(QFont("Courier New", 13, QFont.Weight.Bold))
             p.drawText(QRectF(cx - 80, cy - 14, 160, 28),
                        Qt.AlignmentFlag.AlignCenter, "J.A.R.V.I.S")
+
+        # --- Dynamic State Visualizations ---
+        if self.state in ["THINKING", "PROCESSING", "OFFLINE_THINKING"]:
+            # Neural Synapse Brain animation (Glowing synapses)
+            p.setPen(Qt.PenStyle.NoPen)
+            # Center node
+            p.setBrush(QBrush(qcol(C.ACC2, 230)))
+            p.drawEllipse(QPointF(cx, cy), 8, 8)
+            
+            # Outer nodes
+            nodes = []
+            for i in range(6):
+                ang = math.radians(i * 60 + self._scan * 0.3)
+                rn  = r_face * 0.72 * (0.8 + 0.15 * math.sin(self._tick * 0.08 + i))
+                nx  = cx + rn * math.cos(ang)
+                ny  = cy + rn * math.sin(ang)
+                nodes.append((nx, ny))
+                
+            # Draw lines
+            p.setBrush(Qt.BrushStyle.NoBrush)
+            for idx, (nx, ny) in enumerate(nodes):
+                # Connect to center
+                p.setPen(QPen(qcol(C.ACC2, 140), 1.5))
+                p.drawLine(QPointF(cx, cy), QPointF(nx, ny))
+                # Connect to next node
+                nxt = nodes[(idx + 1) % 6]
+                p.setPen(QPen(qcol(pri_col, 100), 1))
+                p.drawLine(QPointF(nx, ny), QPointF(nxt[0], nxt[1]))
+                
+            # Draw outer node synapse circles
+            for idx, (nx, ny) in enumerate(nodes):
+                sz = 6 + 3 * math.sin(self._tick * 0.12 + idx)
+                p.setPen(QPen(qcol(C.WHITE, 200), 1))
+                p.setBrush(QBrush(qcol(C.ACC if idx % 2 == 0 else C.ACC2, 220)))
+                p.drawEllipse(QPointF(nx, ny), sz, sz)
+                
+        elif self.state == "EXECUTING":
+            # Spinning cyber target loader and telemetry text
+            p.setBrush(Qt.BrushStyle.NoBrush)
+            
+            # Draw spinning rings
+            ring_r = r_face * 0.8
+            p.setPen(QPen(qcol(C.ACC, 200), 2, Qt.PenStyle.DashLine))
+            p.drawArc(QRectF(cx - ring_r, cy - ring_r, ring_r * 2, ring_r * 2), int(self._scan * 16), 140 * 16)
+            p.drawArc(QRectF(cx - ring_r, cy - ring_r, ring_r * 2, ring_r * 2), int((self._scan + 180) * 16), 140 * 16)
+            
+            # Outer counter-rotating ring
+            ring_r2 = r_face * 0.9
+            p.setPen(QPen(qcol(pri_col, 160), 1))
+            p.drawArc(QRectF(cx - ring_r2, cy - ring_r2, ring_r2 * 2, ring_r2 * 2), int(-self._scan * 12), 220 * 16)
+            
+            # Telemetry text labels next to the ring
+            p.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+            p.setPen(QPen(qcol(C.WHITE, 180), 1))
+            p.drawText(int(cx + ring_r * 0.75), int(cy - ring_r * 0.7), "PROC: ACTIVE")
+            p.setPen(QPen(qcol(pri_col, 150), 1))
+            p.drawText(int(cx + ring_r * 0.75), int(cy - ring_r * 0.7 + 10), "LOCK: LOCKED")
+            p.drawText(int(cx + ring_r * 0.75), int(cy - ring_r * 0.7 + 20), "STARK_OS: OK")
+            p.setPen(QPen(qcol(C.ACC, 180), 1))
+            p.drawText(int(cx - ring_r * 1.3), int(cy + ring_r * 0.8), "TELEMETRY: OK")
+            p.drawText(int(cx - ring_r * 1.3), int(cy + ring_r * 0.8 + 10), f"SYS_T: {self._tick}")
+            
+        elif self.state in ["LISTENING", "OFFLINE_LISTENING"]:
+            # Green/Red radar sweep
+            p.setBrush(Qt.BrushStyle.NoBrush)
+            sweep_col = C.RED if self.state == "OFFLINE_LISTENING" else C.GREEN
+            p.setPen(QPen(qcol(sweep_col, 80), 1))
+            # Concentric rings
+            for r_mul in [0.4, 0.6, 0.8]:
+                p.drawEllipse(QRectF(cx - r_face * r_mul, cy - r_face * r_mul, r_face * r_mul * 2, r_face * r_mul * 2))
+            
+            # Sonar sweep line
+            rad = math.radians(self._scan)
+            p.setPen(QPen(qcol(sweep_col, 220), 2))
+            p.drawLine(QPointF(cx, cy), QPointF(cx + r_face * 0.95 * math.cos(rad), cy + r_face * 0.95 * math.sin(rad)))
+            
+            # Draw sweep trail
+            for idx in range(15):
+                trail_rad = math.radians(self._scan - idx * 2.5)
+                p.setPen(QPen(qcol(sweep_col, max(0, 180 - idx * 12)), 1))
+                p.drawLine(QPointF(cx, cy), QPointF(cx + r_face * 0.95 * math.cos(trail_rad), cy + r_face * 0.95 * math.sin(trail_rad)))
+                
+        elif self.speaking:
+            # Concentric voice wave ripples
+            p.setBrush(Qt.BrushStyle.NoBrush)
+            for idx in range(3):
+                # Ripple radius expands and fades
+                rip_r = r_face * 0.5 + ((self._tick * 1.5 + idx * 40) % 100) / 100 * r_face * 0.75
+                alpha = int(220 * (1.0 - (rip_r - r_face * 0.5) / (r_face * 0.75)))
+                if alpha > 0:
+                    p.setPen(QPen(qcol(pri_col if idx % 2 == 0 else C.ACC, alpha), 1.5))
+                    # Draw circle with wavy frequency ripples
+                    path = QPainterPath()
+                    points = 36
+                    for p_idx in range(points + 1):
+                        deg = p_idx * 10
+                        rad = math.radians(deg)
+                        # Add a small noise/sine offset to make it look like soundwave
+                        offset = 4.5 * math.sin(self._tick * 0.25 + deg * 4) if self.speaking else 0
+                        pr = rip_r + offset
+                        px = cx + pr * math.cos(rad)
+                        py = cy + pr * math.sin(rad)
+                        if p_idx == 0:
+                            path.moveTo(px, py)
+                        else:
+                            path.lineTo(px, py)
+                    p.drawPath(path)
 
         # particles
         for pt in self._particles:
             a = max(0, min(255, int(pt[4] * 255)))
             p.setPen(Qt.PenStyle.NoPen)
-            p.setBrush(QBrush(qcol(C.PRI, a)))
+            p.setBrush(QBrush(qcol(pri_col, a)))
             p.drawEllipse(QPointF(pt[0], pt[1]), 2.5, 2.5)
 
         # status text
         sy = cy + fw * 0.40
         if self.muted:
             txt, col = "⊘  MUTED",     qcol(C.MUTED_C)
+        elif self.state == "OFFLINE_LISTENING":
+            sym = "⚠" if self._blink else "○"
+            txt, col = f"{sym}  OFFLINE LISTENING", qcol(C.RED)
+        elif self.state == "OFFLINE_THINKING":
+            sym = "⚠" if self._blink else "◇"
+            txt, col = f"{sym}  OFFLINE THINKING", qcol(C.ACC)
+        elif self.state == "OFFLINE_SPEAKING":
+            sym = "⚠" if self._blink else "●"
+            txt, col = f"{sym}  OFFLINE SPEAKING", qcol(C.RED)
         elif self.speaking:
             txt, col = "●  SPEAKING",  qcol(C.ACC)
         elif self.state == "THINKING":
@@ -474,12 +693,15 @@ class HudCanvas(QWidget):
         elif self.state == "PROCESSING":
             sym = "▷" if self._blink else "▶"
             txt, col = f"{sym}  PROCESSING", qcol(C.ACC2)
+        elif self.state == "EXECUTING":
+            sym = "⚙" if self._blink else "⛭"
+            txt, col = f"{sym}  EXECUTING TASK", qcol(C.ACC)
         elif self.state == "LISTENING":
             sym = "●" if self._blink else "○"
             txt, col = f"{sym}  LISTENING",  qcol(C.GREEN)
         else:
             sym = "●" if self._blink else "○"
-            txt, col = f"{sym}  {self.state}", qcol(C.PRI)
+            txt, col = f"{sym}  {self.state}", qcol(pri_col)
 
         p.setPen(QPen(col, 1))
         p.setFont(QFont("Courier New", 11, QFont.Weight.Bold))
@@ -494,10 +716,10 @@ class HudCanvas(QWidget):
                 hgt, cl = 2, qcol(C.MUTED_C)
             elif self.speaking:
                 hgt = random.randint(3, 20)
-                cl  = qcol(C.PRI) if hgt > 12 else qcol(C.PRI_DIM)
+                cl  = qcol(pri_col) if hgt > 12 else qcol(pri_dim)
             else:
                 hgt = int(3 + 2 * math.sin(self._tick * 0.09 + i * 0.6))
-                cl  = qcol(C.BORDER_B)
+                cl  = qcol("#7a1a24" if self.state.startswith("OFFLINE") else C.BORDER_B)
             p.fillRect(QRectF(wx0 + i * bw, wy + 20 - hgt, bw - 1, hgt), cl)
 
 class MetricBar(QWidget):
@@ -609,6 +831,10 @@ class LogWidget(QTextEdit):
         if   tl.startswith("you:"):    self._tag = "you"
         elif tl.startswith("jarvis:"): self._tag = "ai"
         elif tl.startswith("file:"):   self._tag = "file"
+        elif tl.startswith("thought:"): self._tag = "thought"
+        elif tl.startswith("tool:"):    self._tag = "tool"
+        elif tl.startswith("memory:"):  self._tag = "memory"
+        elif tl.startswith("task:"):    self._tag = "task"
         elif "err" in tl:              self._tag = "err"
         else:                          self._tag = "sys"
         self._tmr.start(6)
@@ -623,7 +849,11 @@ class LogWidget(QTextEdit):
                 "ai":   qcol(C.PRI),
                 "err":  qcol(C.RED),
                 "file": qcol(C.GREEN),
-                "sys":  qcol(C.ACC2),
+                "thought": qcol(C.ACC2),
+                "tool": qcol("#ff6b00"),
+                "memory": qcol("#00ff88"),
+                "task": qcol("#cc44ff"),
+                "sys":  qcol(C.TEXT_MED),
             }.get(self._tag, qcol(C.TEXT))
             fmt.setForeground(QBrush(col))
             cur.movePosition(cur.MoveOperation.End)
@@ -1000,22 +1230,25 @@ class SetupOverlay(QWidget):
                 f" QLineEdit {{ border: 1px solid {C.RED}; }}"
             )
             return
-        if not or_key:
-            self._or_input.setStyleSheet(
-                self._or_input.styleSheet() +
-                f" QLineEdit {{ border: 1px solid {C.RED}; }}"
-            )
-            return
+        # OpenRouter key is optional
         self.done.emit(key, or_key, self._sel_os)
 
 
 class MainWindow(QMainWindow):
     _log_sig   = pyqtSignal(str)
     _state_sig = pyqtSignal(str)
+    _tool_sig  = pyqtSignal(str, str)
+    _thought_sig = pyqtSignal(str)
+    _intent_sig = pyqtSignal(str, str)
+    _timeline_sig = pyqtSignal(str)
+    _clear_thought_sig = pyqtSignal()
+    _motherbot_event_sig = pyqtSignal(str)
+    _wm_update_sig = pyqtSignal(str, list)   # world-monitor: (category, items)
+    _wm_sit_sig = pyqtSignal(str, str)       # world-monitor situation: (weather, outlook)
 
     def __init__(self, face_path: str):
         super().__init__()
-        self.setWindowTitle("J.A.R.V.I.S — MARK XXXIX")
+        self.setWindowTitle("Muhammad's J.A.R.V.I.S")
         self.setMinimumSize(_MIN_W, _MIN_H)
         self.resize(_DEFAULT_W, _DEFAULT_H)
 
@@ -1068,6 +1301,14 @@ class MainWindow(QMainWindow):
 
         self._log_sig.connect(self._log.append_log)
         self._state_sig.connect(self._apply_state)
+        self._tool_sig.connect(self.set_tool_state)
+        self._thought_sig.connect(self._add_thought)
+        self._intent_sig.connect(self._update_intent)
+        self._timeline_sig.connect(self._add_timeline_event)
+        self._clear_thought_sig.connect(self._clear_thoughts)
+        self._motherbot_event_sig.connect(self._handle_motherbot_event)
+        self._wm_update_sig.connect(self._apply_world_monitor)
+        self._wm_sit_sig.connect(self._apply_situation)
 
         self._overlay: SetupOverlay | None = None
         self._ready = self._check_config()
@@ -1146,6 +1387,96 @@ class MainWindow(QMainWindow):
         except Exception:
             self._proc_lbl.setText("PROC  --")
 
+        # --- PC DIAGNOSTICS: flag real problems (where/what is wrong) ---
+        try:
+            problems = []
+            if cpu >= 90:
+                problems.append(f"CPU critical {cpu:.0f}%")
+            elif cpu >= 75:
+                problems.append(f"CPU high {cpu:.0f}%")
+            if mem >= 90:
+                problems.append(f"RAM critical {mem:.0f}%")
+            elif mem >= 80:
+                problems.append(f"RAM high {mem:.0f}%")
+            try:
+                disk = psutil.disk_usage("C:\\").percent
+                if disk >= 92:
+                    problems.append(f"Disk C: full {disk:.0f}%")
+                elif disk >= 85:
+                    problems.append(f"Disk C: low {disk:.0f}%")
+            except Exception:
+                pass
+            if tmp is not None and tmp >= 85:
+                problems.append(f"Temp hot {tmp:.0f}°C")
+            svc = snap.get("services", {})
+            down = [n for k, n in (
+                ("ollama", "Ollama"), ("odysseus", "Odysseus"), ("gateway", "Gateway"),
+                ("ts_jarvis", "TS-Jarvis"), ("backend", "Studio-BE"),
+                ("frontend", "Studio-FE"), ("wa_forwarder", "WhatsApp"),
+            ) if not svc.get(k, False)]
+            if down:
+                problems.append("Down: " + ", ".join(down))
+
+            if not problems:
+                self._diag_lbl.setText("● ALL SYSTEMS NOMINAL")
+                self._diag_lbl.setStyleSheet(f"color: {C.GREEN}; background: transparent; border: none;")
+            else:
+                crit = any("critical" in p or "full" in p for p in problems)
+                col = C.RED if crit else C.ACC2
+                self._diag_lbl.setText("⚠ " + "\n⚠ ".join(problems))
+                self._diag_lbl.setStyleSheet(f"color: {col}; background: transparent; border: none;")
+        except Exception:
+            pass
+
+        # Update services status labels
+        try:
+            services = snap.get("services", {})
+            for s_id, status_lbl in self.service_labels.items():
+                is_running = services.get(s_id, False)
+                if is_running:
+                    status_lbl.setText("● ONLINE")
+                    status_lbl.setStyleSheet(f"color: {C.GREEN}; border: none;")
+                else:
+                    status_lbl.setText("○ OFFLINE")
+                    status_lbl.setStyleSheet(f"color: {C.RED}; border: none;")
+        except Exception:
+            pass
+
+        # Update live WhatsApp connection badge (gateway + forwarder = linked)
+        try:
+            svc = snap.get("services", {})
+            prt = snap.get("ports", {})
+            gw = bool(svc.get("gateway") or prt.get("gateway"))
+            fwd = bool(svc.get("wa_forwarder"))
+            if gw and fwd:
+                wa_txt, wa_col = "WHATSAPP\n● LINKED", C.GREEN
+            elif gw or fwd:
+                wa_txt, wa_col = "WHATSAPP\n◐ PARTIAL", C.PRI
+            else:
+                wa_txt, wa_col = "WHATSAPP\n○ OFFLINE", C.RED
+            self._wa_badge.setText(wa_txt)
+            self._wa_badge.setStyleSheet(
+                f"color: {wa_col}; background: {C.PANEL2};"
+                f"border: 1px solid {C.BORDER_A}; border-radius: 3px; padding: 4px;"
+            )
+        except Exception:
+            pass
+
+        # Update ports visualization
+        try:
+            ports = snap.get("ports", {})
+            ports_text = (
+                f"● PORT 11434 (Ollama)    : {'ACTIVE' if ports.get('ollama') else 'INACTIVE'}\n"
+                f"● PORT 7000  (Odysseus)  : {'ACTIVE' if ports.get('odysseus') else 'INACTIVE'}\n"
+                f"● PORT 27017 (MongoDB)   : {'ACTIVE' if ports.get('mongodb') else 'INACTIVE'}\n"
+                f"● PORT 18789 (Gateway)   : {'ACTIVE' if ports.get('gateway') else 'INACTIVE'}\n"
+                f"● PORT 3142  (TS Jarvis) : {'ACTIVE' if ports.get('ts_jarvis') else 'INACTIVE'}\n"
+                f"● PORT 3000  (Studio Web): {'ACTIVE' if ports.get('frontend') else 'INACTIVE'}"
+            )
+            self.ports_widget.setPlainText(ports_text)
+        except Exception:
+            pass
+
 
     def _build_header(self) -> QWidget:
         w = QWidget()
@@ -1160,7 +1491,7 @@ class MainWindow(QMainWindow):
             l.setStyleSheet(f"color: {color}; background: transparent;")
             return l
 
-        lay.addWidget(_badge("MARK XXXIX", C.PRI_DIM))
+        lay.addWidget(_badge("MUHAMMAD'S JARVIS", C.PRI))
         lay.addStretch()
 
         mid = QVBoxLayout(); mid.setSpacing(1)
@@ -1222,6 +1553,27 @@ class MainWindow(QMainWindow):
 
         lay.addSpacing(4)
 
+        # --- PC DIAGNOSTICS / PROBLEM RADAR ---
+        diag_hdr = QLabel("◈ DIAGNOSTICS")
+        diag_hdr.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+        diag_hdr.setStyleSheet(f"color: {C.PRI}; background: transparent; "
+                               f"border-bottom: 1px solid {C.BORDER}; padding-bottom: 3px;")
+        lay.addWidget(diag_hdr)
+
+        diag_panel = QWidget()
+        diag_panel.setStyleSheet(f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;")
+        diag_lay = QVBoxLayout(diag_panel)
+        diag_lay.setContentsMargins(6, 5, 6, 5)
+        diag_lay.setSpacing(1)
+        self._diag_lbl = QLabel("● SCANNING…")
+        self._diag_lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+        self._diag_lbl.setWordWrap(True)
+        self._diag_lbl.setStyleSheet(f"color: {C.TEXT_DIM}; background: transparent; border: none;")
+        diag_lay.addWidget(self._diag_lbl)
+        lay.addWidget(diag_panel)
+
+        lay.addSpacing(4)
+
         info_panel = QWidget()
         info_panel.setStyleSheet(
             f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;"
@@ -1252,7 +1604,6 @@ class MainWindow(QMainWindow):
         for txt, col in [
             ("AI CORE\nACTIVE",     C.GREEN),
             ("SEC\nCLEARED",        C.PRI),
-            ("PROTOCOL\nXXXVIII",   C.TEXT_DIM),
         ]:
             lbl = QLabel(txt)
             lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
@@ -1263,14 +1614,168 @@ class MainWindow(QMainWindow):
             )
             lay.addWidget(lbl)
 
+        # Live WhatsApp connection status badge (updated by the motherbot refresh loop).
+        self._wa_badge = QLabel("WHATSAPP\n○ CHECKING")
+        self._wa_badge.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+        self._wa_badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._wa_badge.setStyleSheet(
+            f"color: {C.TEXT_DIM}; background: {C.PANEL2};"
+            f"border: 1px solid {C.BORDER_A}; border-radius: 3px; padding: 4px;"
+        )
+        lay.addWidget(self._wa_badge)
+
         return w
     def _build_right_panel(self) -> QWidget:
         w = QWidget()
         w.setFixedWidth(_RIGHT_W)
         w.setStyleSheet(f"background: {C.DARK}; border-left: 1px solid {C.BORDER};")
         lay = QVBoxLayout(w)
-        lay.setContentsMargins(8, 8, 8, 8)
-        lay.setSpacing(6)
+        lay.setContentsMargins(4, 4, 4, 4)
+        lay.setSpacing(4)
+
+        self.tabs = QTabWidget()
+        self.tabs.setStyleSheet(f"""
+            QTabWidget::pane {{
+                border: 1px solid {C.BORDER};
+                background: {C.BG};
+            }}
+            QTabBar::tab {{
+                background: {C.PANEL};
+                color: {C.TEXT_DIM};
+                border: 1px solid {C.BORDER};
+                border-bottom: none;
+                padding: 6px 14px;
+                font-family: 'Courier New';
+                font-size: 8px;
+                font-weight: bold;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+            }}
+            QTabBar::tab:selected {{
+                background: {C.PANEL2};
+                color: {C.PRI};
+                border: 1px solid {C.PRI};
+                border-bottom: none;
+            }}
+            QTabBar::tab:hover {{
+                color: {C.WHITE};
+            }}
+        """)
+
+        # --- HUD Tab ---
+        hud_tab = QWidget()
+        hud_lay = QVBoxLayout(hud_tab)
+        hud_lay.setContentsMargins(6, 6, 6, 6)
+        hud_lay.setSpacing(6)
+
+        # 1. Intent interpretation
+        intent_box = QGroupBox("◈ INTENT INTERPRETATION")
+        intent_box.setFont(QFont("Courier New", 8, QFont.Weight.Bold))
+        intent_box.setStyleSheet(f"""
+            QGroupBox {{
+                color: {C.PRI};
+                border: 1px solid {C.BORDER};
+                border-radius: 4px;
+                margin-top: 10px;
+                padding-top: 5px;
+                background: {C.PANEL};
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 8px;
+                padding: 0 3px;
+            }}
+        """)
+        intent_lay = QVBoxLayout(intent_box)
+        intent_lay.setContentsMargins(6, 6, 6, 6)
+        intent_lay.setSpacing(4)
+
+        self._lbl_user_input = QLabel("USER INPUT: (Listening...)")
+        self._lbl_user_input.setFont(QFont("Courier New", 8))
+        self._lbl_user_input.setStyleSheet(f"color: {C.WHITE};")
+        self._lbl_user_input.setWordWrap(True)
+        intent_lay.addWidget(self._lbl_user_input)
+
+        self._lbl_interpretation = QLabel("INTERPRETATION: Waiting for input...")
+        self._lbl_interpretation.setFont(QFont("Courier New", 8))
+        self._lbl_interpretation.setStyleSheet(f"color: {C.TEXT_MED};")
+        self._lbl_interpretation.setWordWrap(True)
+        intent_lay.addWidget(self._lbl_interpretation)
+        hud_lay.addWidget(intent_box, stretch=0)
+
+        # 2. Cognitive Thinking Stream
+        thought_box = QGroupBox("◈ COGNITIVE THINKING STREAM")
+        thought_box.setFont(QFont("Courier New", 8, QFont.Weight.Bold))
+        thought_box.setStyleSheet(f"""
+            QGroupBox {{
+                color: {C.ACC2};
+                border: 1px solid {C.BORDER};
+                border-radius: 4px;
+                margin-top: 10px;
+                padding-top: 5px;
+                background: {C.PANEL};
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 8px;
+                padding: 0 3px;
+            }}
+        """)
+        thought_lay = QVBoxLayout(thought_box)
+        thought_lay.setContentsMargins(4, 4, 4, 4)
+
+        self._thought_text = QTextEdit()
+        self._thought_text.setReadOnly(True)
+        self._thought_text.setFont(QFont("Courier New", 8))
+        self._thought_text.setStyleSheet(f"""
+            QTextEdit {{
+                background: #000a0f;
+                color: {C.ACC2};
+                border: none;
+                padding: 4px;
+            }}
+        """)
+        thought_lay.addWidget(self._thought_text)
+        hud_lay.addWidget(thought_box, stretch=3)
+
+        # 3. Execution flow timeline
+        flow_box = QGroupBox("◈ SYSTEM EXECUTION FLOW")
+        flow_box.setFont(QFont("Courier New", 8, QFont.Weight.Bold))
+        flow_box.setStyleSheet(f"""
+            QGroupBox {{
+                color: {C.GREEN};
+                border: 1px solid {C.BORDER};
+                border-radius: 4px;
+                margin-top: 10px;
+                padding-top: 5px;
+                background: {C.PANEL};
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                left: 8px;
+                padding: 0 3px;
+            }}
+        """)
+        flow_lay = QVBoxLayout(flow_box)
+        flow_lay.setContentsMargins(4, 4, 4, 4)
+
+        self._flow_list = QListWidget()
+        self._flow_list.setFont(QFont("Courier New", 8))
+        self._flow_list.setStyleSheet(f"""
+            QListWidget {{
+                background: #000a0f;
+                color: {C.TEXT};
+                border: none;
+                padding: 4px;
+            }}
+        """)
+        flow_lay.addWidget(self._flow_list)
+        hud_lay.addWidget(flow_box, stretch=3)
+
+        console_tab = QWidget()
+        console_lay = QVBoxLayout(console_tab)
+        console_lay.setContentsMargins(6, 6, 6, 6)
+        console_lay.setSpacing(6)
 
         def _sec(txt):
             l = QLabel(f"▸ {txt}")
@@ -1278,31 +1783,31 @@ class MainWindow(QMainWindow):
             l.setStyleSheet(f"color: {C.TEXT_MED}; background: transparent;")
             return l
 
-        lay.addWidget(_sec("ACTIVITY LOG"))
+        console_lay.addWidget(_sec("ACTIVITY LOG"))
         self._log = LogWidget()
-        lay.addWidget(self._log, stretch=1)
+        console_lay.addWidget(self._log, stretch=1)
 
         sep = QFrame(); sep.setFrameShape(QFrame.Shape.HLine)
         sep.setStyleSheet(f"color: {C.BORDER}; margin: 2px 0;")
-        lay.addWidget(sep)
+        console_lay.addWidget(sep)
 
-        lay.addWidget(_sec("FILE UPLOAD"))
+        console_lay.addWidget(_sec("FILE UPLOAD"))
         self._drop_zone = FileDropZone()
         self._drop_zone.file_selected.connect(self._on_file_selected)
-        lay.addWidget(self._drop_zone)
+        console_lay.addWidget(self._drop_zone)
 
         self._file_hint = QLabel("No file loaded — drop or click above to upload")
         self._file_hint.setFont(QFont("Courier New", 7))
         self._file_hint.setStyleSheet(f"color: {C.TEXT_MED}; background: transparent;")
         self._file_hint.setWordWrap(True)
-        lay.addWidget(self._file_hint)
+        console_lay.addWidget(self._file_hint)
 
         sep2 = QFrame(); sep2.setFrameShape(QFrame.Shape.HLine)
         sep2.setStyleSheet(f"color: {C.BORDER}; margin: 2px 0;")
-        lay.addWidget(sep2)
+        console_lay.addWidget(sep2)
 
-        lay.addWidget(_sec("COMMAND INPUT"))
-        lay.addLayout(self._build_input_row())
+        console_lay.addWidget(_sec("COMMAND INPUT"))
+        console_lay.addLayout(self._build_input_row())
 
         self._mute_btn = QPushButton("🎙  MICROPHONE ACTIVE")
         self._mute_btn.setFixedHeight(30)
@@ -1310,7 +1815,7 @@ class MainWindow(QMainWindow):
         self._mute_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self._mute_btn.clicked.connect(self._toggle_mute)
         self._style_mute_btn()
-        lay.addWidget(self._mute_btn)
+        console_lay.addWidget(self._mute_btn)
 
         fs_btn = QPushButton("⛶  FULLSCREEN  [F11]")
         fs_btn.setFixedHeight(26)
@@ -1326,7 +1831,263 @@ class MainWindow(QMainWindow):
             }}
         """)
         fs_btn.clicked.connect(self._toggle_fullscreen)
-        lay.addWidget(fs_btn)
+        console_lay.addWidget(fs_btn)
+
+        brain_tab = QWidget()
+        brain_lay = QVBoxLayout(brain_tab)
+        brain_lay.setContentsMargins(6, 6, 6, 6)
+        brain_lay.setSpacing(6)
+
+        brain_lay.addWidget(_sec("MEMORY REGISTRY"))
+        self._mem_list = QListWidget()
+        self._mem_list.setFont(QFont("Courier New", 8))
+        self._mem_list.setStyleSheet(f"""
+            QListWidget {{
+                background: {C.PANEL};
+                color: {C.GREEN};
+                border: 1px solid {C.BORDER};
+                border-radius: 4px;
+                padding: 4px;
+            }}
+        """)
+        brain_lay.addWidget(self._mem_list, stretch=2)
+
+        brain_lay.addWidget(_sec("ACTIVE GOALS / TASKS"))
+        self._task_list = QListWidget()
+        self._task_list.setFont(QFont("Courier New", 8))
+        self._task_list.setStyleSheet(f"""
+            QListWidget {{
+                background: {C.PANEL};
+                color: {C.PRI};
+                border: 1px solid {C.BORDER};
+                border-radius: 4px;
+                padding: 4px;
+            }}
+        """)
+        brain_lay.addWidget(self._task_list, stretch=1)
+
+        brain_lay.addWidget(_sec("AUTOMATED TOOLS MATRIX"))
+        self._tools_widget = QWidget()
+        self._tools_widget.setStyleSheet(f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;")
+        tools_grid = QGridLayout(self._tools_widget)
+        tools_grid.setContentsMargins(6, 6, 6, 6)
+        tools_grid.setSpacing(4)
+        
+        self.tool_labels = {}
+        tool_names = [
+            ("open_app", "App Opener"), ("weather_report", "Weather"), ("browser_control", "Browser"),
+            ("file_controller", "Files"), ("send_message", "WhatsApp"), ("reminder", "Reminder"),
+            ("youtube_video", "YouTube"), ("file_processor", "DocProc"), ("screen_process", "Vision"),
+            ("code_helper", "Coder"), ("dev_agent", "DevAgent"), ("agent_task", "Planner"),
+            ("web_search", "Search"), ("computer_control", "OS Control"), ("cmd_control", "PowerShell")
+        ]
+        
+        for idx, (t_id, t_name) in enumerate(tool_names):
+            row = idx // 3
+            col = idx % 3
+            lbl = QLabel(t_name)
+            lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            lbl.setStyleSheet(f"""
+                QLabel {{
+                    color: {C.TEXT_DIM};
+                    background: {C.PANEL};
+                    border: 1px solid {C.BORDER_A};
+                    border-radius: 2px;
+                    padding: 3px;
+                }}
+            """)
+            tools_grid.addWidget(lbl, row, col)
+            self.tool_labels[t_id] = lbl
+            
+        brain_lay.addWidget(self._tools_widget, stretch=2)
+
+        self.tabs.addTab(hud_tab, "HUD")
+        self.tabs.addTab(console_tab, "CONSOLE")
+        self.tabs.addTab(brain_tab, "BRAIN CORE")
+
+        # --- MOTHERBOT Tab ---
+        motherbot_tab = QWidget()
+        motherbot_lay = QVBoxLayout(motherbot_tab)
+        motherbot_lay.setContentsMargins(6, 6, 6, 6)
+        motherbot_lay.setSpacing(6)
+
+        motherbot_lay.addWidget(_sec("MOTHERBOT CORE SERVICES"))
+        
+        self.services_widget = QWidget()
+        self.services_widget.setStyleSheet(f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;")
+        services_grid = QGridLayout(self.services_widget)
+        services_grid.setContentsMargins(6, 6, 6, 6)
+        services_grid.setSpacing(4)
+        
+        self.service_labels = {}
+        service_names = [
+            ("ollama", "Ollama Local LLM"),
+            ("odysseus", "Odysseus AI Server"),
+            ("gateway", "Moltbot Gateway"),
+            ("ts_jarvis", "TS Jarvis Daemon"),
+            ("backend", "AI Studio Backend"),
+            ("frontend", "AI Studio Frontend"),
+            ("wa_forwarder", "WhatsApp Forwarder"),
+            ("hud_gui", "PyQt6 HUD GUI")
+        ]
+        
+        for idx, (s_id, s_name) in enumerate(service_names):
+            row = idx // 2
+            col = idx % 2
+            
+            box = QFrame()
+            box.setFrameShape(QFrame.Shape.Box)
+            box.setStyleSheet(f"background: {C.PANEL}; border: 1px solid {C.BORDER_A}; border-radius: 2px; padding: 4px;")
+            box_lay = QVBoxLayout(box)
+            box_lay.setContentsMargins(4, 4, 4, 4)
+            box_lay.setSpacing(1)
+            
+            name_lbl = QLabel(s_name)
+            name_lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+            name_lbl.setStyleSheet(f"color: {C.TEXT_MED}; border: none;")
+            box_lay.addWidget(name_lbl)
+            
+            status_lbl = QLabel("○ OFFLINE")
+            status_lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+            status_lbl.setStyleSheet(f"color: {C.RED}; border: none;")
+            box_lay.addWidget(status_lbl)
+            
+            services_grid.addWidget(box, row, col)
+            self.service_labels[s_id] = status_lbl
+            
+        motherbot_lay.addWidget(self.services_widget, stretch=2)
+
+        # Add Telemetry info
+        motherbot_lay.addWidget(_sec("NETWORK & CORE LISTENER PORTS"))
+        self.ports_widget = QTextEdit()
+        self.ports_widget.setReadOnly(True)
+        self.ports_widget.setFont(QFont("Courier New", 7))
+        self.ports_widget.setStyleSheet(f"background: #000a0f; color: {C.PRI}; border: 1px solid {C.BORDER}; border-radius: 4px; padding: 4px;")
+        motherbot_lay.addWidget(self.ports_widget, stretch=1)
+
+        # Controls Group
+        motherbot_lay.addWidget(_sec("MOTHERBOT CORE ACTIONS"))
+        self.controls_widget = QWidget()
+        self.controls_widget.setStyleSheet(f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;")
+        ctrl_lay = QHBoxLayout(self.controls_widget)
+        ctrl_lay.setContentsMargins(4, 4, 4, 4)
+        ctrl_lay.setSpacing(4)
+
+        btn_onboard = QPushButton("ONBOARD")
+        btn_health = QPushButton("HEALTH")
+        btn_train = QPushButton("TRAIN")
+        
+        for btn in [btn_onboard, btn_health, btn_train]:
+            btn.setFixedHeight(22)
+            btn.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+            btn.setCursor(Qt.CursorShape.PointingHandCursor)
+            btn.setStyleSheet(f"""
+                QPushButton {{
+                    background: {C.PANEL}; color: {C.TEXT};
+                    border: 1px solid {C.BORDER}; border-radius: 2px;
+                }}
+                QPushButton:hover {{
+                    background: {C.PRI_GHO}; color: {C.PRI}; border: 1px solid {C.PRI};
+                }}
+            """)
+            ctrl_lay.addWidget(btn)
+            
+        btn_onboard.clicked.connect(lambda: self._run_motherbot_cmd("clawdbot onboard"))
+        btn_health.clicked.connect(lambda: self._run_motherbot_cmd("clawdbot health"))
+        btn_train.clicked.connect(lambda: self._run_motherbot_cmd("self_training"))
+        
+        motherbot_lay.addWidget(self.controls_widget, stretch=0)
+
+        # Recent events
+        motherbot_lay.addWidget(_sec("MOTHERBOT SYSTEM EVENTS"))
+        self._motherbot_events = QListWidget()
+        self._motherbot_events.setFont(QFont("Courier New", 7))
+        self._motherbot_events.setStyleSheet(f"background: #000a0f; color: {C.TEXT_MED}; border: 1px solid {C.BORDER}; border-radius: 4px; padding: 4px;")
+        motherbot_lay.addWidget(self._motherbot_events, stretch=2)
+
+        self.tabs.addTab(motherbot_tab, "MOTHERBOT")
+
+        # --- WORLD MONITOR Tab (worldmonitor integration) ---
+        wm_tab = QWidget()
+        wm_lay = QVBoxLayout(wm_tab)
+        wm_lay.setContentsMargins(6, 6, 6, 6)
+        wm_lay.setSpacing(6)
+
+        wm_lay.addWidget(_sec("WORLD MONITOR — LIVE GLOBAL INTELLIGENCE"))
+
+        # Situation panel: Islamabad weather + AI world outlook
+        sit_panel = QWidget()
+        sit_panel.setStyleSheet(f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;")
+        sit_lay = QVBoxLayout(sit_panel)
+        sit_lay.setContentsMargins(8, 6, 8, 6)
+        sit_lay.setSpacing(3)
+
+        self._wm_weather = QLabel("⛅  Islamabad — loading weather…")
+        self._wm_weather.setFont(QFont("Courier New", 8, QFont.Weight.Bold))
+        self._wm_weather.setStyleSheet(f"color: {C.ACC2}; background: transparent; border: none;")
+        sit_lay.addWidget(self._wm_weather)
+
+        self._wm_outlook = QLabel("Situation & outlook loading…")
+        self._wm_outlook.setFont(QFont("Courier New", 8))
+        self._wm_outlook.setWordWrap(True)
+        self._wm_outlook.setStyleSheet(f"color: {C.TEXT_MED}; background: transparent; border: none;")
+        sit_lay.addWidget(self._wm_outlook)
+
+        wm_lay.addWidget(sit_panel, stretch=0)
+
+        # Category buttons
+        self._wm_cats = [
+            ("world", "WORLD"), ("us", "US"), ("europe", "EUROPE"),
+            ("middleeast", "MID-EAST"), ("asia", "ASIA"), ("finance", "FINANCE"),
+            ("tech", "TECH"), ("ai", "AI"), ("defense", "DEFENSE"), ("crisis", "CRISIS"),
+        ]
+        cat_widget = QWidget()
+        cat_widget.setStyleSheet(f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 4px;")
+        cat_grid = QGridLayout(cat_widget)
+        cat_grid.setContentsMargins(4, 4, 4, 4)
+        cat_grid.setSpacing(3)
+        for idx, (cid, label) in enumerate(self._wm_cats):
+            b = QPushButton(label)
+            b.setFixedHeight(20)
+            b.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
+            b.setCursor(Qt.CursorShape.PointingHandCursor)
+            b.setStyleSheet(f"""
+                QPushButton {{ background: {C.PANEL}; color: {C.TEXT};
+                    border: 1px solid {C.BORDER}; border-radius: 2px; }}
+                QPushButton:hover {{ background: {C.PRI_GHO}; color: {C.PRI}; border: 1px solid {C.PRI}; }}
+            """)
+            b.clicked.connect(lambda _=False, c=cid: self._wm_fetch(c))
+            cat_grid.addWidget(b, idx // 5, idx % 5)
+        wm_lay.addWidget(cat_widget, stretch=0)
+
+        self._wm_status = QLabel("Select a category or ask Jarvis for a world brief.")
+        self._wm_status.setFont(QFont("Courier New", 7))
+        self._wm_status.setStyleSheet(f"color: {C.TEXT_DIM}; background: transparent;")
+        wm_lay.addWidget(self._wm_status)
+
+        self._wm_list = QListWidget()
+        self._wm_list.setFont(QFont("Courier New", 8))
+        self._wm_list.setWordWrap(True)
+        self._wm_list.setStyleSheet(f"background: #000a0f; color: {C.PRI}; border: 1px solid {C.BORDER}; border-radius: 4px; padding: 4px;")
+        self._wm_list.itemActivated.connect(self._wm_open_item)
+        wm_lay.addWidget(self._wm_list, stretch=3)
+
+        self.tabs.addTab(wm_tab, "WORLD MONITOR")
+
+        self.tabs.setCurrentIndex(3)
+        lay.addWidget(self.tabs)
+
+        self._brain_refresh_tmr = QTimer(self)
+        self._brain_refresh_tmr.timeout.connect(self._refresh_brain_tab)
+        self._brain_refresh_tmr.start(4000)
+
+        # World Monitor: initial load shortly after startup, then auto-refresh.
+        QTimer.singleShot(6000, lambda: self._wm_fetch("world"))
+        QTimer.singleShot(7000, self._wm_load_situation)
+        self._wm_refresh_tmr = QTimer(self)
+        self._wm_refresh_tmr.timeout.connect(lambda: (self._wm_fetch("world"), self._wm_load_situation()))
+        self._wm_refresh_tmr.start(300000)  # every 5 minutes
 
         return w
 
@@ -1374,9 +2135,9 @@ class MainWindow(QMainWindow):
 
         lay.addWidget(_fl("[F4] Mute  ·  [F11] Fullscreen"))
         lay.addStretch()
-        lay.addWidget(_fl("FatihMakes Industries  ·  MARK XXXIX  ·  CLASSIFIED"))
+        lay.addWidget(_fl("MUHAMMAD'S JARVIS  ·  CLASSIFIED"))
         lay.addStretch()
-        lay.addWidget(_fl("© STARK INDUSTRIES", C.PRI_DIM))
+        lay.addWidget(_fl("© MUHAMMAD AI", C.PRI_DIM))
         return w
 
     def _on_file_selected(self, path: str):
@@ -1404,7 +2165,10 @@ class MainWindow(QMainWindow):
             self._apply_state("MUTED")
             self._log.append_log("SYS: Microphone muted.")
         else:
-            self._apply_state("LISTENING")
+            if self.hud.state.startswith("OFFLINE"):
+                self._apply_state("OFFLINE_LISTENING")
+            else:
+                self._apply_state("LISTENING")
             self._log.append_log("SYS: Microphone active.")
 
     def _style_mute_btn(self):
@@ -1436,14 +2200,13 @@ class MainWindow(QMainWindow):
 
     def _apply_state(self, state: str):
         self.hud.state    = state
-        self.hud.speaking = (state == "SPEAKING")
+        self.hud.speaking = (state == "SPEAKING" or state == "OFFLINE_SPEAKING")
 
     def _check_config(self) -> bool:
         if not API_FILE.exists(): return False
         try:
             d = json.loads(API_FILE.read_text(encoding="utf-8"))
             return (bool(d.get("gemini_api_key")) and
-                    bool(d.get("openrouter_api_key")) and
                     bool(d.get("os_system")))
         except Exception:
             return False
@@ -1478,6 +2241,246 @@ class MainWindow(QMainWindow):
             self._overlay = None
         self._apply_state("LISTENING")
         self._log.append_log(f"SYS: Initialised. OS={os_name.upper()}. JARVIS online.")
+
+    def set_tool_state(self, tool_id: str, state: str):
+        lbl = self.tool_labels.get(tool_id)
+        if not lbl: return
+        if state == "active":
+            lbl.setStyleSheet(f"""
+                QLabel {{
+                    color: {C.WHITE};
+                    background: {C.PRI_GHO};
+                    border: 1px solid {C.PRI};
+                    border-radius: 2px;
+                    padding: 3px;
+                }}
+            """)
+        elif state == "failed":
+            lbl.setStyleSheet(f"""
+                QLabel {{
+                    color: {C.WHITE};
+                    background: #1a0006;
+                    border: 1px solid {C.RED};
+                    border-radius: 2px;
+                    padding: 3px;
+                }}
+            """)
+        else:
+            lbl.setStyleSheet(f"""
+                QLabel {{
+                    color: {C.TEXT_DIM};
+                    background: {C.PANEL};
+                    border: 1px solid {C.BORDER_A};
+                    border-radius: 2px;
+                    padding: 3px;
+                }}
+            """)
+
+    def _refresh_brain_tab(self):
+        try:
+            from memory.memory_manager import load_memory
+            mem = load_memory()
+            self._mem_list.clear()
+            for cat, items in mem.items():
+                if isinstance(items, dict):
+                    for k, v in items.items():
+                        val = v.get("value", "") if isinstance(v, dict) else str(v)
+                        if len(val) > 28: val = val[:26] + "..."
+                        self._mem_list.addItem(f"[{cat.upper()}] {k}: {val}")
+        except Exception:
+            pass
+
+        try:
+            from agent.task_queue import get_queue
+            tasks = get_queue().get_all_statuses()
+            self._task_list.clear()
+            if not tasks:
+                self._task_list.addItem("No active system goals.")
+            else:
+                for t in tasks:
+                    status_indicator = "●" if t["status"] == "running" else "○"
+                    goal_text = t["goal"]
+                    if len(goal_text) > 30: goal_text = goal_text[:28] + "..."
+                    item = QListWidgetItem(f"{status_indicator} [{t['task_id']}] {goal_text} ({t['status'].upper()})")
+                    st = t["status"]
+                    if st == "running":
+                        item.setForeground(QBrush(qcol(C.PRI)))
+                    elif st in ("done", "completed", "success"):
+                        item.setForeground(QBrush(qcol(C.GREEN)))
+                    elif st in ("failed", "error"):
+                        item.setForeground(QBrush(qcol(C.RED)))
+                    else:
+                        item.setForeground(QBrush(qcol(C.TEXT_MED)))
+                    self._task_list.addItem(item)
+        except Exception:
+            pass
+
+    def _handle_motherbot_event(self, text: str):
+        t_str = time.strftime("[%H:%M:%S] ")
+        item = QListWidgetItem(t_str + text)
+        el = text.lower()
+        if "error" in el or "failed" in el:
+            item.setForeground(QBrush(qcol(C.RED)))
+        elif "learned" in el or "success" in el or "complete" in el:
+            item.setForeground(QBrush(qcol(C.GREEN)))
+        elif "invoking" in el or "running" in el:
+            item.setForeground(QBrush(qcol(C.PRI)))
+        else:
+            item.setForeground(QBrush(qcol(C.TEXT_MED)))
+        self._motherbot_events.insertItem(0, item)
+        if self._motherbot_events.count() > 50:
+            self._motherbot_events.takeItem(50)
+
+    # ---------------- WORLD MONITOR ----------------
+    def update_world_monitor(self, category, items):
+        """Thread-safe entry point the world_monitor tool calls from a worker thread."""
+        try:
+            self._wm_update_sig.emit(str(category), list(items or []))
+        except Exception:
+            pass
+
+    def _wm_fetch(self, category: str):
+        """Fetch headlines in a background thread, then update via signal."""
+        try:
+            self._wm_status.setText(f"Pulling live {category} intelligence…")
+        except Exception:
+            pass
+
+        def _run():
+            try:
+                from actions.world_monitor import get_headlines
+                items = get_headlines(category, 14)
+            except Exception as e:
+                items = []
+                print(f"[WorldMonitor UI] fetch error: {e}")
+            self._wm_update_sig.emit(category, items)
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _apply_world_monitor(self, category: str, items: list):
+        """Render headlines into the WORLD MONITOR list (runs on GUI thread)."""
+        self._wm_list.clear()
+        if not items:
+            self._wm_status.setText(f"No fresh {category} headlines available.")
+            return
+        self._wm_status.setText(
+            f"{category.upper()} — {len(items)} live headlines · updated {time.strftime('%H:%M:%S')}"
+        )
+        for it in items:
+            src = it.get("source", "")
+            title = it.get("title", "")
+            item = QListWidgetItem(f"●  {title}\n     — {src}")
+            item.setForeground(QBrush(qcol(C.PRI)))
+            item.setData(Qt.ItemDataRole.UserRole, it.get("link", ""))
+            self._wm_list.addItem(item)
+
+    def _wm_open_item(self, item):
+        link = item.data(Qt.ItemDataRole.UserRole)
+        if link:
+            try:
+                import webbrowser
+                webbrowser.open(link)
+            except Exception:
+                pass
+
+    def _wm_load_situation(self):
+        """Background-load Islamabad weather + world outlook into the situation panel."""
+        def _run():
+            weather_txt, outlook_txt = "⛅  Islamabad — weather unavailable", ""
+            try:
+                from actions.world_monitor import get_weather, get_situation_brief
+                w = get_weather("Islamabad")
+                if w:
+                    weather_txt = (
+                        f"⛅  ISLAMABAD  {w.get('temp_c','?')}°C "
+                        f"(feels {w.get('feels_c','?')}°C) · {w.get('desc','')} · "
+                        f"hum {w.get('humidity','?')}% · wind {w.get('wind_kph','?')}km/h"
+                    )
+                outlook_txt = get_situation_brief()
+            except Exception as e:
+                print(f"[WorldMonitor UI] situation error: {e}")
+            self._wm_sit_sig.emit(weather_txt, outlook_txt)
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _apply_situation(self, weather_txt: str, outlook_txt: str):
+        if weather_txt:
+            self._wm_weather.setText(weather_txt)
+        if outlook_txt:
+            self._wm_outlook.setText(outlook_txt)
+
+    def _run_motherbot_cmd(self, command: str):
+        self._motherbot_event_sig.emit(f"Invoking: {command}...")
+        
+        if command == "self_training":
+            def _run():
+                try:
+                    from actions.self_training import run_self_training
+                    res = run_self_training(limit=100)
+                    for line in res.splitlines():
+                        if line.strip():
+                            self._motherbot_event_sig.emit(line)
+                except Exception as e:
+                    self._motherbot_event_sig.emit(f"Training failed: {e}")
+            threading.Thread(target=_run, daemon=True).start()
+            return
+
+        def _run_sys():
+            try:
+                r = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=15)
+                out = r.stdout.strip()
+                err = r.stderr.strip()
+                if out:
+                    for line in out.splitlines():
+                        if line.strip():
+                            self._motherbot_event_sig.emit(line)
+                if err:
+                    for line in err.splitlines():
+                        if line.strip():
+                            self._motherbot_event_sig.emit(f"Error: {line}")
+                self._motherbot_event_sig.emit(f"Command finished (Exit Code {r.returncode})")
+            except Exception as e:
+                self._motherbot_event_sig.emit(f"Failed to execute command: {e}")
+        threading.Thread(target=_run_sys, daemon=True).start()
+
+    def _add_thought(self, text: str):
+        cur = self._thought_text.textCursor()
+        cur.movePosition(cur.MoveOperation.End)
+        cur.insertText(text)
+        self._thought_text.setTextCursor(cur)
+        self._thought_text.ensureCursorVisible()
+
+    def _clear_thoughts(self):
+        self._thought_text.clear()
+
+    def _update_intent(self, user_input: str, interpretation: str):
+        if user_input:
+            self._lbl_user_input.setText(f"USER INPUT: {user_input}")
+        if interpretation:
+            self._lbl_interpretation.setText(f"INTERPRETED GOAL: {interpretation}")
+
+    def _add_timeline_event(self, event_text: str):
+        t_str = time.strftime("[%H:%M:%S] ")
+        item = QListWidgetItem(t_str + event_text)
+        el = event_text.lower()
+        if "speech" in el or "you:" in el or "user" in el:
+            item.setForeground(QBrush(qcol(C.WHITE)))
+        elif "thought" in el:
+            item.setForeground(QBrush(qcol(C.ACC2)))
+        elif "tool running" in el or "tool: running" in el:
+            item.setForeground(QBrush(qcol(C.ACC)))
+        elif "success" in el or "finished" in el:
+            item.setForeground(QBrush(qcol(C.GREEN)))
+        elif "failed" in el or "error" in el:
+            item.setForeground(QBrush(qcol(C.RED)))
+        elif "memory" in el:
+            item.setForeground(QBrush(qcol("#00ff88")))
+        elif "task" in el:
+            item.setForeground(QBrush(qcol("#cc44ff")))
+        else:
+            item.setForeground(QBrush(qcol(C.TEXT_MED)))
+        self._flow_list.insertItem(0, item)
+        if self._flow_list.count() > 50:
+            self._flow_list.takeItem(50)
 
 class _RootShim:
     def __init__(self, app: QApplication):
@@ -1520,16 +2523,37 @@ class JarvisUI:
     def set_state(self, state: str):
         self._win._state_sig.emit(state)
 
+    def set_tool_state(self, tool_id: str, state: str):
+        self._win._tool_sig.emit(tool_id, state)
+
     def write_log(self, text: str):
         self._win._log_sig.emit(text)
+
+    def write_thought(self, text: str):
+        self._win._thought_sig.emit(text)
+
+    def clear_thoughts(self):
+        self._win._clear_thought_sig.emit()
+
+    def update_intent(self, user_input: str, interpretation: str):
+        self._win._intent_sig.emit(user_input, interpretation)
+
+    def write_timeline(self, text: str):
+        self._win._timeline_sig.emit(text)
 
     def wait_for_api_key(self):
         while not self._win._ready:
             time.sleep(0.1)
 
     def start_speaking(self):
-        self.set_state("SPEAKING")
+        if self._win.hud.state.startswith("OFFLINE"):
+            self.set_state("OFFLINE_SPEAKING")
+        else:
+            self.set_state("SPEAKING")
 
     def stop_speaking(self):
         if not self.muted:
-            self.set_state("LISTENING")
+            if self._win.hud.state.startswith("OFFLINE"):
+                self.set_state("OFFLINE_LISTENING")
+            else:
+                self.set_state("LISTENING")

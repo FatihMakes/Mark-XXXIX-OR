@@ -1286,6 +1286,7 @@ class MainWindow(QMainWindow):
         body.addWidget(self._right_panel, stretch=0)
 
         root.addLayout(body, stretch=1)
+        root.addWidget(self._build_command_bar())
         root.addWidget(self._build_footer())
 
         self._clock_tmr = QTimer(self)
@@ -2122,6 +2123,55 @@ class MainWindow(QMainWindow):
         row.addWidget(send)
         return row
 
+    def _build_command_bar(self) -> QWidget:
+        """Always-visible command input at the bottom of the main window."""
+        w = QWidget()
+        w.setFixedHeight(40)
+        w.setStyleSheet(f"background: {C.DARK}; border-top: 1px solid {C.BORDER};")
+        lay = QHBoxLayout(w)
+        lay.setContentsMargins(12, 5, 12, 5)
+        lay.setSpacing(6)
+
+        prompt = QLabel("⌘")
+        prompt.setFont(QFont("Courier New", 11, QFont.Weight.Bold))
+        prompt.setStyleSheet(f"color: {C.PRI}; background: transparent;")
+        lay.addWidget(prompt)
+
+        self._cmd_input = QLineEdit()
+        self._cmd_input.setPlaceholderText("Type a command for Jarvis and press Enter…")
+        self._cmd_input.setFont(QFont("Courier New", 9))
+        self._cmd_input.setFixedHeight(28)
+        self._cmd_input.setStyleSheet(
+            f"QLineEdit {{ background: {C.PANEL2}; color: {C.TEXT}; "
+            f"border: 1px solid {C.BORDER}; border-radius: 4px; padding: 2px 8px; }}"
+            f"QLineEdit:focus {{ border: 1px solid {C.PRI}; }}"
+        )
+        self._cmd_input.returnPressed.connect(self._send_cmd)
+        lay.addWidget(self._cmd_input, stretch=1)
+
+        send_btn = QPushButton("SEND")
+        send_btn.setFixedHeight(28)
+        send_btn.setFont(QFont("Courier New", 8, QFont.Weight.Bold))
+        send_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        send_btn.setStyleSheet(
+            f"QPushButton {{ background: {C.PANEL}; color: {C.PRI}; "
+            f"border: 1px solid {C.PRI}; border-radius: 4px; padding: 0 14px; }}"
+            f"QPushButton:hover {{ background: {C.PRI_GHO}; }}"
+        )
+        send_btn.clicked.connect(self._send_cmd)
+        lay.addWidget(send_btn)
+        return w
+
+    def _send_cmd(self):
+        txt = self._cmd_input.text().strip()
+        if not txt:
+            return
+        self._cmd_input.clear()
+        self._log_sig.emit(f"You: {txt}")
+        self._timeline_sig.emit(f"You (typed): {txt}")
+        if self.on_text_command:
+            threading.Thread(target=self.on_text_command, args=(txt,), daemon=True).start()
+
     def _build_footer(self) -> QWidget:
         w = QWidget()
         w.setFixedHeight(22)
@@ -2540,6 +2590,11 @@ class JarvisUI:
 
     def write_timeline(self, text: str):
         self._win._timeline_sig.emit(text)
+        # Mirror activity into the MOTHERBOT "System Events" live feed.
+        try:
+            self._win._motherbot_event_sig.emit(text)
+        except Exception:
+            pass
 
     def wait_for_api_key(self):
         while not self._win._ready:

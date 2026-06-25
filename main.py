@@ -59,6 +59,10 @@ CHUNK_SIZE          = 1024
 
 force_offline = False
 last_offline_time = 0.0
+# How long to stay on the local (Ollama) core after an online failure before
+# retrying Gemini. Short so Jarvis returns online quickly once the net is back —
+# while real internet loss keeps it on Ollama (check_internet gates the switch).
+OFFLINE_COOLDOWN = 120
 
 
 def _get_api_key() -> str:
@@ -714,6 +718,9 @@ class JarvisLive:
             # Let us resume the SAME session after a server-side drop so the voice
             # continues seamlessly instead of cold-restarting (the "awaz atakti hai" bug).
             session_resumption=types.SessionResumptionConfig(handle=self._session_handle),
+            # Reasoning: let the model think before answering and stream its thoughts
+            # to the HUD (BRAIN CORE / thought display already render them).
+            thinking_config=types.ThinkingConfig(include_thoughts=True),
         )
 
     async def _execute_tool(self, fc) -> types.FunctionResponse:
@@ -1344,7 +1351,7 @@ class JarvisOffline:
         while self.running:
             # Check if cooling down period over
             global force_offline, last_offline_time
-            if force_offline and (time.time() - last_offline_time > 3600):
+            if force_offline and (time.time() - last_offline_time > OFFLINE_COOLDOWN):
                 print("[JARVIS] Offline cooling-down period over. Enabling online retry.")
                 force_offline = False
 
@@ -1402,7 +1409,7 @@ def main():
         ui.wait_for_api_key()
         while True:
             # Check if cooling down period is over
-            if force_offline and (time.time() - last_offline_time > 3600):
+            if force_offline and (time.time() - last_offline_time > OFFLINE_COOLDOWN):
                 print("[JARVIS] Offline cooling-down period over. Retrying online connection...")
                 force_offline = False
 

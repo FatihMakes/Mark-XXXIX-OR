@@ -24,14 +24,9 @@ def _load_api_key() -> str:
     try:
         with open(API_KEY_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
-        key = data.get("openrouter_api_key", "").strip()
-        if not key:
-            raise ValueError("openrouter_api_key is empty in api_keys.json")
-        return key
-    except FileNotFoundError:
-        raise RuntimeError(f"api_keys.json not found at: {API_KEY_PATH}")
-    except Exception as e:
-        raise RuntimeError(f"Failed to load OpenRouter API key: {e}")
+        return data.get("openrouter_api_key", "").strip()
+    except Exception:
+        return ""
 
 TEXT_MODELS: list[str] = [
     "nvidia/nemotron-3-super-120b-a12b:free",
@@ -114,6 +109,9 @@ class OpenRouterClient:
         temperature: float = DEFAULT_TEMPERATURE,
         response_format: Optional[dict] = None,
     ) -> Optional[str]:
+        if not self.api_key:
+            logger.warning("[OpenRouter] API key is missing. Skipping request.")
+            return None
         payload: dict = {
             "model":       model,
             "messages":    messages,

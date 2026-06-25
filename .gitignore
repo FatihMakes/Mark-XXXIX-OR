@@ -1,0 +1,22 @@
+# --- Secrets (NEVER commit) ---
+config/api_keys.json
+
+# --- Python caches ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# --- Logs ---
+*.log
+
+# --- Local runtime data ---
+database/
+memory/long_term.json
+
+# --- Scratch: cloned repos (worldmonitor/odysseus/ollama), test scripts, studies ---
+scratch/
+
+# --- Local binaries / personal media ---
+*.png
+*.jpg
+*.jpeg

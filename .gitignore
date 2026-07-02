@@ -1,0 +1,25 @@
+# Byte-compiled / cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# Cache di tool
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Ambienti virtuali
+.venv/
+venv/
+env/
+ENV/
+
+# Segreti / configurazione locale (NON committare le chiavi API)
+config/api_keys.json
+
+# File di sistema
+.DS_Store

@@ -3,40 +3,65 @@ import re
 import sys
 import json
 import time
+import platform
 import subprocess
 import threading
-import winreg
 from pathlib import Path
 from datetime import datetime
 
+_OS = platform.system()  # "Windows" | "Darwin" | "Linux"
 
+
+# ---------------------------------------------------------------------------
+# Steam discovery
+# ---------------------------------------------------------------------------
 def _find_steam_path() -> Path | None:
-    registry_keys = [
-        (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\WOW6432Node\Valve\Steam"),
-        (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Valve\Steam"),
-        (winreg.HKEY_CURRENT_USER,  r"SOFTWARE\Valve\Steam"),
-    ]
-    for hive, key_path in registry_keys:
-        try:
-            key = winreg.OpenKey(hive, key_path)
-            val, _ = winreg.QueryValueEx(key, "InstallPath")
-            winreg.CloseKey(key)
-            p = Path(val)
+    if _OS == "Windows":
+        import winreg
+        registry_keys = [
+            (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\WOW6432Node\Valve\Steam"),
+            (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Valve\Steam"),
+            (winreg.HKEY_CURRENT_USER,  r"SOFTWARE\Valve\Steam"),
+        ]
+        for hive, key_path in registry_keys:
+            try:
+                key = winreg.OpenKey(hive, key_path)
+                val, _ = winreg.QueryValueEx(key, "InstallPath")
+                winreg.CloseKey(key)
+                p = Path(val)
+                if p.exists() and (p / "steam.exe").exists():
+                    return p
+            except Exception:
+                continue
+        for p in [
+            Path(os.environ.get("ProgramFiles(x86)", "")) / "Steam",
+            Path(os.environ.get("ProgramFiles", "")) / "Steam",
+            Path("C:/Steam"), Path("D:/Steam"), Path("E:/Steam"), Path("F:/Steam"),
+        ]:
             if p.exists() and (p / "steam.exe").exists():
                 return p
-        except Exception:
-            continue
+        return None
+
+    if _OS == "Darwin":
+        p = Path.home() / "Library" / "Application Support" / "Steam"
+        return p if p.exists() else None
+
+    # Linux
     for p in [
-        Path(os.environ.get("ProgramFiles(x86)", "")) / "Steam",
-        Path(os.environ.get("ProgramFiles", "")) / "Steam",
-        Path("C:/Steam"), Path("D:/Steam"), Path("E:/Steam"), Path("F:/Steam"),
+        Path.home() / ".steam" / "steam",
+        Path.home() / ".local" / "share" / "Steam",
+        Path.home() / ".var" / "app" / "com.valvesoftware.Steam" / "data" / "Steam",
     ]:
-        if p.exists() and (p / "steam.exe").exists():
+        if p.exists():
             return p
     return None
 
 
 def _find_epic_path() -> Path | None:
+    # Epic Games Launcher is effectively Windows-only for this integration.
+    if _OS != "Windows":
+        return None
+    import winreg
     registry_keys = [
         (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\WOW6432Node\EpicGames\EpicGamesLauncher"),
         (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\EpicGames\EpicGamesLauncher"),
@@ -101,15 +126,56 @@ def _get_steam_games(steam_path: Path) -> list[dict]:
     return games
 
 
+# ---------------------------------------------------------------------------
+# Steam process / launch helpers (cross-platform)
+# ---------------------------------------------------------------------------
 def _is_steam_running() -> bool:
     try:
-        out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq steam.exe"],
-                             capture_output=True, text=True).stdout
-        return "steam.exe" in out.lower()
+        if _OS == "Windows":
+            out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq steam.exe"],
+                                 capture_output=True, text=True).stdout
+            return "steam.exe" in out.lower()
+        # macOS / Linux
+        return subprocess.run(["pgrep", "-i", "steam"],
+                              capture_output=True).returncode == 0
     except Exception:
         return False
 
 
+def _launch_steam(steam_path: Path) -> bool:
+    """Launch the Steam client for the current OS. Returns False if unavailable."""
+    try:
+        if _OS == "Windows":
+            steam_exe = steam_path / "steam.exe"
+            if not steam_exe.exists():
+                print("[GameUpdater] ❌ steam.exe not found")
+                return False
+            subprocess.Popen([str(steam_exe)])
+            return True
+        if _OS == "Darwin":
+            subprocess.Popen(["open", "-a", "Steam"])
+            return True
+        # Linux
+        subprocess.Popen(["steam"])
+        return True
+    except Exception as e:
+        print(f"[GameUpdater] ❌ Could not launch Steam: {e}")
+        return False
+
+
+def _run_steam_uri(steam_path: Path, uri: str) -> None:
+    """Trigger a steam:// URI. On Windows use steam.exe, elsewhere the URL handler."""
+    if _OS == "Windows":
+        subprocess.Popen([str(steam_path / "steam.exe"), uri])
+    elif _OS == "Darwin":
+        subprocess.Popen(["open", uri])
+    else:  # Linux
+        subprocess.Popen(["xdg-open", uri])
+
+
+# ---------------------------------------------------------------------------
+# Windows-only UI automation (profile picker / install dialog)
+# ---------------------------------------------------------------------------
 def _get_steam_window_rect() -> tuple[int, int, int, int] | None:
     try:
         import pygetwindow as gw
@@ -231,20 +297,18 @@ def _ensure_steam_running(steam_path: Path) -> bool:
     if _is_steam_running():
         return True
 
-    steam_exe = steam_path / "steam.exe"
-    if not steam_exe.exists():
-        print("[GameUpdater] ❌ steam.exe not found")
+    if not _launch_steam(steam_path):
         return False
 
     print("[GameUpdater] 🚀 Starting Steam...")
-    subprocess.Popen([str(steam_exe)])
-
     for _ in range(20):
         time.sleep(1)
         if _is_steam_running():
             print("[GameUpdater] ✅ Steam running")
             time.sleep(4)
-            _handle_steam_profile_selection()
+            # Automated profile picking relies on Windows-only window automation.
+            if _OS == "Windows":
+                _handle_steam_profile_selection()
             time.sleep(2)
             return True
 
@@ -256,8 +320,7 @@ def _update_steam_games(steam_path: Path, game_name: str = None) -> str:
     if not _ensure_steam_running(steam_path):
         return "Could not start Steam."
 
-    steam_exe = steam_path / "steam.exe"
-    games     = _get_steam_games(steam_path)
+    games = _get_steam_games(steam_path)
 
     if not games:
         return "No Steam games found."
@@ -283,7 +346,7 @@ def _update_steam_games(steam_path: Path, game_name: str = None) -> str:
             already_running.append(name)
         else:
             try:
-                subprocess.Popen([str(steam_exe), f"steam://update/{game['id']}"])
+                _run_steam_uri(steam_path, f"steam://update/{game['id']}")
                 update_started.append(name)
                 time.sleep(0.3)
             except Exception as e:
@@ -387,6 +450,9 @@ def _search_steam_appid(game_name: str) -> tuple[str | None, str | None]:
     return None, None
 
 
+# ---------------------------------------------------------------------------
+# Windows-only install-dialog automation (drive letters do not exist elsewhere)
+# ---------------------------------------------------------------------------
 def _find_best_drive() -> dict | None:
     import shutil, string
     drives = []
@@ -548,7 +614,6 @@ def _install_steam_game(steam_path: Path, game_name: str = None, app_id: str = N
     if not _ensure_steam_running(steam_path):
         return "Could not start Steam."
 
-    steam_exe       = steam_path / "steam.exe"
     installed_games = _get_steam_games(steam_path)
 
     already = None
@@ -568,7 +633,7 @@ def _install_steam_game(steam_path: Path, game_name: str = None, app_id: str = N
         if state == 1026:
             return f"'{name}' is currently downloading or updating."
         if state in (6, 516):
-            subprocess.Popen([str(steam_exe), f"steam://update/{already['id']}"])
+            _run_steam_uri(steam_path, f"steam://update/{already['id']}")
             return f"'{name}' has a pending update. Update started."
         return f"'{name}' is already installed."
 
@@ -581,9 +646,13 @@ def _install_steam_game(steam_path: Path, game_name: str = None, app_id: str = N
         print(f"[GameUpdater] 🔍 Installing: {game_name} (AppID: {app_id})")
 
     try:
-        subprocess.Popen([str(steam_exe), f"steam://install/{app_id}"])
-        threading.Thread(target=_handle_install_dialog, args=(game_name or str(app_id),), daemon=True).start()
-        return f"Install started for '{game_name}'. Steam will open the download dialog."
+        _run_steam_uri(steam_path, f"steam://install/{app_id}")
+        # The install-dialog automation only exists on Windows; elsewhere Steam
+        # shows its own dialog and the user confirms the location manually.
+        if _OS == "Windows":
+            threading.Thread(target=_handle_install_dialog, args=(game_name or str(app_id),), daemon=True).start()
+            return f"Install started for '{game_name}'. Steam will open the download dialog."
+        return f"Install started for '{game_name}'. Confirm the download in the Steam window."
     except Exception as e:
         return f"Install failed: {e}"
 
@@ -600,6 +669,16 @@ def _get_download_status(steam_path: Path) -> str:
         suffix = f" and {len(pending) - 5} more" if len(pending) > 5 else ""
         lines.append(f"Pending updates: {names}{suffix}.")
     return " ".join(lines) if lines else "No active downloads or pending updates."
+
+
+def _shutdown_system() -> None:
+    if _OS == "Windows":
+        subprocess.run(["shutdown", "/s", "/t", "10"])
+    elif _OS == "Darwin":
+        subprocess.run(["osascript", "-e",
+                        'tell application "System Events" to shut down'])
+    else:  # Linux
+        subprocess.run(["shutdown", "-h", "+1"])
 
 
 def _watch_and_shutdown(steam_path: Path, speak=None, check_interval: int = 30, timeout_hours: int = 12):
@@ -621,13 +700,18 @@ def _watch_and_shutdown(steam_path: Path, speak=None, check_interval: int = 30, 
         if not any(g["state"] == 1026 for g in _get_steam_games(steam_path)):
             if speak: speak("Download complete. Shutting down now.")
             time.sleep(5)
-            subprocess.run(["shutdown", "/s", "/t", "10"])
+            _shutdown_system()
             return
 
     if speak: speak("Download taking too long. Cancelling auto-shutdown.")
 
 
+# ---------------------------------------------------------------------------
+# Epic Games (Windows-only integration)
+# ---------------------------------------------------------------------------
 def _get_epic_games() -> list[dict]:
+    if _OS != "Windows":
+        return []
     manifests_path = (Path(os.environ.get("PROGRAMDATA", "C:/ProgramData"))
                       / "Epic" / "EpicGamesLauncher" / "Data" / "Manifests")
     if not manifests_path.exists():
@@ -645,6 +729,8 @@ def _get_epic_games() -> list[dict]:
 
 
 def _is_epic_running() -> bool:
+    if _OS != "Windows":
+        return False
     try:
         return "epicgameslauncher.exe" in subprocess.run(
             ["tasklist", "/FI", "IMAGENAME eq EpicGamesLauncher.exe"],
@@ -683,35 +769,105 @@ def _update_epic_games(epic_path: Path, game_name: str = None) -> str:
             return f"Epic update failed: {e}"
 
 
+# ---------------------------------------------------------------------------
+# Scheduling: Task Scheduler (Windows) / launchd (macOS) / cron note (Linux)
+# ---------------------------------------------------------------------------
+_LAUNCHD_LABEL = "com.jarvis.gameupdater"
+
+
+def _launchd_plist_path() -> Path:
+    return Path.home() / "Library" / "LaunchAgents" / f"{_LAUNCHD_LABEL}.plist"
+
+
 def _schedule_daily_update(hour: int = 3, minute: int = 0) -> str:
-    task_name   = "JARVIS_GameUpdater"
     script_path = Path(__file__).resolve()
-    subprocess.run(["schtasks", "/Delete", "/TN", task_name, "/F"], capture_output=True)
-    for extra in (["/RL", "HIGHEST", "/RU", "SYSTEM"], []):
-        cmd    = ["schtasks", "/Create", "/TN", task_name,
-                  "/TR", f'"{sys.executable}" "{script_path}" --scheduled',
-                  "/SC", "DAILY", "/ST", f"{hour:02d}:{minute:02d}", "/F", *extra]
-        result = subprocess.run(cmd, capture_output=True, text=True)
+
+    if _OS == "Windows":
+        task_name = "JARVIS_GameUpdater"
+        subprocess.run(["schtasks", "/Delete", "/TN", task_name, "/F"], capture_output=True)
+        for extra in (["/RL", "HIGHEST", "/RU", "SYSTEM"], []):
+            cmd    = ["schtasks", "/Create", "/TN", task_name,
+                      "/TR", f'"{sys.executable}" "{script_path}" --scheduled',
+                      "/SC", "DAILY", "/ST", f"{hour:02d}:{minute:02d}", "/F", *extra]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode == 0:
+                return f"Daily game update scheduled at {hour:02d}:{minute:02d}."
+        return f"Scheduling failed: {result.stderr.strip()}"
+
+    if _OS == "Darwin":
+        plist = _launchd_plist_path()
+        plist.parent.mkdir(parents=True, exist_ok=True)
+        plist.write_text(f'''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key><string>{_LAUNCHD_LABEL}</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{sys.executable}</string>
+        <string>{script_path}</string>
+        <string>--scheduled</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key><integer>{hour}</integer>
+        <key>Minute</key><integer>{minute}</integer>
+    </dict>
+    <key>RunAtLoad</key><false/>
+</dict>
+</plist>
+''', encoding="utf-8")
+        subprocess.run(["launchctl", "unload", str(plist)], capture_output=True)
+        result = subprocess.run(["launchctl", "load", str(plist)], capture_output=True, text=True)
         if result.returncode == 0:
             return f"Daily game update scheduled at {hour:02d}:{minute:02d}."
-    return f"Scheduling failed: {result.stderr.strip()}"
+        return f"Scheduling failed: {result.stderr.strip() or result.stdout.strip()}"
+
+    return ("Automatic scheduling is not supported on Linux. Add a cron entry manually: "
+            f"{minute} {hour} * * * {sys.executable} {script_path} --scheduled")
 
 
 def _cancel_scheduled_update() -> str:
-    result = subprocess.run(["schtasks", "/Delete", "/TN", "JARVIS_GameUpdater", "/F"],
-                            capture_output=True, text=True)
-    return "Scheduled update cancelled." if result.returncode == 0 else "No scheduled update found."
+    if _OS == "Windows":
+        result = subprocess.run(["schtasks", "/Delete", "/TN", "JARVIS_GameUpdater", "/F"],
+                                capture_output=True, text=True)
+        return "Scheduled update cancelled." if result.returncode == 0 else "No scheduled update found."
+
+    if _OS == "Darwin":
+        plist = _launchd_plist_path()
+        if not plist.exists():
+            return "No scheduled update found."
+        subprocess.run(["launchctl", "unload", str(plist)], capture_output=True)
+        try:
+            plist.unlink()
+        except Exception:
+            pass
+        return "Scheduled update cancelled."
+
+    return "Automatic scheduling is not supported on Linux; remove the cron entry manually."
 
 
 def _get_schedule_status() -> str:
-    result = subprocess.run(["schtasks", "/Query", "/TN", "JARVIS_GameUpdater", "/FO", "LIST"],
-                            capture_output=True, text=True)
-    if result.returncode != 0:
-        return "No scheduled game update found."
-    for line in result.stdout.strip().split("\n"):
-        if any(k in line for k in ("Next Run", "Sonraki", "Prochaine", "Próxima", "Nächste")):
-            return f"Game update scheduled. {line.strip()}"
-    return "Game update is scheduled."
+    if _OS == "Windows":
+        result = subprocess.run(["schtasks", "/Query", "/TN", "JARVIS_GameUpdater", "/FO", "LIST"],
+                                capture_output=True, text=True)
+        if result.returncode != 0:
+            return "No scheduled game update found."
+        for line in result.stdout.strip().split("\n"):
+            if any(k in line for k in ("Next Run", "Sonraki", "Prochaine", "Próxima", "Nächste")):
+                return f"Game update scheduled. {line.strip()}"
+        return "Game update is scheduled."
+
+    if _OS == "Darwin":
+        plist = _launchd_plist_path()
+        if not plist.exists():
+            return "No scheduled game update found."
+        running = subprocess.run(["launchctl", "list", _LAUNCHD_LABEL],
+                                 capture_output=True).returncode == 0
+        return "Game update is scheduled and loaded." if running else \
+               "Game update plist exists but is not loaded."
+
+    return "Automatic scheduling is not supported on Linux."
 
 
 def game_updater(parameters: dict, player=None, speak=None) -> str:
@@ -744,13 +900,16 @@ def game_updater(parameters: dict, player=None, speak=None) -> str:
             else:
                 results.append("Steam: Not installed.")
         if platform in ("epic", "both"):
-            games = _get_epic_games()
-            if games:
-                names  = ", ".join(g["name"] for g in games[:8])
-                suffix = f" and {len(games) - 8} more" if len(games) > 8 else ""
-                results.append(f"Epic ({len(games)} games): {names}{suffix}.")
+            if _OS != "Windows":
+                results.append("Epic: only supported on Windows.")
             else:
-                results.append("Epic: No games found.")
+                games = _get_epic_games()
+                if games:
+                    names  = ", ".join(g["name"] for g in games[:8])
+                    suffix = f" and {len(games) - 8} more" if len(games) > 8 else ""
+                    results.append(f"Epic ({len(games)} games): {names}{suffix}.")
+                else:
+                    results.append("Epic: No games found.")
         return " | ".join(results) or "No platforms found."
 
     if action == "download_status":
@@ -758,7 +917,8 @@ def game_updater(parameters: dict, player=None, speak=None) -> str:
             steam_path = _find_steam_path()
             results.append(_get_download_status(steam_path) if steam_path else "Steam: Not installed.")
         if platform in ("epic", "both"):
-            results.append("Epic download status not available directly.")
+            results.append("Epic download status not available directly."
+                           if _OS == "Windows" else "Epic: only supported on Windows.")
         return " ".join(results)
 
     if action in ("install", "update"):
@@ -797,11 +957,14 @@ def game_updater(parameters: dict, player=None, speak=None) -> str:
                     results.append("Auto-shutdown enabled.")
 
         if platform in ("epic", "both"):
-            epic_path = _find_epic_path()
-            if epic_path:
-                results.append(f"Epic: {_update_epic_games(epic_path, game_name=game_name)}")
+            if _OS != "Windows":
+                results.append("Epic: only supported on Windows.")
             else:
-                results.append("Epic: Not installed.")
+                epic_path = _find_epic_path()
+                if epic_path:
+                    results.append(f"Epic: {_update_epic_games(epic_path, game_name=game_name)}")
+                else:
+                    results.append("Epic: Not installed.")
 
         output = " | ".join(results) or "Nothing to do."
         if player: player.write_log(f"[GameUpdater] {output[:100]}")

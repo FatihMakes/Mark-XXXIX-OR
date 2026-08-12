@@ -1,0 +1,12 @@
+{
+  "name": "nova-avatar-electron",
+  "version": "0.1.0",
+  "description": "NOVA 3D avatar demo (Three.js + Electron)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^25.0.0"
+  }
+}

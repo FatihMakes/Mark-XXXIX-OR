@@ -15,6 +15,8 @@ try:
 except ImportError:
     _PYAUTOGUI = False
 
+from utils.logger import log_action
+
 _OS = platform.system()  # "Windows" | "Darwin" | "Linux"
 
 
@@ -64,7 +66,7 @@ def _build_sandbox() -> dict:
             import winreg
             sandbox["ctypes"] = ctypes
             sandbox["winreg"] = type("winreg", (), {
-                # Sadece okuma
+                # read-only helpers
                 "OpenKey":      winreg.OpenKey,
                 "QueryValueEx": winreg.QueryValueEx,
                 "HKEY_CURRENT_USER": winreg.HKEY_CURRENT_USER,
@@ -76,24 +78,61 @@ def _build_sandbox() -> dict:
 
 
 def _execute_generated_code(code: str, player=None) -> str:
+    """Execute generated code in an isolated subprocess when possible.
+
+    Falls back to an in-process limited-sandbox exec only if the isolated runner is unavailable.
+    The isolated runner improves safety but is NOT a full security sandbox. For maximum safety run
+    generated code inside a container or VM.
+    """
     if not code or code.strip() == "UNSAFE":
         return "This action cannot be performed safely."
 
-    # Kod temizleme
+    # Strip Markdown fences if present
     if code.startswith("```"):
         lines = code.split("\n")
         code  = "\n".join(lines[1:-1]).strip()
 
+    # Try to use the exec_isolated helper if available
+    try:
+        from actions.exec_isolated import execute_code_isolated
+    except Exception as e:
+        execute_code_isolated = None
+        log_action("execute_helper_missing", str(e))
+
+    if execute_code_isolated:
+        try:
+            log_action("execute_generated_code.request", f"len={len(code)}")
+            res = execute_code_isolated(code)
+            # res: {"returncode", "stdout", "stderr", "timed_out"}
+            if res.get("timed_out"):
+                return "Execution timed out."
+            rc = res.get("returncode")
+            out = (res.get("stdout") or "").strip()
+            err = (res.get("stderr") or "").strip()
+            log_action("execute_generated_code.result", f"rc={rc} out_len={len(out)} err_len={len(err)}")
+            if rc == 0 or rc is None:
+                return out if out else "Done."
+            return f"Execution error (rc={rc}): {err or out}"
+        except Exception as e:
+            log_action("execute_generated_code.error", str(e))
+            # fallthrough to sandboxed exec
+
+    # Fallback: very limited in-process exec (last resort)
     sandbox      = _build_sandbox()
     output_lines = []
     sandbox["__builtins__"]["print"] = lambda *a: output_lines.append(" ".join(str(x) for x in a))
 
     try:
+        log_action("execute_generated_code.fallback_start", f"len={len(code)}")
         exec(compile(code, "<jarvis_desktop>", "exec"), sandbox)
-        return "\n".join(output_lines) if output_lines else "Done."
+        out = "\n".join(output_lines) if output_lines else "Done."
+        log_action("execute_generated_code.fallback_end", f"out_len={len(out)}")
+        return out
     except Exception as e:
+        log_action("execute_generated_code.fallback_error", str(e))
         print(f"[Desktop] Exec error: {e}\nCode:\n{code[:300]}")
         return f"Execution error: {e}"
+
 
 def _ask_gemini_for_desktop_action(task: str) -> str:
     from or_client import client

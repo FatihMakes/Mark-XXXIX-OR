@@ -1,0 +1,7 @@
+{
+  "send_screenshots": false,
+  "ask_before_send": true,
+  "domains_whitelist": ["localhost"],
+  "pyautogui_retries": 3,
+  "sandbox_timeout": 10
+}

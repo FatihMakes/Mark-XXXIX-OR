@@ -1,0 +1,9 @@
+# Autopilot safety & hygiene
+logs/
+web/avatar-electron/node_modules/
+node_modules/
+*.pyc
+__pycache__/
+.DS_Store
+env/
+.env

@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; background: #0e1116; color: #e6eef8; margin: 0; padding: 20px; }
+#ui { max-width: 980px; margin: 0 auto; }
+#canvas-container { background: #111418; border: 1px solid #222; height: 400px; display: flex; align-items: center; justify-content: center; }
+#controls { margin-top: 12px; display:flex; gap:8px; }
+input[type='text']{ flex:1; padding:8px; border-radius:4px; border:1px solid #333; background:#0b0d11; color:#fff }
+button{ padding:8px 12px; border-radius:4px; border:none; background:#2b8cff; color:#fff }

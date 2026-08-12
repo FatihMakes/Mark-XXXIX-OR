@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NOVA Avatar — Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="ui">
+    <h1>NOVA — 3D Avatar Demo</h1>
+    <div id="canvas-container"></div>
+    <div id="controls">
+      <input id="text" type="text" placeholder="Say something to NOVA..." value="Hello, I am NOVA." />
+      <button id="speak">Speak (browser)</button>
+      <button id="speak-pyttsx3">Speak (pyttsx3 server)</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

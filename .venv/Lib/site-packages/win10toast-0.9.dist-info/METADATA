@@ -1,0 +1,69 @@
+Metadata-Version: 2.0
+Name: win10toast
+Version: 0.9
+Summary: An easy-to-use Python library for displaying Windows 10 Toast Notifications
+Home-page: https://github.com/jithurjacob/Windows-10-Toast-Notifications
+Author: Jithu R Jacob
+Author-email: jithurjacob@gmail.com
+License: BSD
+Download-URL: https://github.com/jithurjacob/Windows-10-Toast-Notifications/tarball/0.9
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Topic :: Utilities
+Classifier: Operating System :: Microsoft
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: License :: OSI Approved :: MIT License
+Requires-Dist: pypiwin32
+Requires-Dist: setuptools
+
+# Windows 10 Toast Notifications
+
+An easy-to-use Python library for displaying Windows 10 Toast Notifications which is useful for Windows GUI development.
+
+
+![o7ja4 1](https://cloud.githubusercontent.com/assets/7101452/19763806/75f71ba4-9c5d-11e6-9f16-d0d4bf43e63e.png)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjithurjacob%2FWindows-10-Toast-Notifications.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjithurjacob%2FWindows-10-Toast-Notifications?ref=badge_shield)
+
+
+
+## Installation
+
+```
+pip install win10toast
+```
+
+## Requirements
+
+### Installation of pywin32
+```
+pypiwin32
+setuptools
+```
+
+## Example
+
+```
+from win10toast import ToastNotifier
+toaster = ToastNotifier()
+toaster.show_toast("Hello World!!!",
+                   "Python is 10 seconds awsm!",
+                   icon_path="custom.ico",
+                   duration=10)
+
+toaster.show_toast("Example two",
+                   "This notification is in it's own thread!",
+                   icon_path=None,
+                   duration=5,
+                   threaded=True)
+# Wait for threaded notification to finish
+while toaster.notification_active(): time.sleep(0.1)
+```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjithurjacob%2FWindows-10-Toast-Notifications.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjithurjacob%2FWindows-10-Toast-Notifications?ref=badge_large)
+
+

@@ -1,0 +1,184 @@
+# Copyright (c) 2023, exiledkingcc
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#
+# * Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+# * Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+# * The name of the author may not be used to endorse or promote products
+# derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+import secrets
+
+from cryptography import __version__
+from cryptography.exceptions import UnsupportedAlgorithm
+from cryptography.hazmat.primitives.ciphers.algorithms import AES
+from cryptography.hazmat.primitives.ciphers.base import Cipher
+from cryptography.hazmat.primitives.ciphers.modes import CBC, ECB
+from cryptography.hazmat.primitives.padding import PKCS7
+
+from pypdf._crypt_providers._base import CryptBase
+from pypdf._utils import logger_warning
+from pypdf.errors import PdfStreamError
+
+try:
+    # 43.0.0: https://cryptography.io/en/latest/changelog/#v43-0-0
+    from cryptography.hazmat.decrepit.ciphers.algorithms import ARC4
+except ImportError:
+    from cryptography.hazmat.primitives.ciphers.algorithms import ARC4
+
+crypt_provider = ("cryptography", __version__)
+
+
+class CryptRC4(CryptBase):
+    # Assume OpenSSL provides RC4; flipped to False the first time it rejects
+    # the cipher (e.g. legacy provider disabled), so the failing attempt is
+    # paid once.
+    _is_rc4_supported = True
+
+    def __init__(self, key: bytes) -> None:
+        self._key = key
+        self._fallback = None
+        if CryptRC4._is_rc4_supported:
+            self.cipher = Cipher(ARC4(key), mode=None)
+        else:
+            self._fallback = self._pure_python_rc4(key)
+
+    @staticmethod
+    def _pure_python_rc4(key: bytes) -> CryptBase:
+        from pypdf._crypt_providers import _fallback  # noqa: PLC0415
+
+        return _fallback.CryptRC4(key)
+
+    @classmethod
+    def _disable_rc4(cls, key: bytes) -> CryptBase:
+        if cls._is_rc4_supported:
+            logger_warning(
+                (
+                    "RC4 is not supported by the current OpenSSL build; "
+                    "falling back to the pure-Python RC4 implementation."
+                ),
+                source=__name__,
+            )
+            cls._is_rc4_supported = False
+        return cls._pure_python_rc4(key)
+
+    def encrypt(self, data: bytes) -> bytes:
+        if self._fallback is not None:
+            return self._fallback.encrypt(data)
+        try:
+            encryptor = self.cipher.encryptor()
+            return encryptor.update(data) + encryptor.finalize()
+        except UnsupportedAlgorithm:
+            self._fallback = self._disable_rc4(self._key)
+            return self._fallback.encrypt(data)
+
+    def decrypt(self, data: bytes, *, strict: bool = True) -> bytes:
+        if self._fallback is not None:
+            return self._fallback.decrypt(data, strict=strict)
+        try:
+            decryptor = self.cipher.decryptor()
+            return decryptor.update(data) + decryptor.finalize()
+        except UnsupportedAlgorithm:
+            self._fallback = self._disable_rc4(self._key)
+            return self._fallback.decrypt(data, strict=strict)
+
+
+class CryptAES(CryptBase):
+    def __init__(self, key: bytes) -> None:
+        self.alg = AES(key)
+
+    def encrypt(self, data: bytes) -> bytes:
+        iv = secrets.token_bytes(16)
+        padder = PKCS7(128).padder()
+        padded_data = padder.update(data) + padder.finalize()
+
+        cipher = Cipher(self.alg, CBC(iv))
+        encryptor = cipher.encryptor()
+        return iv + encryptor.update(padded_data) + encryptor.finalize()
+
+    def decrypt(self, data: bytes, *, strict: bool = True) -> bytes:
+        iv = data[:16]
+        data = data[16:]
+        # for empty encrypted data
+        if not data:
+            return data
+
+        if not strict and len(data) % 16 != 0:
+            logger_warning("Adding missing padding.", source=__name__)
+            padder = PKCS7(128).padder()
+            data = padder.update(data) + padder.finalize()
+
+        cipher = Cipher(self.alg, CBC(iv))
+        decryptor = cipher.decryptor()
+        try:
+            padded_data = decryptor.update(data) + decryptor.finalize()
+        except ValueError as exception:
+            # Only raised in strict mode. Non-strict mode fixes padding.
+            raise PdfStreamError(exception)
+
+        unpadder = PKCS7(128).unpadder()
+        try:
+            return unpadder.update(padded_data) + unpadder.finalize()
+        except ValueError as exception:
+            if strict:
+                raise PdfStreamError(exception)
+            logger_warning("Ignoring padding error: %(exception)s", source=__name__, exception=exception)
+            return padded_data[: -padded_data[-1]]
+
+
+def rc4_encrypt(key: bytes, data: bytes) -> bytes:
+    if CryptRC4._is_rc4_supported:
+        try:
+            encryptor = Cipher(ARC4(key), mode=None).encryptor()
+            return encryptor.update(data) + encryptor.finalize()
+        except UnsupportedAlgorithm:
+            return CryptRC4._disable_rc4(key).encrypt(data)
+    return CryptRC4._pure_python_rc4(key).encrypt(data)
+
+
+def rc4_decrypt(key: bytes, data: bytes) -> bytes:
+    if CryptRC4._is_rc4_supported:
+        try:
+            decryptor = Cipher(ARC4(key), mode=None).decryptor()
+            return decryptor.update(data) + decryptor.finalize()
+        except UnsupportedAlgorithm:
+            return CryptRC4._disable_rc4(key).decrypt(data)
+    return CryptRC4._pure_python_rc4(key).decrypt(data)
+
+
+def aes_ecb_encrypt(key: bytes, data: bytes) -> bytes:
+    encryptor = Cipher(AES(key), mode=ECB()).encryptor()
+    return encryptor.update(data) + encryptor.finalize()
+
+
+def aes_ecb_decrypt(key: bytes, data: bytes) -> bytes:
+    decryptor = Cipher(AES(key), mode=ECB()).decryptor()
+    return decryptor.update(data) + decryptor.finalize()
+
+
+def aes_cbc_encrypt(key: bytes, iv: bytes, data: bytes) -> bytes:
+    encryptor = Cipher(AES(key), mode=CBC(iv)).encryptor()
+    return encryptor.update(data) + encryptor.finalize()
+
+
+def aes_cbc_decrypt(key: bytes, iv: bytes, data: bytes) -> bytes:
+    decryptor = Cipher(AES(key), mode=CBC(iv)).decryptor()
+    return decryptor.update(data) + decryptor.finalize()

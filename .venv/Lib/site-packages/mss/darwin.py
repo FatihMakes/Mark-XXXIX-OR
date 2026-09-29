@@ -1,0 +1,269 @@
+"""macOS CoreGraphics backend for MSS.
+
+Uses the CoreGraphics APIs to capture windows and enumerates up to
+``max_displays`` active displays.
+"""
+
+from __future__ import annotations
+
+import ctypes
+import ctypes.util
+import sys
+import warnings
+from ctypes import (
+    POINTER,
+    Structure,
+    c_double,
+    c_float,
+    c_int32,
+    c_long,
+    c_size_t,
+    c_ubyte,
+    c_uint32,
+    c_void_p,
+)
+from platform import mac_ver
+from typing import TYPE_CHECKING
+
+from mss.base import MSS as _MSS
+from mss.base import MSSImplementation
+from mss.exception import ScreenShotError
+from mss.screenshot import Size
+
+if TYPE_CHECKING:
+    from typing import Any
+
+    from mss.models import CFunctions, Monitor, Monitors
+
+__all__ = ("IMAGE_OPTIONS", "MSS")
+
+BACKENDS = ["default"]
+
+MAC_VERSION_CATALINA = 10.16
+
+kCGWindowImageBoundsIgnoreFraming = 1 << 0  # noqa: N816
+kCGWindowImageNominalResolution = 1 << 4  # noqa: N816
+kCGWindowImageShouldBeOpaque = 1 << 1  # noqa: N816
+#: For advanced users: as a note, you can set ``IMAGE_OPTIONS = 0`` to turn on scaling; see issue #257 for more
+#: information.
+IMAGE_OPTIONS: int = kCGWindowImageBoundsIgnoreFraming | kCGWindowImageShouldBeOpaque | kCGWindowImageNominalResolution
+
+
+class MSS(_MSS):
+    """Deprecated macOS compatibility constructor.
+
+    Use :class:`mss.MSS` instead.
+    """
+
+    def __init__(self, /, **kwargs: Any) -> None:
+        # TODO(jholveck): #493 Remove compatibility constructor after 10.x transition period.
+        warnings.warn(
+            "mss.darwin.MSS is deprecated and will be removed in 11.0; use mss.MSS instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(**kwargs)
+
+
+def cgfloat() -> type[c_double | c_float]:
+    """Get the appropriate value for a float."""
+    return c_double if sys.maxsize > 2**32 else c_float
+
+
+class CGPoint(Structure):
+    """Structure that contains coordinates of a rectangle."""
+
+    _fields_ = (("x", cgfloat()), ("y", cgfloat()))
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(left={self.x} top={self.y})"
+
+
+class CGSize(Structure):
+    """Structure that contains dimensions of an rectangle."""
+
+    _fields_ = (("width", cgfloat()), ("height", cgfloat()))
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(width={self.width} height={self.height})"
+
+
+class CGRect(Structure):
+    """Structure that contains information about a rectangle."""
+
+    _fields_ = (("origin", CGPoint), ("size", CGSize))
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}<{self.origin} {self.size}>"
+
+
+# C functions that will be initialised later.
+#
+# Available attr: core.
+#
+# Note: keep it sorted by cfunction.
+CFUNCTIONS: CFunctions = {
+    # Syntax: cfunction: (attr, argtypes, restype)
+    "CGDataProviderCopyData": ("core", [c_void_p], c_void_p),
+    "CGDisplayBounds": ("core", [c_uint32], CGRect),
+    "CGDisplayRotation": ("core", [c_uint32], c_double),
+    "CFDataGetBytePtr": ("core", [c_void_p], POINTER(c_ubyte)),
+    "CFDataGetLength": ("core", [c_void_p], c_long),
+    "CFRelease": ("core", [c_void_p], None),
+    "CGGetActiveDisplayList": ("core", [c_uint32, POINTER(c_uint32), POINTER(c_uint32)], c_int32),
+    "CGImageGetBitsPerPixel": ("core", [c_void_p], c_size_t),
+    "CGImageGetBytesPerRow": ("core", [c_void_p], c_size_t),
+    "CGImageGetDataProvider": ("core", [c_void_p], c_void_p),
+    "CGImageGetHeight": ("core", [c_void_p], c_size_t),
+    "CGImageGetWidth": ("core", [c_void_p], c_size_t),
+    "CGRectStandardize": ("core", [CGRect], CGRect),
+    "CGRectUnion": ("core", [CGRect, CGRect], CGRect),
+    "CGWindowListCreateImage": ("core", [CGRect, c_uint32, c_uint32, c_uint32], c_void_p),
+}
+
+
+class MSSImplDarwin(MSSImplementation):
+    """Multiple ScreenShots implementation for macOS.
+    It uses intensively the CoreGraphics library.
+
+    :param max_displays: maximum number of displays to handle (default: 32).
+    :type max_displays: int
+
+    .. seealso::
+
+        :py:class:`mss.MSS`
+            Lists other parameters.
+    """
+
+    __slots__ = {"core", "max_displays"}
+
+    def __init__(self, *, backend: str = "default", max_displays: int = 32) -> None:
+        super().__init__()
+
+        if backend != "default":
+            msg = 'The only valid backend on this platform is "default".'
+            raise ScreenShotError(msg)
+
+        # max_displays is only used by monitors(), while the lock is held.
+        #: Maximum number of displays to handle.
+        self.max_displays = max_displays
+
+        self._init_library()
+        self._set_cfunctions()
+
+    def _init_library(self) -> None:
+        """Load the CoreGraphics library."""
+        version = float(".".join(mac_ver()[0].split(".")[:2]))
+        if version < MAC_VERSION_CATALINA:
+            coregraphics = ctypes.util.find_library("CoreGraphics")
+        else:
+            # macOS Big Sur and newer
+            coregraphics = "/System/Library/Frameworks/CoreGraphics.framework/Versions/Current/CoreGraphics"
+
+        if not coregraphics:
+            msg = "No CoreGraphics library found."
+            raise ScreenShotError(msg)
+        # :meta:private:
+        self.core = ctypes.cdll.LoadLibrary(coregraphics)
+
+    def _set_cfunctions(self) -> None:
+        """Set all ctypes functions and attach them to attributes."""
+        cfactory = self._cfactory
+        attrs = {"core": self.core}
+        for func, (attr, argtypes, restype) in CFUNCTIONS.items():
+            cfactory(attrs[attr], func, argtypes, restype)
+
+    def monitors(self) -> Monitors:
+        """Get positions of monitors."""
+        int_ = int
+        core = self.core
+
+        monitors: Monitors = []
+
+        # All monitors
+        # We need to update the value with every single monitor found
+        # using CGRectUnion.  Else we will end with infinite values.
+        all_monitors = CGRect()
+        monitors.append({})
+
+        # Each monitor
+        display_count = c_uint32(0)
+        active_displays = (c_uint32 * self.max_displays)()
+        core.CGGetActiveDisplayList(self.max_displays, active_displays, ctypes.byref(display_count))
+        for idx in range(display_count.value):
+            display = active_displays[idx]
+            rect = core.CGDisplayBounds(display)
+            rect = core.CGRectStandardize(rect)
+            width, height = rect.size.width, rect.size.height
+
+            # 0.0: normal
+            # 90.0: right
+            # -90.0: left
+            if core.CGDisplayRotation(display) in {90.0, -90.0}:
+                width, height = height, width
+
+            monitors.append(
+                {
+                    "left": int_(rect.origin.x),
+                    "top": int_(rect.origin.y),
+                    "width": int_(width),
+                    "height": int_(height),
+                },
+            )
+
+            # Update AiO monitor's values
+            all_monitors = core.CGRectUnion(all_monitors, rect)
+
+        # Set the AiO monitor's values
+        monitors[0] = {
+            "left": int_(all_monitors.origin.x),
+            "top": int_(all_monitors.origin.y),
+            "width": int_(all_monitors.size.width),
+            "height": int_(all_monitors.size.height),
+        }
+
+        return monitors
+
+    def grab(self, monitor: Monitor, /) -> tuple[bytearray, Size]:
+        """Retrieve all pixels from a monitor. Pixels have to be RGB."""
+        core = self.core
+        rect = CGRect((monitor["left"], monitor["top"]), (monitor["width"], monitor["height"]))
+
+        image_ref = core.CGWindowListCreateImage(rect, 1, 0, IMAGE_OPTIONS)
+        if not image_ref:
+            msg = "CoreGraphics.CGWindowListCreateImage() failed."
+            raise ScreenShotError(msg)
+
+        width = core.CGImageGetWidth(image_ref)
+        height = core.CGImageGetHeight(image_ref)
+        copy_data = None
+        try:
+            prov = core.CGImageGetDataProvider(image_ref)
+            copy_data = core.CGDataProviderCopyData(prov)
+            data_ref = core.CFDataGetBytePtr(copy_data)
+            buf_len = core.CFDataGetLength(copy_data)
+            raw = ctypes.cast(data_ref, POINTER(c_ubyte * buf_len))
+            data = bytearray(raw.contents)
+
+            # Remove padding per row
+            bytes_per_row = core.CGImageGetBytesPerRow(image_ref)
+            bytes_per_pixel = core.CGImageGetBitsPerPixel(image_ref)
+            bytes_per_pixel = (bytes_per_pixel + 7) // 8
+
+            if bytes_per_pixel * width != bytes_per_row:
+                cropped = bytearray()
+                for row in range(height):
+                    start = row * bytes_per_row
+                    end = start + width * bytes_per_pixel
+                    cropped.extend(data[start:end])
+                data = cropped
+        finally:
+            if copy_data:
+                core.CFRelease(copy_data)
+            core.CFRelease(image_ref)
+
+        return data, Size(width, height)
+
+    def cursor(self) -> None:
+        """Retrieve all cursor data. Pixels have to be RGB."""
+        return

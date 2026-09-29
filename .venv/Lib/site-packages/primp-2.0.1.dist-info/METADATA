@@ -1,0 +1,109 @@
+Metadata-Version: 2.4
+Name: primp
+Version: 2.0.1
+Classifier: Programming Language :: Rust
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: certifi ; extra == 'dev'
+Requires-Dist: pytest>=8.1.1 ; extra == 'dev'
+Requires-Dist: pytest-asyncio>=0.25.3 ; extra == 'dev'
+Requires-Dist: typing-extensions ; python_full_version < '3.12' and extra == 'dev'
+Requires-Dist: mypy>=1.14.1 ; extra == 'dev'
+Requires-Dist: ruff>=0.9.2 ; extra == 'dev'
+Provides-Extra: dev
+Summary: HTTP client that can impersonate web browsers
+Keywords: python,request,impersonate
+Author: deedy5
+License: MIT License
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
+Project-URL: repository, https://github.com/deedy5/primp
+
+![Python >= 3.10](https://img.shields.io/badge/python->=3.10-red.svg) [![](https://badgen.net/github/release/deedy5/primp)](https://github.com/deedy5/primp/releases) [![](https://badge.fury.io/py/primp.svg)](https://pypi.org/project/primp) [![Downloads](https://static.pepy.tech/badge/primp/week)](https://pepy.tech/project/primp) [![CI](https://github.com/deedy5/primp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/deedy5/primp/actions/workflows/ci.yml)
+
+# 🪞 PRIMP 🐍
+
+> HTTP client that can impersonate web browsers
+
+## 📦 Installation
+
+```bash
+pip install -U primp
+```
+
+## 🔧 Building from Source
+
+```bash
+git clone https://github.com/deedy5/primp.git && cd primp/crates/primp-python
+python -m venv .venv && source .venv/bin/activate
+pip install maturin && maturin develop -r
+```
+
+## 🚀 Quick Start
+
+### Sync API
+
+```python
+import primp
+
+client = primp.Client(impersonate="chrome_146")
+resp = client.get("https://tls.peet.ws/api/all")
+print(resp.text)
+```
+
+### Async API
+
+```python
+import asyncio
+import primp
+
+async def main():
+    async with primp.AsyncClient(impersonate="chrome_146") as client:
+        resp = await client.get("https://tls.peet.ws/api/all")
+        print(resp.text)
+
+asyncio.run(main())
+```
+### More examples
+
+ > See the [examples](examples/) directory.
+
+## 📊 Benchmark
+
+![](./benchmark/benchmark.jpg)
+
+## 🎭 Browser profiles
+
+| Browser | Profiles |
+|:--------|:---------|
+| Chrome | `chrome_144`, `chrome_145`, `chrome_146`, `chrome_147`, `chrome_148`, `chrome_149`, `chrome_150`, `chrome_151`, `chrome_152`, `chrome_153`, `chrome` |
+| Safari | `safari_18.5`, `safari_26`, `safari_26.3`, `safari_26.4`, `safari` |
+| Edge | `edge_144`, `edge_145`, `edge_146`, `edge_147`, `edge_148`, `edge_149`, `edge_150`, `edge_151`, `edge_152`, `edge_153`, `edge` |
+| Firefox | `firefox_140`, `firefox_146`, `firefox_147`, `firefox_148`, `firefox_149`, `firefox_150`, `firefox_151`, `firefox` |
+| Opera | `opera_126`, `opera_127`, `opera_128`, `opera_129`, `opera_130`, `opera_131`, `opera_132`, `opera_133`, `opera_134`, `opera_135`, `opera` |
+| Random | `random` |
+
+**OS:** `android`, `ios`, `linux`, `macos`, `windows`, `random`
+
+## 📖 Documentation
+
+- [Browser Impersonation](docs/impersonate.md) — profiles, OS, TLS/HTTP2 fingerprinting
+- [Client](docs/client.md) — constructor, methods, authentication
+- [AsyncClient](docs/async_client.md) — async API, concurrency
+- [Response](docs/response.md) — properties, streaming
+- [Exceptions](docs/exceptions.md) — error handling
+
+____
+### Disclaimer
+
+This tool is for educational purposes only. Use it at your own risk.
+

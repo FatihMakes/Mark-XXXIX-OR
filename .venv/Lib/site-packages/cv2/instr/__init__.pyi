@@ -1,0 +1,24 @@
+__all__: list[str] = []
+
+# Enumerations
+TYPE_GENERAL: int
+TYPE_MARKER: int
+TYPE_WRAPPER: int
+TYPE_FUN: int
+TYPE = int
+"""One of [TYPE_GENERAL, TYPE_MARKER, TYPE_WRAPPER, TYPE_FUN]"""
+
+IMPL_PLAIN: int
+IMPL_IPP: int
+IMPL_OPENCL: int
+IMPL = int
+"""One of [IMPL_PLAIN, IMPL_IPP, IMPL_OPENCL]"""
+
+FLAGS_NONE: int
+FLAGS_MAPPING: int
+FLAGS_EXPAND_SAME_NAMES: int
+FLAGS = int
+"""One of [FLAGS_NONE, FLAGS_MAPPING, FLAGS_EXPAND_SAME_NAMES]"""
+
+
+

@@ -1,0 +1,44 @@
+Metadata-Version: 2.1
+Name: pywinauto
+Version: 0.6.9
+Summary: A set of Python modules to automate the Microsoft Windows GUI
+Home-page: https://github.com/pywinauto/pywinauto
+Author: Mark Mc Mahon and Contributors
+Author-email: pywinauto-users@lists.sourceforge.net
+License: BSD 3-clause
+Keywords: windows gui automation GuiAuto testing test desktop mouse keyboard
+Platform: win32
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Software Development :: User Interfaces
+Classifier: Topic :: Software Development :: Quality Assurance
+Requires-Dist: six
+Requires-Dist: python-xlib ; platform_system == "Linux"
+Requires-Dist: comtypes (<=1.2.1) ; python_version <= "3.6"
+Requires-Dist: pywin32 (<=227) ; python_version <= "3.6"
+Requires-Dist: comtypes ; python_version > "3.6" and sys_platform == "win32"
+Requires-Dist: pywin32 ; python_version > "3.6" and sys_platform == "win32"
+
+At it's simplest it allows you to send mouse and keyboard
+actions to windows dialogs and controls, but it has support for more complex
+controls also.
+
+Useful links
+-------------
+- Home page: https://github.com/pywinauto/pywinauto
+- Docs Intro: https://pywinauto.readthedocs.io/en/latest/
+- Getting Started Guide: https://pywinauto.readthedocs.io/en/latest/getting_started.html
+- StackOverflow tag: https://stackoverflow.com/questions/tagged/pywinauto
+
+

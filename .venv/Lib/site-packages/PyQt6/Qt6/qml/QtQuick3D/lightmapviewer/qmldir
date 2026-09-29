@@ -1,0 +1,12 @@
+module QtQuick3D.lightmapviewer
+typeinfo lightmapviewer.qmltypes
+import QtQuick3D
+prefer :/qt-project.org/imports/QtQuick3D/lightmapviewer/
+LightmapViewer 1.0 LightmapViewer.qml
+SceneMetadataView 1.0 SceneMetadataView.qml
+MeshViewer 1.0 MeshViewer.qml
+ImageViewer 1.0 ImageViewer.qml
+ArcballController 1.0 ArcballController.qml
+OriginGizmo 1.0 OriginGizmo.qml
+depends QtQuick
+

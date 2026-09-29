@@ -1,0 +1,11567 @@
+{
+"auth": {
+"oauth2": {
+"scopes": {
+"https://www.googleapis.com/auth/cloud-platform": {
+"description": "See, edit, configure, and delete your Google Cloud data and see the email address for your Google Account."
+},
+"https://www.googleapis.com/auth/securitycenter": {
+"description": "See, edit, configure, and delete your Google Cloud Security Command Center data and see the email address for your Google Account"
+}
+}
+}
+},
+"basePath": "",
+"baseUrl": "https://securitycenter.googleapis.com/",
+"batchPath": "batch",
+"canonicalName": "Security Command Center",
+"description": "Security Command Center API provides access to temporal views of assets and findings within an organization.",
+"discoveryVersion": "v1",
+"documentationLink": "https://cloud.google.com/security-command-center",
+"endpoints": [
+{
+"description": "Regional Endpoint",
+"endpointUrl": "https://securitycenter.me-central2.rep.googleapis.com/",
+"location": "me-central2"
+},
+{
+"description": "Regional Endpoint",
+"endpointUrl": "https://securitycenter.us.rep.googleapis.com/",
+"location": "us"
+},
+{
+"description": "Regional Endpoint",
+"endpointUrl": "https://securitycenter.eu.rep.googleapis.com/",
+"location": "eu"
+}
+],
+"fullyEncodeReservedExpansion": true,
+"icons": {
+"x16": "http://www.google.com/images/icons/product/search-16.gif",
+"x32": "http://www.google.com/images/icons/product/search-32.gif"
+},
+"id": "securitycenter:v1beta2",
+"kind": "discovery#restDescription",
+"mtlsRootUrl": "https://securitycenter.mtls.googleapis.com/",
+"name": "securitycenter",
+"ownerDomain": "google.com",
+"ownerName": "Google",
+"parameters": {
+"$.xgafv": {
+"description": "V1 error format.",
+"enum": [
+"1",
+"2"
+],
+"enumDescriptions": [
+"v1 error format",
+"v2 error format"
+],
+"location": "query",
+"type": "string"
+},
+"access_token": {
+"description": "OAuth access token.",
+"location": "query",
+"type": "string"
+},
+"alt": {
+"default": "json",
+"description": "Data format for response.",
+"enum": [
+"json",
+"media",
+"proto"
+],
+"enumDescriptions": [
+"Responses with Content-Type of application/json",
+"Media download with context-dependent Content-Type",
+"Responses with Content-Type of application/x-protobuf"
+],
+"location": "query",
+"type": "string"
+},
+"callback": {
+"description": "JSONP",
+"location": "query",
+"type": "string"
+},
+"fields": {
+"description": "Selector specifying which fields to include in a partial response.",
+"location": "query",
+"type": "string"
+},
+"key": {
+"description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+"location": "query",
+"type": "string"
+},
+"oauth_token": {
+"description": "OAuth 2.0 token for the current user.",
+"location": "query",
+"type": "string"
+},
+"prettyPrint": {
+"default": "true",
+"description": "Returns response with indentations and line breaks.",
+"location": "query",
+"type": "boolean"
+},
+"quotaUser": {
+"description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+"location": "query",
+"type": "string"
+},
+"uploadType": {
+"description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+"location": "query",
+"type": "string"
+},
+"upload_protocol": {
+"description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+"location": "query",
+"type": "string"
+}
+},
+"protocol": "rest",
+"resources": {
+"folders": {
+"methods": {
+"getContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/containerThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getEventThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/eventThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getEventThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getRapidVulnerabilityDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/rapidVulnerabilityDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getRapidVulnerabilityDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSecurityCenterSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/securityCenterSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getSecurityCenterSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/securityCenterSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "SecurityCenterSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSecurityHealthAnalyticsSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/securityHealthAnalyticsSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getSecurityHealthAnalyticsSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getVirtualMachineThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/virtualMachineThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getVirtualMachineThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getWebSecurityScannerSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/webSecurityScannerSettings",
+"httpMethod": "GET",
+"id": "securitycenter.folders.getWebSecurityScannerSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/containerThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.folders.updateContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateEventThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/eventThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.folders.updateEventThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "EventThreatDetectionSettings"
+},
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateRapidVulnerabilityDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/rapidVulnerabilityDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.folders.updateRapidVulnerabilityDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateSecurityHealthAnalyticsSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/securityHealthAnalyticsSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.folders.updateSecurityHealthAnalyticsSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateVirtualMachineThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/virtualMachineThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.folders.updateVirtualMachineThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateWebSecurityScannerSettings": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/webSecurityScannerSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.folders.updateWebSecurityScannerSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "WebSecurityScannerSettings"
+},
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+},
+"resources": {
+"containerThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/containerThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.folders.containerThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"eventThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/eventThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.folders.eventThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"rapidVulnerabilityDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/rapidVulnerabilityDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.folders.rapidVulnerabilityDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"securityHealthAnalyticsSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/securityHealthAnalyticsSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.folders.securityHealthAnalyticsSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"virtualMachineThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/virtualMachineThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.folders.virtualMachineThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"webSecurityScannerSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/folders/{foldersId}/webSecurityScannerSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.folders.webSecurityScannerSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^folders/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+}
+}
+},
+"organizations": {
+"methods": {
+"getContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/containerThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getEventThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/eventThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getEventThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getRapidVulnerabilityDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/rapidVulnerabilityDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getRapidVulnerabilityDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSecurityCenterSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/securityCenterSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getSecurityCenterSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/securityCenterSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "SecurityCenterSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSecurityHealthAnalyticsSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/securityHealthAnalyticsSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getSecurityHealthAnalyticsSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSubscription": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/subscription",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getSubscription",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/subscription$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "Subscription"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getVirtualMachineThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/virtualMachineThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getVirtualMachineThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getWebSecurityScannerSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/webSecurityScannerSettings",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.getWebSecurityScannerSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/containerThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.organizations.updateContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateEventThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/eventThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.organizations.updateEventThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "EventThreatDetectionSettings"
+},
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateRapidVulnerabilityDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/rapidVulnerabilityDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.organizations.updateRapidVulnerabilityDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateSecurityHealthAnalyticsSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/securityHealthAnalyticsSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.organizations.updateSecurityHealthAnalyticsSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateVirtualMachineThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/virtualMachineThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.organizations.updateVirtualMachineThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateWebSecurityScannerSettings": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/webSecurityScannerSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.organizations.updateWebSecurityScannerSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "WebSecurityScannerSettings"
+},
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+},
+"resources": {
+"containerThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/containerThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.containerThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"eventThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/eventThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.eventThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"rapidVulnerabilityDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/rapidVulnerabilityDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.rapidVulnerabilityDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"securityHealthAnalyticsSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/securityHealthAnalyticsSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.securityHealthAnalyticsSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"virtualMachineThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/virtualMachineThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.virtualMachineThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"webSecurityScannerSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/organizations/{organizationsId}/webSecurityScannerSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.organizations.webSecurityScannerSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^organizations/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+}
+}
+},
+"projects": {
+"methods": {
+"getContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/containerThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getEventThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/eventThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getEventThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getRapidVulnerabilityDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/rapidVulnerabilityDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getRapidVulnerabilityDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSecurityCenterSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/securityCenterSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getSecurityCenterSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/securityCenterSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "SecurityCenterSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getSecurityHealthAnalyticsSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/securityHealthAnalyticsSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getSecurityHealthAnalyticsSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getVirtualMachineThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/virtualMachineThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getVirtualMachineThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"getWebSecurityScannerSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/webSecurityScannerSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.getWebSecurityScannerSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/containerThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.updateContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateEventThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/eventThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.updateEventThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "EventThreatDetectionSettings"
+},
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateRapidVulnerabilityDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/rapidVulnerabilityDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.updateRapidVulnerabilityDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateSecurityHealthAnalyticsSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/securityHealthAnalyticsSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.updateSecurityHealthAnalyticsSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateVirtualMachineThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/virtualMachineThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.updateVirtualMachineThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateWebSecurityScannerSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/webSecurityScannerSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.updateWebSecurityScannerSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "WebSecurityScannerSettings"
+},
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+},
+"resources": {
+"containerThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/containerThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.containerThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"eventThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/eventThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.eventThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/eventThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "EventThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"locations": {
+"resources": {
+"clusters": {
+"methods": {
+"getContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}/containerThreatDetectionSettings",
+"httpMethod": "GET",
+"id": "securitycenter.projects.locations.clusters.getContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+},
+"updateContainerThreatDetectionSettings": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}/containerThreatDetectionSettings",
+"httpMethod": "PATCH",
+"id": "securitycenter.projects.locations.clusters.updateContainerThreatDetectionSettings",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"updateMask": {
+"format": "google-fieldmask",
+"location": "query",
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}",
+"request": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+},
+"resources": {
+"containerThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/clusters/{clustersId}/containerThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.locations.clusters.containerThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/locations/[^/]+/clusters/[^/]+/containerThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "ContainerThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+}
+}
+}
+}
+},
+"rapidVulnerabilityDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/rapidVulnerabilityDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.rapidVulnerabilityDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/rapidVulnerabilityDetectionSettings$",
+"required": true,
+"type": "string"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "RapidVulnerabilityDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"securityHealthAnalyticsSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/securityHealthAnalyticsSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.securityHealthAnalyticsSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/securityHealthAnalyticsSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "SecurityHealthAnalyticsSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"virtualMachineThreatDetectionSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/virtualMachineThreatDetectionSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.virtualMachineThreatDetectionSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/virtualMachineThreatDetectionSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "VirtualMachineThreatDetectionSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+},
+"webSecurityScannerSettings": {
+"methods": {
+"calculate": {
+"description": "",
+"flatPath": "v1beta2/projects/{projectsId}/webSecurityScannerSettings:calculate",
+"httpMethod": "GET",
+"id": "securitycenter.projects.webSecurityScannerSettings.calculate",
+"parameterOrder": [
+"name"
+],
+"parameters": {
+"name": {
+"location": "path",
+"pattern": "^projects/[^/]+/webSecurityScannerSettings$",
+"required": true,
+"type": "string"
+},
+"showEligibleModulesOnly": {
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "v1beta2/{+name}:calculate",
+"response": {
+"$ref": "WebSecurityScannerSettings"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/securitycenter"
+]
+}
+}
+}
+}
+}
+},
+"revision": "20260724",
+"rootUrl": "https://securitycenter.googleapis.com/",
+"schemas": {
+"Access": {
+"id": "Access",
+"properties": {
+"callerIp": {
+"type": "string"
+},
+"callerIpGeo": {
+"$ref": "Geolocation"
+},
+"methodName": {
+"type": "string"
+},
+"principalEmail": {
+"type": "string"
+},
+"principalSubject": {
+"type": "string"
+},
+"serviceAccountDelegationInfo": {
+"items": {
+"$ref": "ServiceAccountDelegationInfo"
+},
+"type": "array"
+},
+"serviceAccountKeyName": {
+"type": "string"
+},
+"serviceName": {
+"type": "string"
+},
+"userAgent": {
+"type": "string"
+},
+"userAgentFamily": {
+"type": "string"
+},
+"userName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AccessReview": {
+"id": "AccessReview",
+"properties": {
+"group": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+},
+"resource": {
+"type": "string"
+},
+"subresource": {
+"type": "string"
+},
+"verb": {
+"type": "string"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AdaptiveProtection": {
+"id": "AdaptiveProtection",
+"properties": {
+"confidence": {
+"format": "double",
+"type": "number"
+}
+},
+"type": "object"
+},
+"AdcApplication": {
+"id": "AdcApplication",
+"properties": {
+"attributes": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributes"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AdcApplicationTemplateRevision": {
+"id": "AdcApplicationTemplateRevision",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AdcSharedTemplateRevision": {
+"id": "AdcSharedTemplateRevision",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AffectedResources": {
+"id": "AffectedResources",
+"properties": {
+"count": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"Agent": {
+"id": "Agent",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AgentAnomaly": {
+"id": "AgentAnomaly",
+"properties": {
+"confidenceScore": {
+"format": "double",
+"type": "number"
+},
+"detectorReferences": {
+"items": {
+"$ref": "DetectorReference"
+},
+"type": "array"
+},
+"invocationReferences": {
+"items": {
+"$ref": "InvocationReference"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"AgentDataAccessEvent": {
+"id": "AgentDataAccessEvent",
+"properties": {
+"eventId": {
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"operation": {
+"enum": [
+"OPERATION_UNSPECIFIED",
+"READ",
+"MOVE",
+"COPY"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"principalSubject": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AgentSession": {
+"id": "AgentSession",
+"properties": {
+"sessionId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AiModel": {
+"id": "AiModel",
+"properties": {
+"deploymentPlatform": {
+"enum": [
+"DEPLOYMENT_PLATFORM_UNSPECIFIED",
+"VERTEX_AI",
+"GKE",
+"GCE",
+"FINE_TUNED_MODEL"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"domain": {
+"type": "string"
+},
+"library": {
+"type": "string"
+},
+"location": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"publisher": {
+"type": "string"
+},
+"usageCategory": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Allowed": {
+"id": "Allowed",
+"properties": {
+"ipRules": {
+"items": {
+"$ref": "IpRule"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Application": {
+"id": "Application",
+"properties": {
+"baseUri": {
+"type": "string"
+},
+"fullUri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ArtifactGuardPolicies": {
+"id": "ArtifactGuardPolicies",
+"properties": {
+"failingPolicies": {
+"items": {
+"$ref": "ArtifactGuardPolicy"
+},
+"type": "array"
+},
+"resourceId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ArtifactGuardPolicy": {
+"id": "ArtifactGuardPolicy",
+"properties": {
+"failureReason": {
+"type": "string"
+},
+"policyId": {
+"type": "string"
+},
+"type": {
+"enum": [
+"ARTIFACT_GUARD_POLICY_TYPE_UNSPECIFIED",
+"VULNERABILITY"
+],
+"enumDescriptions": [
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Attack": {
+"id": "Attack",
+"properties": {
+"classification": {
+"type": "string"
+},
+"volumeBps": {
+"deprecated": true,
+"format": "int32",
+"type": "integer"
+},
+"volumeBpsLong": {
+"format": "int64",
+"type": "string"
+},
+"volumePps": {
+"deprecated": true,
+"format": "int32",
+"type": "integer"
+},
+"volumePpsLong": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"AttackExposure": {
+"id": "AttackExposure",
+"properties": {
+"attackExposureResult": {
+"type": "string"
+},
+"exposedHighValueResourcesCount": {
+"format": "int32",
+"type": "integer"
+},
+"exposedLowValueResourcesCount": {
+"format": "int32",
+"type": "integer"
+},
+"exposedMediumValueResourcesCount": {
+"format": "int32",
+"type": "integer"
+},
+"latestCalculationTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"score": {
+"format": "double",
+"type": "number"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"CALCULATED",
+"NOT_CALCULATED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"AwsAccount": {
+"id": "AwsAccount",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AwsMetadata": {
+"id": "AwsMetadata",
+"properties": {
+"account": {
+"$ref": "AwsAccount"
+},
+"organization": {
+"$ref": "AwsOrganization"
+},
+"organizationalUnits": {
+"items": {
+"$ref": "AwsOrganizationalUnit"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"AwsOrganization": {
+"id": "AwsOrganization",
+"properties": {
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AwsOrganizationalUnit": {
+"id": "AwsOrganizationalUnit",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AzureManagementGroup": {
+"id": "AzureManagementGroup",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AzureMetadata": {
+"id": "AzureMetadata",
+"properties": {
+"managementGroups": {
+"items": {
+"$ref": "AzureManagementGroup"
+},
+"type": "array"
+},
+"resourceGroup": {
+"$ref": "AzureResourceGroup"
+},
+"subscription": {
+"$ref": "AzureSubscription"
+},
+"tenant": {
+"$ref": "AzureTenant"
+}
+},
+"type": "object"
+},
+"AzureResourceGroup": {
+"id": "AzureResourceGroup",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AzureSubscription": {
+"id": "AzureSubscription",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"AzureTenant": {
+"id": "AzureTenant",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"BackupDisasterRecovery": {
+"id": "BackupDisasterRecovery",
+"properties": {
+"appliance": {
+"type": "string"
+},
+"applications": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"backupCreateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"backupTemplate": {
+"type": "string"
+},
+"backupType": {
+"type": "string"
+},
+"host": {
+"type": "string"
+},
+"policies": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"policyOptions": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"profile": {
+"type": "string"
+},
+"storagePool": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"BigQueryDestination": {
+"id": "BigQueryDestination",
+"properties": {
+"dataset": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Chokepoint": {
+"id": "Chokepoint",
+"properties": {
+"relatedFindings": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"CloudArmor": {
+"id": "CloudArmor",
+"properties": {
+"adaptiveProtection": {
+"$ref": "AdaptiveProtection"
+},
+"attack": {
+"$ref": "Attack"
+},
+"duration": {
+"format": "google-duration",
+"type": "string"
+},
+"requests": {
+"$ref": "Requests"
+},
+"securityPolicy": {
+"$ref": "SecurityPolicy"
+},
+"threatVector": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"CloudControl": {
+"id": "CloudControl",
+"properties": {
+"cloudControlName": {
+"type": "string"
+},
+"policyType": {
+"type": "string"
+},
+"type": {
+"enum": [
+"CLOUD_CONTROL_TYPE_UNSPECIFIED",
+"BUILT_IN",
+"CUSTOM"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"version": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"CloudDlpDataProfile": {
+"id": "CloudDlpDataProfile",
+"properties": {
+"dataProfile": {
+"type": "string"
+},
+"infoTypes": {
+"items": {
+"$ref": "InfoType"
+},
+"type": "array"
+},
+"parentType": {
+"enum": [
+"PARENT_TYPE_UNSPECIFIED",
+"ORGANIZATION",
+"PROJECT"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"CloudDlpInspection": {
+"id": "CloudDlpInspection",
+"properties": {
+"fullScan": {
+"type": "boolean"
+},
+"infoType": {
+"type": "string"
+},
+"infoTypeCount": {
+"format": "int64",
+"type": "string"
+},
+"inspectJob": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"CloudLoggingEntry": {
+"id": "CloudLoggingEntry",
+"properties": {
+"insertId": {
+"type": "string"
+},
+"logId": {
+"type": "string"
+},
+"resourceContainer": {
+"type": "string"
+},
+"timestamp": {
+"format": "google-datetime",
+"type": "string"
+}
+},
+"type": "object"
+},
+"Compliance": {
+"id": "Compliance",
+"properties": {
+"ids": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"standard": {
+"type": "string"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ComplianceDetails": {
+"id": "ComplianceDetails",
+"properties": {
+"cloudControl": {
+"$ref": "CloudControl"
+},
+"cloudControlDeploymentNames": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"frameworks": {
+"items": {
+"$ref": "Framework"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Config": {
+"id": "Config",
+"properties": {
+"moduleEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"value": {
+"additionalProperties": {
+"description": "Properties of the object.",
+"type": "any"
+},
+"type": "object"
+}
+},
+"type": "object"
+},
+"Connection": {
+"id": "Connection",
+"properties": {
+"destinationIp": {
+"type": "string"
+},
+"destinationPort": {
+"format": "int32",
+"type": "integer"
+},
+"protocol": {
+"enum": [
+"PROTOCOL_UNSPECIFIED",
+"ICMP",
+"TCP",
+"UDP",
+"GRE",
+"ESP"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"sourceIp": {
+"type": "string"
+},
+"sourcePort": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"Contact": {
+"id": "Contact",
+"properties": {
+"email": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ContactDetails": {
+"id": "ContactDetails",
+"properties": {
+"contacts": {
+"items": {
+"$ref": "Contact"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Container": {
+"id": "Container",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"imageId": {
+"type": "string"
+},
+"labels": {
+"items": {
+"$ref": "Label"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"uri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ContainerThreatDetectionSettings": {
+"id": "ContainerThreatDetectionSettings",
+"properties": {
+"modules": {
+"additionalProperties": {
+"$ref": "Config"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+},
+"serviceAccount": {
+"readOnly": true,
+"type": "string"
+},
+"serviceEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"Control": {
+"id": "Control",
+"properties": {
+"controlName": {
+"type": "string"
+},
+"displayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Cve": {
+"id": "Cve",
+"properties": {
+"cvssv3": {
+"$ref": "Cvssv3"
+},
+"exploitReleaseDate": {
+"format": "google-datetime",
+"type": "string"
+},
+"exploitationActivity": {
+"enum": [
+"EXPLOITATION_ACTIVITY_UNSPECIFIED",
+"WIDE",
+"CONFIRMED",
+"AVAILABLE",
+"ANTICIPATED",
+"NO_KNOWN"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"firstExploitationDate": {
+"format": "google-datetime",
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"impact": {
+"enum": [
+"RISK_RATING_UNSPECIFIED",
+"LOW",
+"MEDIUM",
+"HIGH",
+"CRITICAL"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"observedInTheWild": {
+"type": "boolean"
+},
+"references": {
+"items": {
+"$ref": "Reference"
+},
+"type": "array"
+},
+"upstreamFixAvailable": {
+"type": "boolean"
+},
+"zeroDay": {
+"type": "boolean"
+}
+},
+"type": "object"
+},
+"Cvssv3": {
+"id": "Cvssv3",
+"properties": {
+"attackComplexity": {
+"enum": [
+"ATTACK_COMPLEXITY_UNSPECIFIED",
+"ATTACK_COMPLEXITY_LOW",
+"ATTACK_COMPLEXITY_HIGH"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"attackVector": {
+"enum": [
+"ATTACK_VECTOR_UNSPECIFIED",
+"ATTACK_VECTOR_NETWORK",
+"ATTACK_VECTOR_ADJACENT",
+"ATTACK_VECTOR_LOCAL",
+"ATTACK_VECTOR_PHYSICAL"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"availabilityImpact": {
+"enum": [
+"IMPACT_UNSPECIFIED",
+"IMPACT_HIGH",
+"IMPACT_LOW",
+"IMPACT_NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"baseScore": {
+"format": "double",
+"type": "number"
+},
+"confidentialityImpact": {
+"enum": [
+"IMPACT_UNSPECIFIED",
+"IMPACT_HIGH",
+"IMPACT_LOW",
+"IMPACT_NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"integrityImpact": {
+"enum": [
+"IMPACT_UNSPECIFIED",
+"IMPACT_HIGH",
+"IMPACT_LOW",
+"IMPACT_NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"privilegesRequired": {
+"enum": [
+"PRIVILEGES_REQUIRED_UNSPECIFIED",
+"PRIVILEGES_REQUIRED_NONE",
+"PRIVILEGES_REQUIRED_LOW",
+"PRIVILEGES_REQUIRED_HIGH"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"scope": {
+"enum": [
+"SCOPE_UNSPECIFIED",
+"SCOPE_UNCHANGED",
+"SCOPE_CHANGED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"userInteraction": {
+"enum": [
+"USER_INTERACTION_UNSPECIFIED",
+"USER_INTERACTION_NONE",
+"USER_INTERACTION_REQUIRED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Cwe": {
+"id": "Cwe",
+"properties": {
+"id": {
+"type": "string"
+},
+"references": {
+"items": {
+"$ref": "Reference"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"DataAccessEvent": {
+"id": "DataAccessEvent",
+"properties": {
+"eventId": {
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"operation": {
+"enum": [
+"OPERATION_UNSPECIFIED",
+"READ",
+"MOVE",
+"COPY"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"principalEmail": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"DataFlowEvent": {
+"id": "DataFlowEvent",
+"properties": {
+"eventId": {
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"operation": {
+"enum": [
+"OPERATION_UNSPECIFIED",
+"READ",
+"MOVE",
+"COPY"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"principalEmail": {
+"type": "string"
+},
+"violatedLocation": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"DataRetentionDeletionEvent": {
+"id": "DataRetentionDeletionEvent",
+"properties": {
+"dataObjectCount": {
+"format": "int64",
+"type": "string"
+},
+"eventDetectionTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"eventType": {
+"enum": [
+"EVENT_TYPE_UNSPECIFIED",
+"EVENT_TYPE_MAX_TTL_EXCEEDED",
+"EVENT_TYPE_MAX_TTL_FROM_CREATION",
+"EVENT_TYPE_MAX_TTL_FROM_LAST_MODIFICATION",
+"EVENT_TYPE_MIN_TTL_FROM_CREATION"
+],
+"enumDeprecated": [
+false,
+true,
+false,
+false,
+false
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"maxRetentionAllowed": {
+"format": "google-duration",
+"type": "string"
+},
+"minRetentionAllowed": {
+"format": "google-duration",
+"type": "string"
+}
+},
+"type": "object"
+},
+"Database": {
+"id": "Database",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"grantees": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"query": {
+"type": "string"
+},
+"userName": {
+"type": "string"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Dataset": {
+"id": "Dataset",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"source": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Denied": {
+"id": "Denied",
+"properties": {
+"ipRules": {
+"items": {
+"$ref": "IpRule"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Details": {
+"id": "Details",
+"properties": {
+"endTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"startTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"type": {
+"enum": [
+"TYPE_UNSPECIFIED",
+"STANDARD",
+"TRIAL",
+"ALPHA",
+"DEMO",
+"PAY_AS_YOU_GO",
+"SUBSCRIPTION",
+"SUB_FIXED",
+"SUB_BASE_OVERAGE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Detection": {
+"id": "Detection",
+"properties": {
+"binary": {
+"type": "string"
+},
+"percentPagesMatched": {
+"format": "double",
+"type": "number"
+}
+},
+"type": "object"
+},
+"DetectorReference": {
+"id": "DetectorReference",
+"properties": {
+"detectorId": {
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"explanation": {
+"type": "string"
+},
+"recommendation": {
+"type": "string"
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"DiscoveredWorkload": {
+"id": "DiscoveredWorkload",
+"properties": {
+"confidence": {
+"enum": [
+"CONFIDENCE_UNSPECIFIED",
+"CONFIDENCE_HIGH"
+],
+"enumDescriptions": [
+"",
+""
+],
+"type": "string"
+},
+"detectedRelevantHardware": {
+"type": "boolean"
+},
+"detectedRelevantKeywords": {
+"type": "boolean"
+},
+"detectedRelevantPackages": {
+"type": "boolean"
+},
+"workloadType": {
+"enum": [
+"WORKLOAD_TYPE_UNSPECIFIED",
+"MCP_SERVER",
+"AI_INFERENCE",
+"AGENT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Disk": {
+"id": "Disk",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"DiskPath": {
+"id": "DiskPath",
+"properties": {
+"partitionUuid": {
+"type": "string"
+},
+"relativePath": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"DynamicMuteRecord": {
+"id": "DynamicMuteRecord",
+"properties": {
+"matchTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"muteConfig": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"EnvironmentVariable": {
+"id": "EnvironmentVariable",
+"properties": {
+"name": {
+"type": "string"
+},
+"val": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"EventThreatDetectionSettings": {
+"id": "EventThreatDetectionSettings",
+"properties": {
+"modules": {
+"additionalProperties": {
+"$ref": "Config"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+},
+"serviceEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"ExfilResource": {
+"id": "ExfilResource",
+"properties": {
+"components": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Exfiltration": {
+"id": "Exfiltration",
+"properties": {
+"sources": {
+"items": {
+"$ref": "ExfilResource"
+},
+"type": "array"
+},
+"targets": {
+"items": {
+"$ref": "ExfilResource"
+},
+"type": "array"
+},
+"totalExfiltratedBytes": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"ExportFindingsMetadata": {
+"id": "ExportFindingsMetadata",
+"properties": {
+"bigQueryDestination": {
+"$ref": "BigQueryDestination"
+},
+"exportStartTime": {
+"format": "google-datetime",
+"type": "string"
+}
+},
+"type": "object"
+},
+"ExportFindingsResponse": {
+"id": "ExportFindingsResponse",
+"properties": {},
+"type": "object"
+},
+"Expr": {
+"id": "Expr",
+"properties": {
+"description": {
+"type": "string"
+},
+"expression": {
+"type": "string"
+},
+"location": {
+"type": "string"
+},
+"title": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ExternalExposure": {
+"id": "ExternalExposure",
+"properties": {
+"backendBucket": {
+"type": "string"
+},
+"backendService": {
+"type": "string"
+},
+"exposedApplication": {
+"type": "string"
+},
+"exposedEndpoint": {
+"type": "string"
+},
+"exposedService": {
+"type": "string"
+},
+"forwardingRule": {
+"type": "string"
+},
+"hostnameUri": {
+"type": "string"
+},
+"httpResponse": {
+"items": {
+"$ref": "HttpResponse"
+},
+"type": "array"
+},
+"instanceGroup": {
+"type": "string"
+},
+"internalBackendService": {
+"type": "string"
+},
+"loadBalancerFirewallPolicy": {
+"type": "string"
+},
+"networkEndpointGroup": {
+"type": "string"
+},
+"networkIngressFirewallPolicy": {
+"type": "string"
+},
+"networkPathInsightsGenerationTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"privateIpAddress": {
+"type": "string"
+},
+"privatePort": {
+"type": "string"
+},
+"pscNetworkAttachment": {
+"type": "string"
+},
+"pscServiceAttachment": {
+"type": "string"
+},
+"publicIpAddress": {
+"type": "string"
+},
+"publicPort": {
+"type": "string"
+},
+"serviceFirewallPolicy": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"File": {
+"id": "File",
+"properties": {
+"contents": {
+"type": "string"
+},
+"diskPath": {
+"$ref": "DiskPath"
+},
+"fileLoadState": {
+"enum": [
+"FILE_LOAD_STATE_UNSPECIFIED",
+"LOADED_BY_PROCESS",
+"NOT_LOADED_BY_PROCESS"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"hashedSize": {
+"format": "int64",
+"type": "string"
+},
+"operations": {
+"items": {
+"$ref": "FileOperation"
+},
+"type": "array"
+},
+"partiallyHashed": {
+"type": "boolean"
+},
+"path": {
+"type": "string"
+},
+"sha256": {
+"type": "string"
+},
+"size": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"FileOperation": {
+"id": "FileOperation",
+"properties": {
+"type": {
+"enum": [
+"OPERATION_TYPE_UNSPECIFIED",
+"OPEN",
+"READ",
+"RENAME",
+"WRITE",
+"EXECUTE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Finding": {
+"id": "Finding",
+"properties": {
+"access": {
+"$ref": "Access"
+},
+"affectedResources": {
+"$ref": "AffectedResources"
+},
+"agent": {
+"$ref": "Agent"
+},
+"agentAnomaly": {
+"$ref": "AgentAnomaly"
+},
+"agentDataAccessEvents": {
+"items": {
+"$ref": "AgentDataAccessEvent"
+},
+"type": "array"
+},
+"agentSessions": {
+"items": {
+"$ref": "AgentSession"
+},
+"type": "array"
+},
+"aiModel": {
+"$ref": "AiModel"
+},
+"application": {
+"$ref": "Application"
+},
+"artifactGuardPolicies": {
+"$ref": "ArtifactGuardPolicies"
+},
+"attackExposure": {
+"$ref": "AttackExposure"
+},
+"backupDisasterRecovery": {
+"$ref": "BackupDisasterRecovery"
+},
+"canonicalName": {
+"type": "string"
+},
+"category": {
+"type": "string"
+},
+"chokepoint": {
+"$ref": "Chokepoint"
+},
+"cloudArmor": {
+"$ref": "CloudArmor"
+},
+"cloudDlpDataProfile": {
+"$ref": "CloudDlpDataProfile"
+},
+"cloudDlpInspection": {
+"$ref": "CloudDlpInspection"
+},
+"complianceDetails": {
+"$ref": "ComplianceDetails"
+},
+"compliances": {
+"items": {
+"$ref": "Compliance"
+},
+"type": "array"
+},
+"connections": {
+"items": {
+"$ref": "Connection"
+},
+"type": "array"
+},
+"contacts": {
+"additionalProperties": {
+"$ref": "ContactDetails"
+},
+"readOnly": true,
+"type": "object"
+},
+"containers": {
+"items": {
+"$ref": "Container"
+},
+"type": "array"
+},
+"createTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"dataAccessEvents": {
+"items": {
+"$ref": "DataAccessEvent"
+},
+"type": "array"
+},
+"dataFlowEvents": {
+"items": {
+"$ref": "DataFlowEvent"
+},
+"type": "array"
+},
+"dataRetentionDeletionEvents": {
+"items": {
+"$ref": "DataRetentionDeletionEvent"
+},
+"type": "array"
+},
+"database": {
+"$ref": "Database"
+},
+"description": {
+"type": "string"
+},
+"discoveredWorkload": {
+"$ref": "DiscoveredWorkload"
+},
+"disk": {
+"$ref": "Disk"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"exfiltration": {
+"$ref": "Exfiltration"
+},
+"externalExposure": {
+"$ref": "ExternalExposure"
+},
+"externalSystems": {
+"additionalProperties": {
+"$ref": "GoogleCloudSecuritycenterV1ExternalSystem"
+},
+"readOnly": true,
+"type": "object"
+},
+"externalUri": {
+"type": "string"
+},
+"files": {
+"items": {
+"$ref": "File"
+},
+"type": "array"
+},
+"findingClass": {
+"enum": [
+"FINDING_CLASS_UNSPECIFIED",
+"THREAT",
+"VULNERABILITY",
+"MISCONFIGURATION",
+"OBSERVATION",
+"SCC_ERROR",
+"POSTURE_VIOLATION",
+"TOXIC_COMBINATION",
+"SENSITIVE_DATA_RISK",
+"CHOKEPOINT",
+"EXTERNAL_EXPOSURE",
+"SECRET"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"groupMemberships": {
+"items": {
+"$ref": "GroupMembership"
+},
+"type": "array"
+},
+"iamBindings": {
+"items": {
+"$ref": "IamBinding"
+},
+"type": "array"
+},
+"iamDetails": {
+"$ref": "GoogleCloudSecuritycenterV1IamDetails"
+},
+"indicator": {
+"$ref": "Indicator"
+},
+"ipRules": {
+"$ref": "IpRules"
+},
+"job": {
+"$ref": "Job"
+},
+"kernelRootkit": {
+"$ref": "KernelRootkit"
+},
+"kubernetes": {
+"$ref": "Kubernetes"
+},
+"loadBalancers": {
+"items": {
+"$ref": "LoadBalancer"
+},
+"type": "array"
+},
+"logEntries": {
+"items": {
+"$ref": "LogEntry"
+},
+"type": "array"
+},
+"mitreAttack": {
+"$ref": "MitreAttack"
+},
+"moduleName": {
+"type": "string"
+},
+"mute": {
+"enum": [
+"MUTE_UNSPECIFIED",
+"MUTED",
+"UNMUTED",
+"UNDEFINED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"muteInfo": {
+"$ref": "MuteInfo",
+"readOnly": true
+},
+"muteInitiator": {
+"type": "string"
+},
+"muteUpdateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"networks": {
+"items": {
+"$ref": "Network"
+},
+"type": "array"
+},
+"nextSteps": {
+"type": "string"
+},
+"notebook": {
+"$ref": "Notebook"
+},
+"orgPolicies": {
+"items": {
+"$ref": "OrgPolicy"
+},
+"type": "array"
+},
+"parent": {
+"type": "string"
+},
+"parentDisplayName": {
+"readOnly": true,
+"type": "string"
+},
+"policyViolationSummary": {
+"$ref": "PolicyViolationSummary"
+},
+"processes": {
+"items": {
+"$ref": "Process"
+},
+"type": "array"
+},
+"resourceName": {
+"type": "string"
+},
+"secret": {
+"$ref": "Secret"
+},
+"securityMarks": {
+"$ref": "SecurityMarks",
+"readOnly": true
+},
+"securityPosture": {
+"$ref": "SecurityPosture"
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"sourceProperties": {
+"additionalProperties": {
+"type": "any"
+},
+"type": "object"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"ACTIVE",
+"INACTIVE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"toxicCombination": {
+"$ref": "ToxicCombination"
+},
+"vertexAi": {
+"$ref": "VertexAi"
+},
+"vulnerability": {
+"$ref": "Vulnerability"
+}
+},
+"type": "object"
+},
+"Folder": {
+"id": "Folder",
+"properties": {
+"resourceFolder": {
+"type": "string"
+},
+"resourceFolderDisplayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Framework": {
+"id": "Framework",
+"properties": {
+"category": {
+"items": {
+"enum": [
+"FRAMEWORK_CATEGORY_UNSPECIFIED",
+"SECURITY_BENCHMARKS",
+"ASSURED_WORKLOADS",
+"DATA_SECURITY",
+"GOOGLE_BEST_PRACTICES",
+"CUSTOM_FRAMEWORK"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"controls": {
+"items": {
+"$ref": "Control"
+},
+"type": "array"
+},
+"displayName": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"type": {
+"enum": [
+"FRAMEWORK_TYPE_UNSPECIFIED",
+"FRAMEWORK_TYPE_BUILT_IN",
+"FRAMEWORK_TYPE_CUSTOM"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GcpMetadata": {
+"id": "GcpMetadata",
+"properties": {
+"folders": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Folder"
+},
+"readOnly": true,
+"type": "array"
+},
+"organization": {
+"type": "string"
+},
+"parent": {
+"type": "string"
+},
+"parentDisplayName": {
+"type": "string"
+},
+"project": {
+"type": "string"
+},
+"projectDisplayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Geolocation": {
+"id": "Geolocation",
+"properties": {
+"regionCode": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1BigQueryExport": {
+"id": "GoogleCloudSecuritycenterV1BigQueryExport",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"dataset": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"filter": {
+"type": "string"
+},
+"mostRecentEditor": {
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"principal": {
+"readOnly": true,
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1Binding": {
+"id": "GoogleCloudSecuritycenterV1Binding",
+"properties": {
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+},
+"role": {
+"$ref": "Role"
+},
+"subjects": {
+"items": {
+"$ref": "Subject"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1BulkMuteFindingsResponse": {
+"id": "GoogleCloudSecuritycenterV1BulkMuteFindingsResponse",
+"properties": {},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1CustomConfig": {
+"id": "GoogleCloudSecuritycenterV1CustomConfig",
+"properties": {
+"customOutput": {
+"$ref": "GoogleCloudSecuritycenterV1CustomOutputSpec"
+},
+"description": {
+"type": "string"
+},
+"predicate": {
+"$ref": "Expr"
+},
+"recommendation": {
+"type": "string"
+},
+"resourceSelector": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceSelector"
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1CustomOutputSpec": {
+"id": "GoogleCloudSecuritycenterV1CustomOutputSpec",
+"properties": {
+"properties": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1Property"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1EffectiveSecurityHealthAnalyticsCustomModule": {
+"id": "GoogleCloudSecuritycenterV1EffectiveSecurityHealthAnalyticsCustomModule",
+"properties": {
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"customConfig": {
+"$ref": "GoogleCloudSecuritycenterV1CustomConfig",
+"readOnly": true
+},
+"displayName": {
+"readOnly": true,
+"type": "string"
+},
+"enablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ExternalSystem": {
+"id": "GoogleCloudSecuritycenterV1ExternalSystem",
+"properties": {
+"assignees": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"caseCloseTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"caseCreateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"casePriority": {
+"type": "string"
+},
+"caseSla": {
+"format": "google-datetime",
+"type": "string"
+},
+"caseUri": {
+"type": "string"
+},
+"externalSystemUpdateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"externalUid": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"status": {
+"type": "string"
+},
+"ticketInfo": {
+"$ref": "TicketInfo"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1IamDetails": {
+"id": "GoogleCloudSecuritycenterV1IamDetails",
+"properties": {
+"iamRolePermissions": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1IamRolePermission"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1IamRolePermission": {
+"id": "GoogleCloudSecuritycenterV1IamRolePermission",
+"properties": {
+"name": {
+"type": "string"
+},
+"role": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1MuteConfig": {
+"id": "GoogleCloudSecuritycenterV1MuteConfig",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"displayName": {
+"deprecated": true,
+"type": "string"
+},
+"expiryTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"filter": {
+"type": "string"
+},
+"mostRecentEditor": {
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"type": {
+"enum": [
+"MUTE_CONFIG_TYPE_UNSPECIFIED",
+"STATIC",
+"DYNAMIC"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1NotificationMessage": {
+"id": "GoogleCloudSecuritycenterV1NotificationMessage",
+"properties": {
+"finding": {
+"$ref": "Finding"
+},
+"notificationConfigName": {
+"type": "string"
+},
+"resource": {
+"$ref": "GoogleCloudSecuritycenterV1Resource"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1Property": {
+"id": "GoogleCloudSecuritycenterV1Property",
+"properties": {
+"name": {
+"type": "string"
+},
+"valueExpression": {
+"$ref": "Expr"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1Resource": {
+"id": "GoogleCloudSecuritycenterV1Resource",
+"properties": {
+"adcApplication": {
+"$ref": "AdcApplication"
+},
+"adcApplicationTemplate": {
+"$ref": "AdcApplicationTemplateRevision"
+},
+"adcSharedTemplate": {
+"$ref": "AdcSharedTemplateRevision"
+},
+"application": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplication"
+},
+"awsMetadata": {
+"$ref": "AwsMetadata"
+},
+"azureMetadata": {
+"$ref": "AzureMetadata"
+},
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"folders": {
+"items": {
+"$ref": "Folder"
+},
+"readOnly": true,
+"type": "array"
+},
+"location": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"organization": {
+"type": "string"
+},
+"parent": {
+"type": "string"
+},
+"parentDisplayName": {
+"type": "string"
+},
+"project": {
+"type": "string"
+},
+"projectDisplayName": {
+"type": "string"
+},
+"resourcePath": {
+"$ref": "ResourcePath"
+},
+"resourcePathString": {
+"type": "string"
+},
+"service": {
+"type": "string"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceApplication": {
+"id": "GoogleCloudSecuritycenterV1ResourceApplication",
+"properties": {
+"attributes": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributes"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceApplicationAttributes": {
+"id": "GoogleCloudSecuritycenterV1ResourceApplicationAttributes",
+"properties": {
+"businessOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+},
+"criticality": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesCriticality"
+},
+"developerOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+},
+"environment": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesEnvironment"
+},
+"operatorOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceApplicationAttributesContactInfo": {
+"id": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesContactInfo",
+"properties": {
+"email": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceApplicationAttributesCriticality": {
+"id": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesCriticality",
+"properties": {
+"type": {
+"enum": [
+"CRITICALITY_TYPE_UNSPECIFIED",
+"MISSION_CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceApplicationAttributesEnvironment": {
+"id": "GoogleCloudSecuritycenterV1ResourceApplicationAttributesEnvironment",
+"properties": {
+"type": {
+"enum": [
+"ENVIRONMENT_TYPE_UNSPECIFIED",
+"PRODUCTION",
+"STAGING",
+"TEST",
+"DEVELOPMENT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceSelector": {
+"id": "GoogleCloudSecuritycenterV1ResourceSelector",
+"properties": {
+"resourceTypes": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1ResourceValueConfig": {
+"id": "GoogleCloudSecuritycenterV1ResourceValueConfig",
+"properties": {
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"resourceLabelsSelector": {
+"additionalProperties": {
+"type": "string"
+},
+"type": "object"
+},
+"resourceType": {
+"type": "string"
+},
+"resourceValue": {
+"enum": [
+"RESOURCE_VALUE_UNSPECIFIED",
+"HIGH",
+"MEDIUM",
+"LOW",
+"NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"scope": {
+"type": "string"
+},
+"sensitiveDataProtectionMapping": {
+"$ref": "GoogleCloudSecuritycenterV1SensitiveDataProtectionMapping"
+},
+"tagValues": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1RunAssetDiscoveryResponse": {
+"id": "GoogleCloudSecuritycenterV1RunAssetDiscoveryResponse",
+"properties": {
+"duration": {
+"format": "google-duration",
+"type": "string"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"COMPLETED",
+"SUPERSEDED",
+"TERMINATED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1SecurityHealthAnalyticsCustomModule": {
+"id": "GoogleCloudSecuritycenterV1SecurityHealthAnalyticsCustomModule",
+"properties": {
+"ancestorModule": {
+"readOnly": true,
+"type": "string"
+},
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"customConfig": {
+"$ref": "GoogleCloudSecuritycenterV1CustomConfig"
+},
+"displayName": {
+"type": "string"
+},
+"enablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"ENABLED",
+"DISABLED",
+"INHERITED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"lastEditor": {
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1SensitiveDataProtectionMapping": {
+"id": "GoogleCloudSecuritycenterV1SensitiveDataProtectionMapping",
+"properties": {
+"highSensitivityMapping": {
+"enum": [
+"RESOURCE_VALUE_UNSPECIFIED",
+"HIGH",
+"MEDIUM",
+"LOW",
+"NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"mediumSensitivityMapping": {
+"enum": [
+"RESOURCE_VALUE_UNSPECIFIED",
+"HIGH",
+"MEDIUM",
+"LOW",
+"NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1beta1RunAssetDiscoveryResponse": {
+"id": "GoogleCloudSecuritycenterV1beta1RunAssetDiscoveryResponse",
+"properties": {
+"duration": {
+"format": "google-duration",
+"type": "string"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"COMPLETED",
+"SUPERSEDED",
+"TERMINATED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1p1beta1Finding": {
+"id": "GoogleCloudSecuritycenterV1p1beta1Finding",
+"properties": {
+"canonicalName": {
+"type": "string"
+},
+"category": {
+"type": "string"
+},
+"createTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"externalUri": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"parent": {
+"type": "string"
+},
+"resourceName": {
+"type": "string"
+},
+"securityMarks": {
+"$ref": "GoogleCloudSecuritycenterV1p1beta1SecurityMarks",
+"readOnly": true
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"sourceProperties": {
+"additionalProperties": {
+"type": "any"
+},
+"type": "object"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"ACTIVE",
+"INACTIVE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1p1beta1Folder": {
+"id": "GoogleCloudSecuritycenterV1p1beta1Folder",
+"properties": {
+"resourceFolder": {
+"type": "string"
+},
+"resourceFolderDisplayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1p1beta1NotificationMessage": {
+"id": "GoogleCloudSecuritycenterV1p1beta1NotificationMessage",
+"properties": {
+"finding": {
+"$ref": "GoogleCloudSecuritycenterV1p1beta1Finding"
+},
+"notificationConfigName": {
+"type": "string"
+},
+"resource": {
+"$ref": "GoogleCloudSecuritycenterV1p1beta1Resource"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1p1beta1Resource": {
+"id": "GoogleCloudSecuritycenterV1p1beta1Resource",
+"properties": {
+"folders": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1p1beta1Folder"
+},
+"readOnly": true,
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"parent": {
+"type": "string"
+},
+"parentDisplayName": {
+"type": "string"
+},
+"project": {
+"type": "string"
+},
+"projectDisplayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1p1beta1RunAssetDiscoveryResponse": {
+"id": "GoogleCloudSecuritycenterV1p1beta1RunAssetDiscoveryResponse",
+"properties": {
+"duration": {
+"format": "google-duration",
+"type": "string"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"COMPLETED",
+"SUPERSEDED",
+"TERMINATED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV1p1beta1SecurityMarks": {
+"id": "GoogleCloudSecuritycenterV1p1beta1SecurityMarks",
+"properties": {
+"canonicalName": {
+"type": "string"
+},
+"marks": {
+"additionalProperties": {
+"type": "string"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Access": {
+"id": "GoogleCloudSecuritycenterV2Access",
+"properties": {
+"callerIp": {
+"type": "string"
+},
+"callerIpGeo": {
+"$ref": "GoogleCloudSecuritycenterV2Geolocation"
+},
+"methodName": {
+"type": "string"
+},
+"principalEmail": {
+"type": "string"
+},
+"principalSubject": {
+"type": "string"
+},
+"serviceAccountDelegationInfo": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ServiceAccountDelegationInfo"
+},
+"type": "array"
+},
+"serviceAccountKeyName": {
+"type": "string"
+},
+"serviceName": {
+"type": "string"
+},
+"userAgent": {
+"type": "string"
+},
+"userAgentFamily": {
+"type": "string"
+},
+"userName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AccessReview": {
+"id": "GoogleCloudSecuritycenterV2AccessReview",
+"properties": {
+"group": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+},
+"resource": {
+"type": "string"
+},
+"subresource": {
+"type": "string"
+},
+"verb": {
+"type": "string"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AdaptiveProtection": {
+"id": "GoogleCloudSecuritycenterV2AdaptiveProtection",
+"properties": {
+"confidence": {
+"format": "double",
+"type": "number"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AdcApplication": {
+"id": "GoogleCloudSecuritycenterV2AdcApplication",
+"properties": {
+"attributes": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributes"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AdcApplicationTemplateRevision": {
+"id": "GoogleCloudSecuritycenterV2AdcApplicationTemplateRevision",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AdcSharedTemplateRevision": {
+"id": "GoogleCloudSecuritycenterV2AdcSharedTemplateRevision",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AffectedResources": {
+"id": "GoogleCloudSecuritycenterV2AffectedResources",
+"properties": {
+"count": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Agent": {
+"id": "GoogleCloudSecuritycenterV2Agent",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AgentAnomaly": {
+"id": "GoogleCloudSecuritycenterV2AgentAnomaly",
+"properties": {
+"confidenceScore": {
+"format": "double",
+"type": "number"
+},
+"detectorReferences": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2DetectorReference"
+},
+"type": "array"
+},
+"invocationReferences": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2InvocationReference"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AgentDataAccessEvent": {
+"id": "GoogleCloudSecuritycenterV2AgentDataAccessEvent",
+"properties": {
+"eventId": {
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"operation": {
+"enum": [
+"OPERATION_UNSPECIFIED",
+"READ",
+"MOVE",
+"COPY"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"principalSubject": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AgentSession": {
+"id": "GoogleCloudSecuritycenterV2AgentSession",
+"properties": {
+"sessionId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AiModel": {
+"id": "GoogleCloudSecuritycenterV2AiModel",
+"properties": {
+"deploymentPlatform": {
+"enum": [
+"DEPLOYMENT_PLATFORM_UNSPECIFIED",
+"VERTEX_AI",
+"GKE",
+"GCE",
+"FINE_TUNED_MODEL"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"domain": {
+"type": "string"
+},
+"library": {
+"type": "string"
+},
+"location": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"publisher": {
+"type": "string"
+},
+"usageCategory": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Allowed": {
+"id": "GoogleCloudSecuritycenterV2Allowed",
+"properties": {
+"ipRules": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IpRule"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Application": {
+"id": "GoogleCloudSecuritycenterV2Application",
+"properties": {
+"baseUri": {
+"type": "string"
+},
+"fullUri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ArtifactGuardPolicies": {
+"id": "GoogleCloudSecuritycenterV2ArtifactGuardPolicies",
+"properties": {
+"failingPolicies": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ArtifactGuardPolicy"
+},
+"type": "array"
+},
+"resourceId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ArtifactGuardPolicy": {
+"id": "GoogleCloudSecuritycenterV2ArtifactGuardPolicy",
+"properties": {
+"failureReason": {
+"type": "string"
+},
+"policyId": {
+"type": "string"
+},
+"type": {
+"enum": [
+"ARTIFACT_GUARD_POLICY_TYPE_UNSPECIFIED",
+"VULNERABILITY"
+],
+"enumDescriptions": [
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Attack": {
+"id": "GoogleCloudSecuritycenterV2Attack",
+"properties": {
+"classification": {
+"type": "string"
+},
+"volumeBps": {
+"deprecated": true,
+"format": "int32",
+"type": "integer"
+},
+"volumeBpsLong": {
+"format": "int64",
+"type": "string"
+},
+"volumePps": {
+"deprecated": true,
+"format": "int32",
+"type": "integer"
+},
+"volumePpsLong": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AttackExposure": {
+"id": "GoogleCloudSecuritycenterV2AttackExposure",
+"properties": {
+"attackExposureResult": {
+"type": "string"
+},
+"exposedHighValueResourcesCount": {
+"format": "int32",
+"type": "integer"
+},
+"exposedLowValueResourcesCount": {
+"format": "int32",
+"type": "integer"
+},
+"exposedMediumValueResourcesCount": {
+"format": "int32",
+"type": "integer"
+},
+"latestCalculationTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"score": {
+"format": "double",
+"type": "number"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"CALCULATED",
+"NOT_CALCULATED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AwsAccount": {
+"id": "GoogleCloudSecuritycenterV2AwsAccount",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AwsMetadata": {
+"id": "GoogleCloudSecuritycenterV2AwsMetadata",
+"properties": {
+"account": {
+"$ref": "GoogleCloudSecuritycenterV2AwsAccount"
+},
+"organization": {
+"$ref": "GoogleCloudSecuritycenterV2AwsOrganization"
+},
+"organizationalUnits": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2AwsOrganizationalUnit"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AwsOrganization": {
+"id": "GoogleCloudSecuritycenterV2AwsOrganization",
+"properties": {
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AwsOrganizationalUnit": {
+"id": "GoogleCloudSecuritycenterV2AwsOrganizationalUnit",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AzureManagementGroup": {
+"id": "GoogleCloudSecuritycenterV2AzureManagementGroup",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AzureMetadata": {
+"id": "GoogleCloudSecuritycenterV2AzureMetadata",
+"properties": {
+"managementGroups": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2AzureManagementGroup"
+},
+"type": "array"
+},
+"resourceGroup": {
+"$ref": "GoogleCloudSecuritycenterV2AzureResourceGroup"
+},
+"subscription": {
+"$ref": "GoogleCloudSecuritycenterV2AzureSubscription"
+},
+"tenant": {
+"$ref": "GoogleCloudSecuritycenterV2AzureTenant"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AzureResourceGroup": {
+"id": "GoogleCloudSecuritycenterV2AzureResourceGroup",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AzureSubscription": {
+"id": "GoogleCloudSecuritycenterV2AzureSubscription",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2AzureTenant": {
+"id": "GoogleCloudSecuritycenterV2AzureTenant",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2BackupDisasterRecovery": {
+"id": "GoogleCloudSecuritycenterV2BackupDisasterRecovery",
+"properties": {
+"appliance": {
+"type": "string"
+},
+"applications": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"backupCreateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"backupTemplate": {
+"type": "string"
+},
+"backupType": {
+"type": "string"
+},
+"host": {
+"type": "string"
+},
+"policies": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"policyOptions": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"profile": {
+"type": "string"
+},
+"storagePool": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2BigQueryExport": {
+"id": "GoogleCloudSecuritycenterV2BigQueryExport",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"cryptoKeyName": {
+"readOnly": true,
+"type": "string"
+},
+"dataset": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"filter": {
+"type": "string"
+},
+"mostRecentEditor": {
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"principal": {
+"readOnly": true,
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Binding": {
+"id": "GoogleCloudSecuritycenterV2Binding",
+"properties": {
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+},
+"role": {
+"$ref": "GoogleCloudSecuritycenterV2Role"
+},
+"subjects": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Subject"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2BulkMuteFindingsResponse": {
+"id": "GoogleCloudSecuritycenterV2BulkMuteFindingsResponse",
+"properties": {},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Chokepoint": {
+"id": "GoogleCloudSecuritycenterV2Chokepoint",
+"properties": {
+"relatedFindings": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2CloudArmor": {
+"id": "GoogleCloudSecuritycenterV2CloudArmor",
+"properties": {
+"adaptiveProtection": {
+"$ref": "GoogleCloudSecuritycenterV2AdaptiveProtection"
+},
+"attack": {
+"$ref": "GoogleCloudSecuritycenterV2Attack"
+},
+"duration": {
+"format": "google-duration",
+"type": "string"
+},
+"requests": {
+"$ref": "GoogleCloudSecuritycenterV2Requests"
+},
+"securityPolicy": {
+"$ref": "GoogleCloudSecuritycenterV2SecurityPolicy"
+},
+"threatVector": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2CloudControl": {
+"id": "GoogleCloudSecuritycenterV2CloudControl",
+"properties": {
+"cloudControlName": {
+"type": "string"
+},
+"policyType": {
+"type": "string"
+},
+"type": {
+"enum": [
+"CLOUD_CONTROL_TYPE_UNSPECIFIED",
+"BUILT_IN",
+"CUSTOM"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"version": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2CloudDlpDataProfile": {
+"id": "GoogleCloudSecuritycenterV2CloudDlpDataProfile",
+"properties": {
+"dataProfile": {
+"type": "string"
+},
+"infoTypes": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2InfoType"
+},
+"type": "array"
+},
+"parentType": {
+"enum": [
+"PARENT_TYPE_UNSPECIFIED",
+"ORGANIZATION",
+"PROJECT"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2CloudDlpInspection": {
+"id": "GoogleCloudSecuritycenterV2CloudDlpInspection",
+"properties": {
+"fullScan": {
+"type": "boolean"
+},
+"infoType": {
+"type": "string"
+},
+"infoTypeCount": {
+"format": "int64",
+"type": "string"
+},
+"inspectJob": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2CloudLoggingEntry": {
+"id": "GoogleCloudSecuritycenterV2CloudLoggingEntry",
+"properties": {
+"insertId": {
+"type": "string"
+},
+"logId": {
+"type": "string"
+},
+"resourceContainer": {
+"type": "string"
+},
+"timestamp": {
+"format": "google-datetime",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Compliance": {
+"id": "GoogleCloudSecuritycenterV2Compliance",
+"properties": {
+"ids": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"standard": {
+"type": "string"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ComplianceDetails": {
+"id": "GoogleCloudSecuritycenterV2ComplianceDetails",
+"properties": {
+"cloudControl": {
+"$ref": "GoogleCloudSecuritycenterV2CloudControl"
+},
+"cloudControlDeploymentNames": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"frameworks": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Framework"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Connection": {
+"id": "GoogleCloudSecuritycenterV2Connection",
+"properties": {
+"destinationIp": {
+"type": "string"
+},
+"destinationPort": {
+"format": "int32",
+"type": "integer"
+},
+"protocol": {
+"enum": [
+"PROTOCOL_UNSPECIFIED",
+"ICMP",
+"TCP",
+"UDP",
+"GRE",
+"ESP"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"sourceIp": {
+"type": "string"
+},
+"sourcePort": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Contact": {
+"id": "GoogleCloudSecuritycenterV2Contact",
+"properties": {
+"email": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ContactDetails": {
+"id": "GoogleCloudSecuritycenterV2ContactDetails",
+"properties": {
+"contacts": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Contact"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Container": {
+"id": "GoogleCloudSecuritycenterV2Container",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"imageId": {
+"type": "string"
+},
+"labels": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Label"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"uri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Control": {
+"id": "GoogleCloudSecuritycenterV2Control",
+"properties": {
+"controlName": {
+"type": "string"
+},
+"displayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Cve": {
+"id": "GoogleCloudSecuritycenterV2Cve",
+"properties": {
+"cvssv3": {
+"$ref": "GoogleCloudSecuritycenterV2Cvssv3"
+},
+"exploitReleaseDate": {
+"format": "google-datetime",
+"type": "string"
+},
+"exploitationActivity": {
+"enum": [
+"EXPLOITATION_ACTIVITY_UNSPECIFIED",
+"WIDE",
+"CONFIRMED",
+"AVAILABLE",
+"ANTICIPATED",
+"NO_KNOWN"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"firstExploitationDate": {
+"format": "google-datetime",
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"impact": {
+"enum": [
+"RISK_RATING_UNSPECIFIED",
+"LOW",
+"MEDIUM",
+"HIGH",
+"CRITICAL"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"observedInTheWild": {
+"type": "boolean"
+},
+"references": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Reference"
+},
+"type": "array"
+},
+"upstreamFixAvailable": {
+"type": "boolean"
+},
+"zeroDay": {
+"type": "boolean"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Cvssv3": {
+"id": "GoogleCloudSecuritycenterV2Cvssv3",
+"properties": {
+"attackComplexity": {
+"enum": [
+"ATTACK_COMPLEXITY_UNSPECIFIED",
+"ATTACK_COMPLEXITY_LOW",
+"ATTACK_COMPLEXITY_HIGH"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"attackVector": {
+"enum": [
+"ATTACK_VECTOR_UNSPECIFIED",
+"ATTACK_VECTOR_NETWORK",
+"ATTACK_VECTOR_ADJACENT",
+"ATTACK_VECTOR_LOCAL",
+"ATTACK_VECTOR_PHYSICAL"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"availabilityImpact": {
+"enum": [
+"IMPACT_UNSPECIFIED",
+"IMPACT_HIGH",
+"IMPACT_LOW",
+"IMPACT_NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"baseScore": {
+"format": "double",
+"type": "number"
+},
+"confidentialityImpact": {
+"enum": [
+"IMPACT_UNSPECIFIED",
+"IMPACT_HIGH",
+"IMPACT_LOW",
+"IMPACT_NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"integrityImpact": {
+"enum": [
+"IMPACT_UNSPECIFIED",
+"IMPACT_HIGH",
+"IMPACT_LOW",
+"IMPACT_NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"privilegesRequired": {
+"enum": [
+"PRIVILEGES_REQUIRED_UNSPECIFIED",
+"PRIVILEGES_REQUIRED_NONE",
+"PRIVILEGES_REQUIRED_LOW",
+"PRIVILEGES_REQUIRED_HIGH"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"scope": {
+"enum": [
+"SCOPE_UNSPECIFIED",
+"SCOPE_UNCHANGED",
+"SCOPE_CHANGED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"userInteraction": {
+"enum": [
+"USER_INTERACTION_UNSPECIFIED",
+"USER_INTERACTION_NONE",
+"USER_INTERACTION_REQUIRED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Cwe": {
+"id": "GoogleCloudSecuritycenterV2Cwe",
+"properties": {
+"id": {
+"type": "string"
+},
+"references": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Reference"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DataAccessEvent": {
+"id": "GoogleCloudSecuritycenterV2DataAccessEvent",
+"properties": {
+"eventId": {
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"operation": {
+"enum": [
+"OPERATION_UNSPECIFIED",
+"READ",
+"MOVE",
+"COPY"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"principalEmail": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DataFlowEvent": {
+"id": "GoogleCloudSecuritycenterV2DataFlowEvent",
+"properties": {
+"eventId": {
+"type": "string"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"operation": {
+"enum": [
+"OPERATION_UNSPECIFIED",
+"READ",
+"MOVE",
+"COPY"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"principalEmail": {
+"type": "string"
+},
+"violatedLocation": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DataRetentionDeletionEvent": {
+"id": "GoogleCloudSecuritycenterV2DataRetentionDeletionEvent",
+"properties": {
+"dataObjectCount": {
+"format": "int64",
+"type": "string"
+},
+"eventDetectionTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"eventType": {
+"enum": [
+"EVENT_TYPE_UNSPECIFIED",
+"EVENT_TYPE_MAX_TTL_EXCEEDED",
+"EVENT_TYPE_MAX_TTL_FROM_CREATION",
+"EVENT_TYPE_MAX_TTL_FROM_LAST_MODIFICATION",
+"EVENT_TYPE_MIN_TTL_FROM_CREATION"
+],
+"enumDeprecated": [
+false,
+true,
+false,
+false,
+false
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"maxRetentionAllowed": {
+"format": "google-duration",
+"type": "string"
+},
+"minRetentionAllowed": {
+"format": "google-duration",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Database": {
+"id": "GoogleCloudSecuritycenterV2Database",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"grantees": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"query": {
+"type": "string"
+},
+"userName": {
+"type": "string"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Dataset": {
+"id": "GoogleCloudSecuritycenterV2Dataset",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"source": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Denied": {
+"id": "GoogleCloudSecuritycenterV2Denied",
+"properties": {
+"ipRules": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IpRule"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Detection": {
+"id": "GoogleCloudSecuritycenterV2Detection",
+"properties": {
+"binary": {
+"type": "string"
+},
+"percentPagesMatched": {
+"format": "double",
+"type": "number"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DetectorReference": {
+"id": "GoogleCloudSecuritycenterV2DetectorReference",
+"properties": {
+"detectorId": {
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"explanation": {
+"type": "string"
+},
+"recommendation": {
+"type": "string"
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DiscoveredWorkload": {
+"id": "GoogleCloudSecuritycenterV2DiscoveredWorkload",
+"properties": {
+"confidence": {
+"enum": [
+"CONFIDENCE_UNSPECIFIED",
+"CONFIDENCE_HIGH"
+],
+"enumDescriptions": [
+"",
+""
+],
+"type": "string"
+},
+"detectedRelevantHardware": {
+"type": "boolean"
+},
+"detectedRelevantKeywords": {
+"type": "boolean"
+},
+"detectedRelevantPackages": {
+"type": "boolean"
+},
+"workloadType": {
+"enum": [
+"WORKLOAD_TYPE_UNSPECIFIED",
+"MCP_SERVER",
+"AI_INFERENCE",
+"AGENT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Disk": {
+"id": "GoogleCloudSecuritycenterV2Disk",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DiskPath": {
+"id": "GoogleCloudSecuritycenterV2DiskPath",
+"properties": {
+"partitionUuid": {
+"type": "string"
+},
+"relativePath": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2DynamicMuteRecord": {
+"id": "GoogleCloudSecuritycenterV2DynamicMuteRecord",
+"properties": {
+"matchTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"muteConfig": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2EnvironmentVariable": {
+"id": "GoogleCloudSecuritycenterV2EnvironmentVariable",
+"properties": {
+"name": {
+"type": "string"
+},
+"val": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ExfilResource": {
+"id": "GoogleCloudSecuritycenterV2ExfilResource",
+"properties": {
+"components": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Exfiltration": {
+"id": "GoogleCloudSecuritycenterV2Exfiltration",
+"properties": {
+"sources": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ExfilResource"
+},
+"type": "array"
+},
+"targets": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ExfilResource"
+},
+"type": "array"
+},
+"totalExfiltratedBytes": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ExternalExposure": {
+"id": "GoogleCloudSecuritycenterV2ExternalExposure",
+"properties": {
+"backendBucket": {
+"type": "string"
+},
+"backendService": {
+"type": "string"
+},
+"exposedApplication": {
+"type": "string"
+},
+"exposedEndpoint": {
+"type": "string"
+},
+"exposedService": {
+"type": "string"
+},
+"forwardingRule": {
+"type": "string"
+},
+"hostnameUri": {
+"type": "string"
+},
+"httpResponse": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2HttpResponse"
+},
+"type": "array"
+},
+"instanceGroup": {
+"type": "string"
+},
+"internalBackendService": {
+"type": "string"
+},
+"loadBalancerFirewallPolicy": {
+"type": "string"
+},
+"networkEndpointGroup": {
+"type": "string"
+},
+"networkIngressFirewallPolicy": {
+"type": "string"
+},
+"networkPathInsightsGenerationTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"privateIpAddress": {
+"type": "string"
+},
+"privatePort": {
+"type": "string"
+},
+"pscNetworkAttachment": {
+"type": "string"
+},
+"pscServiceAttachment": {
+"type": "string"
+},
+"publicIpAddress": {
+"type": "string"
+},
+"publicPort": {
+"type": "string"
+},
+"serviceFirewallPolicy": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ExternalSystem": {
+"id": "GoogleCloudSecuritycenterV2ExternalSystem",
+"properties": {
+"assignees": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"caseCloseTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"caseCreateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"casePriority": {
+"type": "string"
+},
+"caseSla": {
+"format": "google-datetime",
+"type": "string"
+},
+"caseUri": {
+"type": "string"
+},
+"externalSystemUpdateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"externalUid": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"status": {
+"type": "string"
+},
+"ticketInfo": {
+"$ref": "GoogleCloudSecuritycenterV2TicketInfo"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2File": {
+"id": "GoogleCloudSecuritycenterV2File",
+"properties": {
+"contents": {
+"type": "string"
+},
+"diskPath": {
+"$ref": "GoogleCloudSecuritycenterV2DiskPath"
+},
+"fileLoadState": {
+"enum": [
+"FILE_LOAD_STATE_UNSPECIFIED",
+"LOADED_BY_PROCESS",
+"NOT_LOADED_BY_PROCESS"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"hashedSize": {
+"format": "int64",
+"type": "string"
+},
+"operations": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2FileOperation"
+},
+"type": "array"
+},
+"partiallyHashed": {
+"type": "boolean"
+},
+"path": {
+"type": "string"
+},
+"sha256": {
+"type": "string"
+},
+"size": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2FileOperation": {
+"id": "GoogleCloudSecuritycenterV2FileOperation",
+"properties": {
+"type": {
+"enum": [
+"OPERATION_TYPE_UNSPECIFIED",
+"OPEN",
+"READ",
+"RENAME",
+"WRITE",
+"EXECUTE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Finding": {
+"id": "GoogleCloudSecuritycenterV2Finding",
+"properties": {
+"access": {
+"$ref": "GoogleCloudSecuritycenterV2Access"
+},
+"affectedResources": {
+"$ref": "GoogleCloudSecuritycenterV2AffectedResources"
+},
+"agent": {
+"$ref": "GoogleCloudSecuritycenterV2Agent"
+},
+"agentAnomaly": {
+"$ref": "GoogleCloudSecuritycenterV2AgentAnomaly"
+},
+"agentDataAccessEvents": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2AgentDataAccessEvent"
+},
+"type": "array"
+},
+"agentSessions": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2AgentSession"
+},
+"type": "array"
+},
+"aiModel": {
+"$ref": "GoogleCloudSecuritycenterV2AiModel"
+},
+"application": {
+"$ref": "GoogleCloudSecuritycenterV2Application"
+},
+"artifactGuardPolicies": {
+"$ref": "GoogleCloudSecuritycenterV2ArtifactGuardPolicies"
+},
+"attackExposure": {
+"$ref": "GoogleCloudSecuritycenterV2AttackExposure"
+},
+"backupDisasterRecovery": {
+"$ref": "GoogleCloudSecuritycenterV2BackupDisasterRecovery"
+},
+"canonicalName": {
+"readOnly": true,
+"type": "string"
+},
+"category": {
+"type": "string"
+},
+"chokepoint": {
+"$ref": "GoogleCloudSecuritycenterV2Chokepoint"
+},
+"cloudArmor": {
+"$ref": "GoogleCloudSecuritycenterV2CloudArmor"
+},
+"cloudDlpDataProfile": {
+"$ref": "GoogleCloudSecuritycenterV2CloudDlpDataProfile"
+},
+"cloudDlpInspection": {
+"$ref": "GoogleCloudSecuritycenterV2CloudDlpInspection"
+},
+"complianceDetails": {
+"$ref": "GoogleCloudSecuritycenterV2ComplianceDetails"
+},
+"compliances": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Compliance"
+},
+"type": "array"
+},
+"connections": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Connection"
+},
+"type": "array"
+},
+"contacts": {
+"additionalProperties": {
+"$ref": "GoogleCloudSecuritycenterV2ContactDetails"
+},
+"readOnly": true,
+"type": "object"
+},
+"containers": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Container"
+},
+"type": "array"
+},
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"cryptoKeyName": {
+"readOnly": true,
+"type": "string"
+},
+"dataAccessEvents": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2DataAccessEvent"
+},
+"type": "array"
+},
+"dataFlowEvents": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2DataFlowEvent"
+},
+"type": "array"
+},
+"dataRetentionDeletionEvents": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2DataRetentionDeletionEvent"
+},
+"type": "array"
+},
+"database": {
+"$ref": "GoogleCloudSecuritycenterV2Database"
+},
+"description": {
+"type": "string"
+},
+"discoveredWorkload": {
+"$ref": "GoogleCloudSecuritycenterV2DiscoveredWorkload"
+},
+"disk": {
+"$ref": "GoogleCloudSecuritycenterV2Disk"
+},
+"eventTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"exfiltration": {
+"$ref": "GoogleCloudSecuritycenterV2Exfiltration"
+},
+"externalExposure": {
+"$ref": "GoogleCloudSecuritycenterV2ExternalExposure"
+},
+"externalSystems": {
+"additionalProperties": {
+"$ref": "GoogleCloudSecuritycenterV2ExternalSystem"
+},
+"readOnly": true,
+"type": "object"
+},
+"externalUri": {
+"type": "string"
+},
+"files": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2File"
+},
+"type": "array"
+},
+"findingClass": {
+"enum": [
+"FINDING_CLASS_UNSPECIFIED",
+"THREAT",
+"VULNERABILITY",
+"MISCONFIGURATION",
+"OBSERVATION",
+"SCC_ERROR",
+"POSTURE_VIOLATION",
+"TOXIC_COMBINATION",
+"SENSITIVE_DATA_RISK",
+"CHOKEPOINT",
+"EXTERNAL_EXPOSURE",
+"SECRET"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"groupMemberships": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2GroupMembership"
+},
+"type": "array"
+},
+"iamBindings": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IamBinding"
+},
+"type": "array"
+},
+"iamDetails": {
+"$ref": "GoogleCloudSecuritycenterV2IamDetails"
+},
+"indicator": {
+"$ref": "GoogleCloudSecuritycenterV2Indicator"
+},
+"ipRules": {
+"$ref": "GoogleCloudSecuritycenterV2IpRules"
+},
+"job": {
+"$ref": "GoogleCloudSecuritycenterV2Job"
+},
+"kernelRootkit": {
+"$ref": "GoogleCloudSecuritycenterV2KernelRootkit"
+},
+"kubernetes": {
+"$ref": "GoogleCloudSecuritycenterV2Kubernetes"
+},
+"loadBalancers": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2LoadBalancer"
+},
+"type": "array"
+},
+"logEntries": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2LogEntry"
+},
+"type": "array"
+},
+"mitreAttack": {
+"$ref": "GoogleCloudSecuritycenterV2MitreAttack"
+},
+"moduleName": {
+"type": "string"
+},
+"mute": {
+"enum": [
+"MUTE_UNSPECIFIED",
+"MUTED",
+"UNMUTED",
+"UNDEFINED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"muteInfo": {
+"$ref": "GoogleCloudSecuritycenterV2MuteInfo",
+"readOnly": true
+},
+"muteInitiator": {
+"type": "string"
+},
+"muteUpdateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"networks": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Network"
+},
+"type": "array"
+},
+"nextSteps": {
+"type": "string"
+},
+"notebook": {
+"$ref": "GoogleCloudSecuritycenterV2Notebook"
+},
+"orgPolicies": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2OrgPolicy"
+},
+"type": "array"
+},
+"parent": {
+"type": "string"
+},
+"parentDisplayName": {
+"readOnly": true,
+"type": "string"
+},
+"policyViolationSummary": {
+"$ref": "GoogleCloudSecuritycenterV2PolicyViolationSummary"
+},
+"processes": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Process"
+},
+"type": "array"
+},
+"resourceName": {
+"type": "string"
+},
+"secret": {
+"$ref": "GoogleCloudSecuritycenterV2Secret"
+},
+"securityMarks": {
+"$ref": "GoogleCloudSecuritycenterV2SecurityMarks",
+"readOnly": true
+},
+"securityPosture": {
+"$ref": "GoogleCloudSecuritycenterV2SecurityPosture"
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"sourceProperties": {
+"additionalProperties": {
+"type": "any"
+},
+"type": "object"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"ACTIVE",
+"INACTIVE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+},
+"toxicCombination": {
+"$ref": "GoogleCloudSecuritycenterV2ToxicCombination"
+},
+"vertexAi": {
+"$ref": "GoogleCloudSecuritycenterV2VertexAi"
+},
+"vulnerability": {
+"$ref": "GoogleCloudSecuritycenterV2Vulnerability"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Folder": {
+"id": "GoogleCloudSecuritycenterV2Folder",
+"properties": {
+"resourceFolder": {
+"type": "string"
+},
+"resourceFolderDisplayName": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Framework": {
+"id": "GoogleCloudSecuritycenterV2Framework",
+"properties": {
+"category": {
+"items": {
+"enum": [
+"FRAMEWORK_CATEGORY_UNSPECIFIED",
+"SECURITY_BENCHMARKS",
+"ASSURED_WORKLOADS",
+"DATA_SECURITY",
+"GOOGLE_BEST_PRACTICES",
+"CUSTOM_FRAMEWORK"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"controls": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Control"
+},
+"type": "array"
+},
+"displayName": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"type": {
+"enum": [
+"FRAMEWORK_TYPE_UNSPECIFIED",
+"FRAMEWORK_TYPE_BUILT_IN",
+"FRAMEWORK_TYPE_CUSTOM"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Geolocation": {
+"id": "GoogleCloudSecuritycenterV2Geolocation",
+"properties": {
+"regionCode": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2GroupMembership": {
+"id": "GoogleCloudSecuritycenterV2GroupMembership",
+"properties": {
+"groupId": {
+"type": "string"
+},
+"groupType": {
+"enum": [
+"GROUP_TYPE_UNSPECIFIED",
+"GROUP_TYPE_TOXIC_COMBINATION",
+"GROUP_TYPE_CHOKEPOINT"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2HttpResponse": {
+"id": "GoogleCloudSecuritycenterV2HttpResponse",
+"properties": {
+"path": {
+"type": "string"
+},
+"statusCode": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IamBinding": {
+"id": "GoogleCloudSecuritycenterV2IamBinding",
+"properties": {
+"action": {
+"enum": [
+"ACTION_UNSPECIFIED",
+"ADD",
+"REMOVE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"member": {
+"type": "string"
+},
+"role": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IamDetails": {
+"id": "GoogleCloudSecuritycenterV2IamDetails",
+"properties": {
+"iamRolePermissions": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IamRolePermission"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IamRolePermission": {
+"id": "GoogleCloudSecuritycenterV2IamRolePermission",
+"properties": {
+"name": {
+"type": "string"
+},
+"role": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Indicator": {
+"id": "GoogleCloudSecuritycenterV2Indicator",
+"properties": {
+"domains": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"ipAddresses": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"signatures": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ProcessSignature"
+},
+"type": "array"
+},
+"uris": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2InfoType": {
+"id": "GoogleCloudSecuritycenterV2InfoType",
+"properties": {
+"name": {
+"type": "string"
+},
+"sensitivityScore": {
+"$ref": "GoogleCloudSecuritycenterV2SensitivityScore"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2InvocationReference": {
+"id": "GoogleCloudSecuritycenterV2InvocationReference",
+"properties": {
+"invocationId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IpRule": {
+"id": "GoogleCloudSecuritycenterV2IpRule",
+"properties": {
+"portRanges": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2PortRange"
+},
+"type": "array"
+},
+"protocol": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IpRules": {
+"id": "GoogleCloudSecuritycenterV2IpRules",
+"properties": {
+"allowed": {
+"$ref": "GoogleCloudSecuritycenterV2Allowed"
+},
+"denied": {
+"$ref": "GoogleCloudSecuritycenterV2Denied"
+},
+"destinationIpRanges": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"direction": {
+"enum": [
+"DIRECTION_UNSPECIFIED",
+"INGRESS",
+"EGRESS"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"exposedServices": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"sourceIpRanges": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Issue": {
+"id": "GoogleCloudSecuritycenterV2Issue",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"detection": {
+"type": "string"
+},
+"domains": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueDomain"
+},
+"type": "array"
+},
+"exposureScore": {
+"format": "double",
+"type": "number"
+},
+"issueType": {
+"enum": [
+"ISSUE_TYPE_UNSPECIFIED",
+"CHOKEPOINT",
+"TOXIC_COMBINATION",
+"INSIGHT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"lastObservationTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"mute": {
+"$ref": "GoogleCloudSecuritycenterV2IssueMute"
+},
+"name": {
+"type": "string"
+},
+"primaryResource": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResource"
+},
+"relatedFindings": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueFinding"
+},
+"type": "array"
+},
+"remediations": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"secondaryResources": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResource"
+},
+"type": "array"
+},
+"securityContexts": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueSecurityContext"
+},
+"type": "array"
+},
+"severity": {
+"enum": [
+"SEVERITY_UNSPECIFIED",
+"CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"state": {
+"enum": [
+"STATE_UNSPECIFIED",
+"ACTIVE",
+"INACTIVE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueDomain": {
+"id": "GoogleCloudSecuritycenterV2IssueDomain",
+"properties": {
+"domainCategory": {
+"enum": [
+"DOMAIN_CATEGORY_UNSPECIFIED",
+"AI",
+"CODE",
+"CONTAINER",
+"DATA",
+"IDENTITY_AND_ACCESS",
+"VULNERABILITY",
+"THREAT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueFinding": {
+"id": "GoogleCloudSecuritycenterV2IssueFinding",
+"properties": {
+"cve": {
+"$ref": "GoogleCloudSecuritycenterV2IssueFindingCve"
+},
+"name": {
+"type": "string"
+},
+"securityBulletin": {
+"$ref": "GoogleCloudSecuritycenterV2IssueFindingSecurityBulletin"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueFindingCve": {
+"id": "GoogleCloudSecuritycenterV2IssueFindingCve",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueFindingSecurityBulletin": {
+"id": "GoogleCloudSecuritycenterV2IssueFindingSecurityBulletin",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueMute": {
+"id": "GoogleCloudSecuritycenterV2IssueMute",
+"properties": {
+"muteInitiator": {
+"type": "string"
+},
+"muteReason": {
+"type": "string"
+},
+"muteState": {
+"enum": [
+"MUTE_STATE_UNSPECIFIED",
+"NOT_MUTED",
+"MUTED"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+},
+"muteUpdateTime": {
+"format": "google-datetime",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResource": {
+"id": "GoogleCloudSecuritycenterV2IssueResource",
+"properties": {
+"adcApplication": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAdcApplication"
+},
+"adcApplicationTemplate": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAdcApplicationTemplateRevision"
+},
+"adcSharedTemplate": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAdcSharedTemplateRevision"
+},
+"application": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplication"
+},
+"awsMetadata": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAwsMetadata"
+},
+"azureMetadata": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAzureMetadata"
+},
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"googleCloudMetadata": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceGoogleCloudMetadata"
+},
+"name": {
+"type": "string"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAdcApplication": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAdcApplication",
+"properties": {
+"attributes": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributes"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAdcApplicationTemplateRevision": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAdcApplicationTemplateRevision",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAdcSharedTemplateRevision": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAdcSharedTemplateRevision",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceApplication": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceApplication",
+"properties": {
+"attributes": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributes"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceApplicationAttributes": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributes",
+"properties": {
+"businessOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+},
+"criticality": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesCriticality"
+},
+"developerOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+},
+"environment": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesEnvironment"
+},
+"operatorOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesContactInfo": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesContactInfo",
+"properties": {
+"email": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesCriticality": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesCriticality",
+"properties": {
+"type": {
+"enum": [
+"CRITICALITY_TYPE_UNSPECIFIED",
+"MISSION_CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesEnvironment": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceApplicationAttributesEnvironment",
+"properties": {
+"type": {
+"enum": [
+"ENVIRONMENT_TYPE_UNSPECIFIED",
+"PRODUCTION",
+"STAGING",
+"TEST",
+"DEVELOPMENT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAwsMetadata": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAwsMetadata",
+"properties": {
+"account": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAwsMetadataAwsAccount"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAwsMetadataAwsAccount": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAwsMetadataAwsAccount",
+"properties": {
+"id": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAzureMetadata": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAzureMetadata",
+"properties": {
+"subscription": {
+"$ref": "GoogleCloudSecuritycenterV2IssueResourceAzureMetadataAzureSubscription"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceAzureMetadataAzureSubscription": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceAzureMetadataAzureSubscription",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueResourceGoogleCloudMetadata": {
+"id": "GoogleCloudSecuritycenterV2IssueResourceGoogleCloudMetadata",
+"properties": {
+"projectId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueSecurityContext": {
+"id": "GoogleCloudSecuritycenterV2IssueSecurityContext",
+"properties": {
+"aggregatedCount": {
+"$ref": "GoogleCloudSecuritycenterV2IssueSecurityContextAggregatedCount"
+},
+"context": {
+"$ref": "GoogleCloudSecuritycenterV2IssueSecurityContextContext"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueSecurityContextAggregatedCount": {
+"id": "GoogleCloudSecuritycenterV2IssueSecurityContextAggregatedCount",
+"properties": {
+"key": {
+"type": "string"
+},
+"value": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2IssueSecurityContextContext": {
+"id": "GoogleCloudSecuritycenterV2IssueSecurityContextContext",
+"properties": {
+"type": {
+"type": "string"
+},
+"values": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Job": {
+"id": "GoogleCloudSecuritycenterV2Job",
+"properties": {
+"errorCode": {
+"format": "int32",
+"type": "integer"
+},
+"location": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"state": {
+"enum": [
+"JOB_STATE_UNSPECIFIED",
+"PENDING",
+"RUNNING",
+"SUCCEEDED",
+"FAILED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2KernelRootkit": {
+"id": "GoogleCloudSecuritycenterV2KernelRootkit",
+"properties": {
+"name": {
+"type": "string"
+},
+"unexpectedCodeModification": {
+"type": "boolean"
+},
+"unexpectedFtraceHandler": {
+"type": "boolean"
+},
+"unexpectedInterruptHandler": {
+"type": "boolean"
+},
+"unexpectedKernelCodePages": {
+"type": "boolean"
+},
+"unexpectedKprobeHandler": {
+"type": "boolean"
+},
+"unexpectedProcessesInRunqueue": {
+"type": "boolean"
+},
+"unexpectedReadOnlyDataModification": {
+"type": "boolean"
+},
+"unexpectedSystemCallHandler": {
+"type": "boolean"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Kubernetes": {
+"id": "GoogleCloudSecuritycenterV2Kubernetes",
+"properties": {
+"accessReviews": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2AccessReview"
+},
+"type": "array"
+},
+"bindings": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Binding"
+},
+"type": "array"
+},
+"nodePools": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2NodePool"
+},
+"type": "array"
+},
+"nodes": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Node"
+},
+"type": "array"
+},
+"objects": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Object"
+},
+"type": "array"
+},
+"pods": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Pod"
+},
+"type": "array"
+},
+"roles": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Role"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Label": {
+"id": "GoogleCloudSecuritycenterV2Label",
+"properties": {
+"name": {
+"type": "string"
+},
+"value": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2LoadBalancer": {
+"id": "GoogleCloudSecuritycenterV2LoadBalancer",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2LogEntry": {
+"id": "GoogleCloudSecuritycenterV2LogEntry",
+"properties": {
+"cloudLoggingEntry": {
+"$ref": "GoogleCloudSecuritycenterV2CloudLoggingEntry"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2MemoryHashSignature": {
+"id": "GoogleCloudSecuritycenterV2MemoryHashSignature",
+"properties": {
+"binaryFamily": {
+"type": "string"
+},
+"detections": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Detection"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2MitreAttack": {
+"id": "GoogleCloudSecuritycenterV2MitreAttack",
+"properties": {
+"additionalTactics": {
+"items": {
+"enum": [
+"TACTIC_UNSPECIFIED",
+"RECONNAISSANCE",
+"RESOURCE_DEVELOPMENT",
+"INITIAL_ACCESS",
+"EXECUTION",
+"PERSISTENCE",
+"PRIVILEGE_ESCALATION",
+"DEFENSE_EVASION",
+"CREDENTIAL_ACCESS",
+"DISCOVERY",
+"LATERAL_MOVEMENT",
+"COLLECTION",
+"COMMAND_AND_CONTROL",
+"EXFILTRATION",
+"IMPACT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"additionalTechniques": {
+"items": {
+"enum": [
+"TECHNIQUE_UNSPECIFIED",
+"DATA_OBFUSCATION",
+"DATA_OBFUSCATION_STEGANOGRAPHY",
+"OS_CREDENTIAL_DUMPING",
+"OS_CREDENTIAL_DUMPING_PROC_FILESYSTEM",
+"OS_CREDENTIAL_DUMPING_ETC_PASSWORD_AND_ETC_SHADOW",
+"DATA_FROM_LOCAL_SYSTEM",
+"AUTOMATED_EXFILTRATION",
+"OBFUSCATED_FILES_OR_INFO",
+"STEGANOGRAPHY",
+"COMPILE_AFTER_DELIVERY",
+"COMMAND_OBFUSCATION",
+"SCHEDULED_TRANSFER",
+"SYSTEM_OWNER_USER_DISCOVERY",
+"MASQUERADING",
+"MATCH_LEGITIMATE_NAME_OR_LOCATION",
+"BOOT_OR_LOGON_INITIALIZATION_SCRIPTS",
+"STARTUP_ITEMS",
+"NETWORK_SERVICE_DISCOVERY",
+"SCHEDULED_TASK_JOB",
+"SCHEDULED_TASK_JOB_CRON",
+"CONTAINER_ORCHESTRATION_JOB",
+"PROCESS_INJECTION",
+"INPUT_CAPTURE",
+"INPUT_CAPTURE_KEYLOGGING",
+"PROCESS_DISCOVERY",
+"COMMAND_AND_SCRIPTING_INTERPRETER",
+"UNIX_SHELL",
+"PYTHON",
+"EXPLOITATION_FOR_PRIVILEGE_ESCALATION",
+"PERMISSION_GROUPS_DISCOVERY",
+"CLOUD_GROUPS",
+"INDICATOR_REMOVAL",
+"INDICATOR_REMOVAL_CLEAR_LINUX_OR_MAC_SYSTEM_LOGS",
+"INDICATOR_REMOVAL_CLEAR_COMMAND_HISTORY",
+"INDICATOR_REMOVAL_FILE_DELETION",
+"INDICATOR_REMOVAL_TIMESTOMP",
+"INDICATOR_REMOVAL_CLEAR_MAILBOX_DATA",
+"APPLICATION_LAYER_PROTOCOL",
+"DNS",
+"SOFTWARE_DEPLOYMENT_TOOLS",
+"VALID_ACCOUNTS",
+"DEFAULT_ACCOUNTS",
+"LOCAL_ACCOUNTS",
+"CLOUD_ACCOUNTS",
+"FILE_AND_DIRECTORY_DISCOVERY",
+"ACCOUNT_DISCOVERY_LOCAL_ACCOUNT",
+"PROXY",
+"EXTERNAL_PROXY",
+"MULTI_HOP_PROXY",
+"ACCOUNT_MANIPULATION",
+"ADDITIONAL_CLOUD_CREDENTIALS",
+"ADDITIONAL_CLOUD_ROLES",
+"SSH_AUTHORIZED_KEYS",
+"ADDITIONAL_CONTAINER_CLUSTER_ROLES",
+"MULTI_STAGE_CHANNELS",
+"INGRESS_TOOL_TRANSFER",
+"NATIVE_API",
+"BRUTE_FORCE",
+"AUTOMATED_COLLECTION",
+"SHARED_MODULES",
+"DATA_ENCODING",
+"STANDARD_ENCODING",
+"ACCESS_TOKEN_MANIPULATION",
+"TOKEN_IMPERSONATION_OR_THEFT",
+"CREATE_ACCOUNT",
+"LOCAL_ACCOUNT",
+"DEOBFUSCATE_DECODE_FILES_OR_INFO",
+"EXPLOIT_PUBLIC_FACING_APPLICATION",
+"SUPPLY_CHAIN_COMPROMISE",
+"COMPROMISE_SOFTWARE_DEPENDENCIES_AND_DEVELOPMENT_TOOLS",
+"EXPLOITATION_FOR_CLIENT_EXECUTION",
+"USER_EXECUTION",
+"EXPLOITATION_FOR_CREDENTIAL_ACCESS",
+"LINUX_AND_MAC_FILE_AND_DIRECTORY_PERMISSIONS_MODIFICATION",
+"DOMAIN_POLICY_MODIFICATION",
+"DATA_DESTRUCTION",
+"DATA_ENCRYPTED_FOR_IMPACT",
+"SERVICE_STOP",
+"INHIBIT_SYSTEM_RECOVERY",
+"FIRMWARE_CORRUPTION",
+"RESOURCE_HIJACKING",
+"NETWORK_DENIAL_OF_SERVICE",
+"CLOUD_SERVICE_DISCOVERY",
+"STEAL_APPLICATION_ACCESS_TOKEN",
+"ACCOUNT_ACCESS_REMOVAL",
+"TRANSFER_DATA_TO_CLOUD_ACCOUNT",
+"STEAL_WEB_SESSION_COOKIE",
+"CREATE_OR_MODIFY_SYSTEM_PROCESS",
+"EVENT_TRIGGERED_EXECUTION",
+"BOOT_OR_LOGON_AUTOSTART_EXECUTION",
+"KERNEL_MODULES_AND_EXTENSIONS",
+"SHORTCUT_MODIFICATION",
+"ABUSE_ELEVATION_CONTROL_MECHANISM",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SETUID_AND_SETGID",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SUDO_AND_SUDO_CACHING",
+"UNSECURED_CREDENTIALS",
+"CREDENTIALS_IN_FILES",
+"BASH_HISTORY",
+"PRIVATE_KEYS",
+"SUBVERT_TRUST_CONTROL",
+"INSTALL_ROOT_CERTIFICATE",
+"COMPROMISE_HOST_SOFTWARE_BINARY",
+"CREDENTIALS_FROM_PASSWORD_STORES",
+"MODIFY_AUTHENTICATION_PROCESS",
+"PLUGGABLE_AUTHENTICATION_MODULES",
+"MULTI_FACTOR_AUTHENTICATION",
+"IMPAIR_DEFENSES",
+"DISABLE_OR_MODIFY_TOOLS",
+"INDICATOR_BLOCKING",
+"DISABLE_OR_MODIFY_LINUX_AUDIT_SYSTEM",
+"HIDE_ARTIFACTS",
+"HIDDEN_FILES_AND_DIRECTORIES",
+"HIDDEN_USERS",
+"EXFILTRATION_OVER_WEB_SERVICE",
+"EXFILTRATION_TO_CLOUD_STORAGE",
+"DYNAMIC_RESOLUTION",
+"LATERAL_TOOL_TRANSFER",
+"HIJACK_EXECUTION_FLOW",
+"HIJACK_EXECUTION_FLOW_DYNAMIC_LINKER_HIJACKING",
+"MODIFY_CLOUD_COMPUTE_INFRASTRUCTURE",
+"CREATE_SNAPSHOT",
+"CLOUD_INFRASTRUCTURE_DISCOVERY",
+"DEVELOP_CAPABILITIES",
+"DEVELOP_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES",
+"OBTAIN_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES_VULNERABILITIES",
+"ACTIVE_SCANNING",
+"SCANNING_IP_BLOCKS",
+"STAGE_CAPABILITIES",
+"UPLOAD_MALWARE",
+"CONTAINER_ADMINISTRATION_COMMAND",
+"DEPLOY_CONTAINER",
+"ESCAPE_TO_HOST",
+"CONTAINER_AND_RESOURCE_DISCOVERY",
+"REFLECTIVE_CODE_LOADING",
+"STEAL_OR_FORGE_AUTHENTICATION_CERTIFICATES",
+"FINANCIAL_THEFT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"primaryTactic": {
+"enum": [
+"TACTIC_UNSPECIFIED",
+"RECONNAISSANCE",
+"RESOURCE_DEVELOPMENT",
+"INITIAL_ACCESS",
+"EXECUTION",
+"PERSISTENCE",
+"PRIVILEGE_ESCALATION",
+"DEFENSE_EVASION",
+"CREDENTIAL_ACCESS",
+"DISCOVERY",
+"LATERAL_MOVEMENT",
+"COLLECTION",
+"COMMAND_AND_CONTROL",
+"EXFILTRATION",
+"IMPACT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"primaryTechniques": {
+"items": {
+"enum": [
+"TECHNIQUE_UNSPECIFIED",
+"DATA_OBFUSCATION",
+"DATA_OBFUSCATION_STEGANOGRAPHY",
+"OS_CREDENTIAL_DUMPING",
+"OS_CREDENTIAL_DUMPING_PROC_FILESYSTEM",
+"OS_CREDENTIAL_DUMPING_ETC_PASSWORD_AND_ETC_SHADOW",
+"DATA_FROM_LOCAL_SYSTEM",
+"AUTOMATED_EXFILTRATION",
+"OBFUSCATED_FILES_OR_INFO",
+"STEGANOGRAPHY",
+"COMPILE_AFTER_DELIVERY",
+"COMMAND_OBFUSCATION",
+"SCHEDULED_TRANSFER",
+"SYSTEM_OWNER_USER_DISCOVERY",
+"MASQUERADING",
+"MATCH_LEGITIMATE_NAME_OR_LOCATION",
+"BOOT_OR_LOGON_INITIALIZATION_SCRIPTS",
+"STARTUP_ITEMS",
+"NETWORK_SERVICE_DISCOVERY",
+"SCHEDULED_TASK_JOB",
+"SCHEDULED_TASK_JOB_CRON",
+"CONTAINER_ORCHESTRATION_JOB",
+"PROCESS_INJECTION",
+"INPUT_CAPTURE",
+"INPUT_CAPTURE_KEYLOGGING",
+"PROCESS_DISCOVERY",
+"COMMAND_AND_SCRIPTING_INTERPRETER",
+"UNIX_SHELL",
+"PYTHON",
+"EXPLOITATION_FOR_PRIVILEGE_ESCALATION",
+"PERMISSION_GROUPS_DISCOVERY",
+"CLOUD_GROUPS",
+"INDICATOR_REMOVAL",
+"INDICATOR_REMOVAL_CLEAR_LINUX_OR_MAC_SYSTEM_LOGS",
+"INDICATOR_REMOVAL_CLEAR_COMMAND_HISTORY",
+"INDICATOR_REMOVAL_FILE_DELETION",
+"INDICATOR_REMOVAL_TIMESTOMP",
+"INDICATOR_REMOVAL_CLEAR_MAILBOX_DATA",
+"APPLICATION_LAYER_PROTOCOL",
+"DNS",
+"SOFTWARE_DEPLOYMENT_TOOLS",
+"VALID_ACCOUNTS",
+"DEFAULT_ACCOUNTS",
+"LOCAL_ACCOUNTS",
+"CLOUD_ACCOUNTS",
+"FILE_AND_DIRECTORY_DISCOVERY",
+"ACCOUNT_DISCOVERY_LOCAL_ACCOUNT",
+"PROXY",
+"EXTERNAL_PROXY",
+"MULTI_HOP_PROXY",
+"ACCOUNT_MANIPULATION",
+"ADDITIONAL_CLOUD_CREDENTIALS",
+"ADDITIONAL_CLOUD_ROLES",
+"SSH_AUTHORIZED_KEYS",
+"ADDITIONAL_CONTAINER_CLUSTER_ROLES",
+"MULTI_STAGE_CHANNELS",
+"INGRESS_TOOL_TRANSFER",
+"NATIVE_API",
+"BRUTE_FORCE",
+"AUTOMATED_COLLECTION",
+"SHARED_MODULES",
+"DATA_ENCODING",
+"STANDARD_ENCODING",
+"ACCESS_TOKEN_MANIPULATION",
+"TOKEN_IMPERSONATION_OR_THEFT",
+"CREATE_ACCOUNT",
+"LOCAL_ACCOUNT",
+"DEOBFUSCATE_DECODE_FILES_OR_INFO",
+"EXPLOIT_PUBLIC_FACING_APPLICATION",
+"SUPPLY_CHAIN_COMPROMISE",
+"COMPROMISE_SOFTWARE_DEPENDENCIES_AND_DEVELOPMENT_TOOLS",
+"EXPLOITATION_FOR_CLIENT_EXECUTION",
+"USER_EXECUTION",
+"EXPLOITATION_FOR_CREDENTIAL_ACCESS",
+"LINUX_AND_MAC_FILE_AND_DIRECTORY_PERMISSIONS_MODIFICATION",
+"DOMAIN_POLICY_MODIFICATION",
+"DATA_DESTRUCTION",
+"DATA_ENCRYPTED_FOR_IMPACT",
+"SERVICE_STOP",
+"INHIBIT_SYSTEM_RECOVERY",
+"FIRMWARE_CORRUPTION",
+"RESOURCE_HIJACKING",
+"NETWORK_DENIAL_OF_SERVICE",
+"CLOUD_SERVICE_DISCOVERY",
+"STEAL_APPLICATION_ACCESS_TOKEN",
+"ACCOUNT_ACCESS_REMOVAL",
+"TRANSFER_DATA_TO_CLOUD_ACCOUNT",
+"STEAL_WEB_SESSION_COOKIE",
+"CREATE_OR_MODIFY_SYSTEM_PROCESS",
+"EVENT_TRIGGERED_EXECUTION",
+"BOOT_OR_LOGON_AUTOSTART_EXECUTION",
+"KERNEL_MODULES_AND_EXTENSIONS",
+"SHORTCUT_MODIFICATION",
+"ABUSE_ELEVATION_CONTROL_MECHANISM",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SETUID_AND_SETGID",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SUDO_AND_SUDO_CACHING",
+"UNSECURED_CREDENTIALS",
+"CREDENTIALS_IN_FILES",
+"BASH_HISTORY",
+"PRIVATE_KEYS",
+"SUBVERT_TRUST_CONTROL",
+"INSTALL_ROOT_CERTIFICATE",
+"COMPROMISE_HOST_SOFTWARE_BINARY",
+"CREDENTIALS_FROM_PASSWORD_STORES",
+"MODIFY_AUTHENTICATION_PROCESS",
+"PLUGGABLE_AUTHENTICATION_MODULES",
+"MULTI_FACTOR_AUTHENTICATION",
+"IMPAIR_DEFENSES",
+"DISABLE_OR_MODIFY_TOOLS",
+"INDICATOR_BLOCKING",
+"DISABLE_OR_MODIFY_LINUX_AUDIT_SYSTEM",
+"HIDE_ARTIFACTS",
+"HIDDEN_FILES_AND_DIRECTORIES",
+"HIDDEN_USERS",
+"EXFILTRATION_OVER_WEB_SERVICE",
+"EXFILTRATION_TO_CLOUD_STORAGE",
+"DYNAMIC_RESOLUTION",
+"LATERAL_TOOL_TRANSFER",
+"HIJACK_EXECUTION_FLOW",
+"HIJACK_EXECUTION_FLOW_DYNAMIC_LINKER_HIJACKING",
+"MODIFY_CLOUD_COMPUTE_INFRASTRUCTURE",
+"CREATE_SNAPSHOT",
+"CLOUD_INFRASTRUCTURE_DISCOVERY",
+"DEVELOP_CAPABILITIES",
+"DEVELOP_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES",
+"OBTAIN_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES_VULNERABILITIES",
+"ACTIVE_SCANNING",
+"SCANNING_IP_BLOCKS",
+"STAGE_CAPABILITIES",
+"UPLOAD_MALWARE",
+"CONTAINER_ADMINISTRATION_COMMAND",
+"DEPLOY_CONTAINER",
+"ESCAPE_TO_HOST",
+"CONTAINER_AND_RESOURCE_DISCOVERY",
+"REFLECTIVE_CODE_LOADING",
+"STEAL_OR_FORGE_AUTHENTICATION_CERTIFICATES",
+"FINANCIAL_THEFT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2MuteConfig": {
+"id": "GoogleCloudSecuritycenterV2MuteConfig",
+"properties": {
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"cryptoKeyName": {
+"readOnly": true,
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"expiryTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"filter": {
+"type": "string"
+},
+"mostRecentEditor": {
+"readOnly": true,
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"type": {
+"enum": [
+"MUTE_CONFIG_TYPE_UNSPECIFIED",
+"STATIC",
+"DYNAMIC"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2MuteInfo": {
+"id": "GoogleCloudSecuritycenterV2MuteInfo",
+"properties": {
+"dynamicMuteRecords": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2DynamicMuteRecord"
+},
+"type": "array"
+},
+"staticMute": {
+"$ref": "GoogleCloudSecuritycenterV2StaticMute"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Network": {
+"id": "GoogleCloudSecuritycenterV2Network",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Node": {
+"id": "GoogleCloudSecuritycenterV2Node",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2NodePool": {
+"id": "GoogleCloudSecuritycenterV2NodePool",
+"properties": {
+"name": {
+"type": "string"
+},
+"nodes": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Node"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Notebook": {
+"id": "GoogleCloudSecuritycenterV2Notebook",
+"properties": {
+"lastAuthor": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"notebookUpdateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"service": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2NotificationMessage": {
+"id": "GoogleCloudSecuritycenterV2NotificationMessage",
+"properties": {
+"finding": {
+"$ref": "GoogleCloudSecuritycenterV2Finding"
+},
+"notificationConfigName": {
+"type": "string"
+},
+"resource": {
+"$ref": "GoogleCloudSecuritycenterV2Resource"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Object": {
+"id": "GoogleCloudSecuritycenterV2Object",
+"properties": {
+"containers": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Container"
+},
+"type": "array"
+},
+"group": {
+"type": "string"
+},
+"kind": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2OrgPolicy": {
+"id": "GoogleCloudSecuritycenterV2OrgPolicy",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Package": {
+"id": "GoogleCloudSecuritycenterV2Package",
+"properties": {
+"cpeUri": {
+"type": "string"
+},
+"packageName": {
+"type": "string"
+},
+"packageType": {
+"type": "string"
+},
+"packageVersion": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Pipeline": {
+"id": "GoogleCloudSecuritycenterV2Pipeline",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Pod": {
+"id": "GoogleCloudSecuritycenterV2Pod",
+"properties": {
+"containers": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Container"
+},
+"type": "array"
+},
+"labels": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Label"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2PolicyDriftDetails": {
+"id": "GoogleCloudSecuritycenterV2PolicyDriftDetails",
+"properties": {
+"detectedValue": {
+"type": "string"
+},
+"expectedValue": {
+"type": "string"
+},
+"field": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2PolicyViolationSummary": {
+"id": "GoogleCloudSecuritycenterV2PolicyViolationSummary",
+"properties": {
+"conformantResourcesCount": {
+"format": "int64",
+"type": "string"
+},
+"evaluationErrorsCount": {
+"format": "int64",
+"type": "string"
+},
+"outOfScopeResourcesCount": {
+"format": "int64",
+"type": "string"
+},
+"policyViolationsCount": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2PortRange": {
+"id": "GoogleCloudSecuritycenterV2PortRange",
+"properties": {
+"max": {
+"format": "int64",
+"type": "string"
+},
+"min": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Process": {
+"id": "GoogleCloudSecuritycenterV2Process",
+"properties": {
+"args": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"argumentsTruncated": {
+"type": "boolean"
+},
+"binary": {
+"$ref": "GoogleCloudSecuritycenterV2File"
+},
+"envVariables": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2EnvironmentVariable"
+},
+"type": "array"
+},
+"envVariablesTruncated": {
+"type": "boolean"
+},
+"libraries": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2File"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"parentPid": {
+"format": "int64",
+"type": "string"
+},
+"pid": {
+"format": "int64",
+"type": "string"
+},
+"script": {
+"$ref": "GoogleCloudSecuritycenterV2File"
+},
+"userId": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ProcessSignature": {
+"id": "GoogleCloudSecuritycenterV2ProcessSignature",
+"properties": {
+"memoryHashSignature": {
+"$ref": "GoogleCloudSecuritycenterV2MemoryHashSignature"
+},
+"signatureType": {
+"enum": [
+"SIGNATURE_TYPE_UNSPECIFIED",
+"SIGNATURE_TYPE_PROCESS",
+"SIGNATURE_TYPE_FILE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"yaraRuleSignature": {
+"$ref": "GoogleCloudSecuritycenterV2YaraRuleSignature"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Reference": {
+"id": "GoogleCloudSecuritycenterV2Reference",
+"properties": {
+"source": {
+"type": "string"
+},
+"uri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Requests": {
+"id": "GoogleCloudSecuritycenterV2Requests",
+"properties": {
+"longTermAllowed": {
+"format": "int32",
+"type": "integer"
+},
+"longTermDenied": {
+"format": "int32",
+"type": "integer"
+},
+"ratio": {
+"format": "double",
+"type": "number"
+},
+"shortTermAllowed": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Resource": {
+"id": "GoogleCloudSecuritycenterV2Resource",
+"properties": {
+"adcApplication": {
+"$ref": "GoogleCloudSecuritycenterV2AdcApplication"
+},
+"adcApplicationTemplate": {
+"$ref": "GoogleCloudSecuritycenterV2AdcApplicationTemplateRevision"
+},
+"adcSharedTemplate": {
+"$ref": "GoogleCloudSecuritycenterV2AdcSharedTemplateRevision"
+},
+"application": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplication"
+},
+"awsMetadata": {
+"$ref": "GoogleCloudSecuritycenterV2AwsMetadata"
+},
+"azureMetadata": {
+"$ref": "GoogleCloudSecuritycenterV2AzureMetadata"
+},
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"displayName": {
+"type": "string"
+},
+"gcpMetadata": {
+"$ref": "GcpMetadata"
+},
+"location": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"resourcePath": {
+"$ref": "GoogleCloudSecuritycenterV2ResourcePath"
+},
+"resourcePathString": {
+"type": "string"
+},
+"service": {
+"type": "string"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourceApplication": {
+"id": "GoogleCloudSecuritycenterV2ResourceApplication",
+"properties": {
+"attributes": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributes"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourceApplicationAttributes": {
+"id": "GoogleCloudSecuritycenterV2ResourceApplicationAttributes",
+"properties": {
+"businessOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+},
+"criticality": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesCriticality"
+},
+"developerOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+},
+"environment": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesEnvironment"
+},
+"operatorOwners": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesContactInfo"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourceApplicationAttributesContactInfo": {
+"id": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesContactInfo",
+"properties": {
+"email": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourceApplicationAttributesCriticality": {
+"id": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesCriticality",
+"properties": {
+"type": {
+"enum": [
+"CRITICALITY_TYPE_UNSPECIFIED",
+"MISSION_CRITICAL",
+"HIGH",
+"MEDIUM",
+"LOW"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourceApplicationAttributesEnvironment": {
+"id": "GoogleCloudSecuritycenterV2ResourceApplicationAttributesEnvironment",
+"properties": {
+"type": {
+"enum": [
+"ENVIRONMENT_TYPE_UNSPECIFIED",
+"PRODUCTION",
+"STAGING",
+"TEST",
+"DEVELOPMENT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourcePath": {
+"id": "GoogleCloudSecuritycenterV2ResourcePath",
+"properties": {
+"nodes": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2ResourcePathNode"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourcePathNode": {
+"id": "GoogleCloudSecuritycenterV2ResourcePathNode",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"nodeType": {
+"enum": [
+"RESOURCE_PATH_NODE_TYPE_UNSPECIFIED",
+"GCP_ORGANIZATION",
+"GCP_FOLDER",
+"GCP_PROJECT",
+"AWS_ORGANIZATION",
+"AWS_ORGANIZATIONAL_UNIT",
+"AWS_ACCOUNT",
+"AZURE_MANAGEMENT_GROUP",
+"AZURE_SUBSCRIPTION",
+"AZURE_RESOURCE_GROUP"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ResourceValueConfig": {
+"id": "GoogleCloudSecuritycenterV2ResourceValueConfig",
+"properties": {
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"createTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"resourceLabelsSelector": {
+"additionalProperties": {
+"type": "string"
+},
+"type": "object"
+},
+"resourceType": {
+"type": "string"
+},
+"resourceValue": {
+"enum": [
+"RESOURCE_VALUE_UNSPECIFIED",
+"HIGH",
+"MEDIUM",
+"LOW",
+"NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"scope": {
+"type": "string"
+},
+"sensitiveDataProtectionMapping": {
+"$ref": "GoogleCloudSecuritycenterV2SensitiveDataProtectionMapping"
+},
+"tagValues": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Role": {
+"id": "GoogleCloudSecuritycenterV2Role",
+"properties": {
+"kind": {
+"enum": [
+"KIND_UNSPECIFIED",
+"ROLE",
+"CLUSTER_ROLE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Secret": {
+"id": "GoogleCloudSecuritycenterV2Secret",
+"properties": {
+"environmentVariable": {
+"$ref": "GoogleCloudSecuritycenterV2SecretEnvironmentVariable"
+},
+"filePath": {
+"$ref": "GoogleCloudSecuritycenterV2SecretFilePath"
+},
+"status": {
+"$ref": "GoogleCloudSecuritycenterV2SecretStatus"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecretEnvironmentVariable": {
+"id": "GoogleCloudSecuritycenterV2SecretEnvironmentVariable",
+"properties": {
+"key": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecretFilePath": {
+"id": "GoogleCloudSecuritycenterV2SecretFilePath",
+"properties": {
+"path": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecretStatus": {
+"id": "GoogleCloudSecuritycenterV2SecretStatus",
+"properties": {
+"lastUpdatedTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"validity": {
+"enum": [
+"SECRET_VALIDITY_UNSPECIFIED",
+"SECRET_VALIDITY_UNSUPPORTED",
+"SECRET_VALIDITY_FAILED",
+"SECRET_VALIDITY_INVALID",
+"SECRET_VALIDITY_VALID"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecurityBulletin": {
+"id": "GoogleCloudSecuritycenterV2SecurityBulletin",
+"properties": {
+"bulletinId": {
+"type": "string"
+},
+"submissionTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"suggestedUpgradeVersion": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecurityMarks": {
+"id": "GoogleCloudSecuritycenterV2SecurityMarks",
+"properties": {
+"canonicalName": {
+"type": "string"
+},
+"marks": {
+"additionalProperties": {
+"type": "string"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecurityPolicy": {
+"id": "GoogleCloudSecuritycenterV2SecurityPolicy",
+"properties": {
+"name": {
+"type": "string"
+},
+"preview": {
+"type": "boolean"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SecurityPosture": {
+"id": "GoogleCloudSecuritycenterV2SecurityPosture",
+"properties": {
+"changedPolicy": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"policy": {
+"type": "string"
+},
+"policyDriftDetails": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2PolicyDriftDetails"
+},
+"type": "array"
+},
+"policySet": {
+"type": "string"
+},
+"postureDeployment": {
+"type": "string"
+},
+"postureDeploymentResource": {
+"type": "string"
+},
+"revisionId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SensitiveDataProtectionMapping": {
+"id": "GoogleCloudSecuritycenterV2SensitiveDataProtectionMapping",
+"properties": {
+"highSensitivityMapping": {
+"enum": [
+"RESOURCE_VALUE_UNSPECIFIED",
+"HIGH",
+"MEDIUM",
+"LOW",
+"NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"mediumSensitivityMapping": {
+"enum": [
+"RESOURCE_VALUE_UNSPECIFIED",
+"HIGH",
+"MEDIUM",
+"LOW",
+"NONE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2SensitivityScore": {
+"id": "GoogleCloudSecuritycenterV2SensitivityScore",
+"properties": {
+"score": {
+"enum": [
+"SENSITIVITY_SCORE_LEVEL_UNSPECIFIED",
+"SENSITIVITY_LOW",
+"SENSITIVITY_UNKNOWN",
+"SENSITIVITY_MODERATE",
+"SENSITIVITY_HIGH"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ServiceAccountDelegationInfo": {
+"id": "GoogleCloudSecuritycenterV2ServiceAccountDelegationInfo",
+"properties": {
+"principalEmail": {
+"type": "string"
+},
+"principalSubject": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2StaticMute": {
+"id": "GoogleCloudSecuritycenterV2StaticMute",
+"properties": {
+"applyTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"state": {
+"enum": [
+"MUTE_UNSPECIFIED",
+"MUTED",
+"UNMUTED",
+"UNDEFINED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Subject": {
+"id": "GoogleCloudSecuritycenterV2Subject",
+"properties": {
+"kind": {
+"enum": [
+"AUTH_TYPE_UNSPECIFIED",
+"USER",
+"SERVICEACCOUNT",
+"GROUP"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2TicketInfo": {
+"id": "GoogleCloudSecuritycenterV2TicketInfo",
+"properties": {
+"assignee": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"status": {
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"uri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2ToxicCombination": {
+"id": "GoogleCloudSecuritycenterV2ToxicCombination",
+"properties": {
+"attackExposureScore": {
+"format": "double",
+"type": "number"
+},
+"relatedFindings": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2VertexAi": {
+"id": "GoogleCloudSecuritycenterV2VertexAi",
+"properties": {
+"datasets": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Dataset"
+},
+"type": "array"
+},
+"pipelines": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Pipeline"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2Vulnerability": {
+"id": "GoogleCloudSecuritycenterV2Vulnerability",
+"properties": {
+"cve": {
+"$ref": "GoogleCloudSecuritycenterV2Cve"
+},
+"cwes": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV2Cwe"
+},
+"type": "array"
+},
+"fixedPackage": {
+"$ref": "GoogleCloudSecuritycenterV2Package"
+},
+"offendingPackage": {
+"$ref": "GoogleCloudSecuritycenterV2Package"
+},
+"providerRiskScore": {
+"format": "int64",
+"type": "string"
+},
+"reachable": {
+"type": "boolean"
+},
+"securityBulletin": {
+"$ref": "GoogleCloudSecuritycenterV2SecurityBulletin"
+}
+},
+"type": "object"
+},
+"GoogleCloudSecuritycenterV2YaraRuleSignature": {
+"id": "GoogleCloudSecuritycenterV2YaraRuleSignature",
+"properties": {
+"yaraRule": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"GroupMembership": {
+"id": "GroupMembership",
+"properties": {
+"groupId": {
+"type": "string"
+},
+"groupType": {
+"enum": [
+"GROUP_TYPE_UNSPECIFIED",
+"GROUP_TYPE_TOXIC_COMBINATION",
+"GROUP_TYPE_CHOKEPOINT"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"HttpResponse": {
+"id": "HttpResponse",
+"properties": {
+"path": {
+"type": "string"
+},
+"statusCode": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"IamBinding": {
+"id": "IamBinding",
+"properties": {
+"action": {
+"enum": [
+"ACTION_UNSPECIFIED",
+"ADD",
+"REMOVE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"member": {
+"type": "string"
+},
+"role": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Indicator": {
+"id": "Indicator",
+"properties": {
+"domains": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"ipAddresses": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"signatures": {
+"items": {
+"$ref": "ProcessSignature"
+},
+"type": "array"
+},
+"uris": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"InfoType": {
+"id": "InfoType",
+"properties": {
+"name": {
+"type": "string"
+},
+"sensitivityScore": {
+"$ref": "SensitivityScore"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"InvocationReference": {
+"id": "InvocationReference",
+"properties": {
+"invocationId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"IpRule": {
+"id": "IpRule",
+"properties": {
+"portRanges": {
+"items": {
+"$ref": "PortRange"
+},
+"type": "array"
+},
+"protocol": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"IpRules": {
+"id": "IpRules",
+"properties": {
+"allowed": {
+"$ref": "Allowed"
+},
+"denied": {
+"$ref": "Denied"
+},
+"destinationIpRanges": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"direction": {
+"enum": [
+"DIRECTION_UNSPECIFIED",
+"INGRESS",
+"EGRESS"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"exposedServices": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"sourceIpRanges": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Job": {
+"id": "Job",
+"properties": {
+"errorCode": {
+"format": "int32",
+"type": "integer"
+},
+"location": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"state": {
+"enum": [
+"JOB_STATE_UNSPECIFIED",
+"PENDING",
+"RUNNING",
+"SUCCEEDED",
+"FAILED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"KernelRootkit": {
+"id": "KernelRootkit",
+"properties": {
+"name": {
+"type": "string"
+},
+"unexpectedCodeModification": {
+"type": "boolean"
+},
+"unexpectedFtraceHandler": {
+"type": "boolean"
+},
+"unexpectedInterruptHandler": {
+"type": "boolean"
+},
+"unexpectedKernelCodePages": {
+"type": "boolean"
+},
+"unexpectedKprobeHandler": {
+"type": "boolean"
+},
+"unexpectedProcessesInRunqueue": {
+"type": "boolean"
+},
+"unexpectedReadOnlyDataModification": {
+"type": "boolean"
+},
+"unexpectedSystemCallHandler": {
+"type": "boolean"
+}
+},
+"type": "object"
+},
+"Kubernetes": {
+"id": "Kubernetes",
+"properties": {
+"accessReviews": {
+"items": {
+"$ref": "AccessReview"
+},
+"type": "array"
+},
+"bindings": {
+"items": {
+"$ref": "GoogleCloudSecuritycenterV1Binding"
+},
+"type": "array"
+},
+"nodePools": {
+"items": {
+"$ref": "NodePool"
+},
+"type": "array"
+},
+"nodes": {
+"items": {
+"$ref": "Node"
+},
+"type": "array"
+},
+"objects": {
+"items": {
+"$ref": "Object"
+},
+"type": "array"
+},
+"pods": {
+"items": {
+"$ref": "Pod"
+},
+"type": "array"
+},
+"roles": {
+"items": {
+"$ref": "Role"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Label": {
+"id": "Label",
+"properties": {
+"name": {
+"type": "string"
+},
+"value": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"LoadBalancer": {
+"id": "LoadBalancer",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"LogEntry": {
+"id": "LogEntry",
+"properties": {
+"cloudLoggingEntry": {
+"$ref": "CloudLoggingEntry"
+}
+},
+"type": "object"
+},
+"MemoryHashSignature": {
+"id": "MemoryHashSignature",
+"properties": {
+"binaryFamily": {
+"type": "string"
+},
+"detections": {
+"items": {
+"$ref": "Detection"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"MitreAttack": {
+"id": "MitreAttack",
+"properties": {
+"additionalTactics": {
+"items": {
+"enum": [
+"TACTIC_UNSPECIFIED",
+"RECONNAISSANCE",
+"RESOURCE_DEVELOPMENT",
+"INITIAL_ACCESS",
+"EXECUTION",
+"PERSISTENCE",
+"PRIVILEGE_ESCALATION",
+"DEFENSE_EVASION",
+"CREDENTIAL_ACCESS",
+"DISCOVERY",
+"LATERAL_MOVEMENT",
+"COLLECTION",
+"COMMAND_AND_CONTROL",
+"EXFILTRATION",
+"IMPACT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"additionalTechniques": {
+"items": {
+"enum": [
+"TECHNIQUE_UNSPECIFIED",
+"DATA_OBFUSCATION",
+"DATA_OBFUSCATION_STEGANOGRAPHY",
+"OS_CREDENTIAL_DUMPING",
+"OS_CREDENTIAL_DUMPING_PROC_FILESYSTEM",
+"OS_CREDENTIAL_DUMPING_ETC_PASSWORD_AND_ETC_SHADOW",
+"DATA_FROM_LOCAL_SYSTEM",
+"AUTOMATED_EXFILTRATION",
+"OBFUSCATED_FILES_OR_INFO",
+"STEGANOGRAPHY",
+"COMPILE_AFTER_DELIVERY",
+"COMMAND_OBFUSCATION",
+"SCHEDULED_TRANSFER",
+"SYSTEM_OWNER_USER_DISCOVERY",
+"MASQUERADING",
+"MATCH_LEGITIMATE_NAME_OR_LOCATION",
+"BOOT_OR_LOGON_INITIALIZATION_SCRIPTS",
+"STARTUP_ITEMS",
+"NETWORK_SERVICE_DISCOVERY",
+"SCHEDULED_TASK_JOB",
+"SCHEDULED_TASK_JOB_CRON",
+"CONTAINER_ORCHESTRATION_JOB",
+"PROCESS_INJECTION",
+"INPUT_CAPTURE",
+"INPUT_CAPTURE_KEYLOGGING",
+"PROCESS_DISCOVERY",
+"COMMAND_AND_SCRIPTING_INTERPRETER",
+"UNIX_SHELL",
+"PYTHON",
+"EXPLOITATION_FOR_PRIVILEGE_ESCALATION",
+"PERMISSION_GROUPS_DISCOVERY",
+"CLOUD_GROUPS",
+"INDICATOR_REMOVAL",
+"INDICATOR_REMOVAL_CLEAR_LINUX_OR_MAC_SYSTEM_LOGS",
+"INDICATOR_REMOVAL_CLEAR_COMMAND_HISTORY",
+"INDICATOR_REMOVAL_FILE_DELETION",
+"INDICATOR_REMOVAL_TIMESTOMP",
+"INDICATOR_REMOVAL_CLEAR_MAILBOX_DATA",
+"APPLICATION_LAYER_PROTOCOL",
+"DNS",
+"SOFTWARE_DEPLOYMENT_TOOLS",
+"VALID_ACCOUNTS",
+"DEFAULT_ACCOUNTS",
+"LOCAL_ACCOUNTS",
+"CLOUD_ACCOUNTS",
+"FILE_AND_DIRECTORY_DISCOVERY",
+"ACCOUNT_DISCOVERY_LOCAL_ACCOUNT",
+"PROXY",
+"EXTERNAL_PROXY",
+"MULTI_HOP_PROXY",
+"ACCOUNT_MANIPULATION",
+"ADDITIONAL_CLOUD_CREDENTIALS",
+"ADDITIONAL_CLOUD_ROLES",
+"SSH_AUTHORIZED_KEYS",
+"ADDITIONAL_CONTAINER_CLUSTER_ROLES",
+"MULTI_STAGE_CHANNELS",
+"INGRESS_TOOL_TRANSFER",
+"NATIVE_API",
+"BRUTE_FORCE",
+"AUTOMATED_COLLECTION",
+"SHARED_MODULES",
+"DATA_ENCODING",
+"STANDARD_ENCODING",
+"ACCESS_TOKEN_MANIPULATION",
+"TOKEN_IMPERSONATION_OR_THEFT",
+"CREATE_ACCOUNT",
+"LOCAL_ACCOUNT",
+"DEOBFUSCATE_DECODE_FILES_OR_INFO",
+"EXPLOIT_PUBLIC_FACING_APPLICATION",
+"SUPPLY_CHAIN_COMPROMISE",
+"COMPROMISE_SOFTWARE_DEPENDENCIES_AND_DEVELOPMENT_TOOLS",
+"EXPLOITATION_FOR_CLIENT_EXECUTION",
+"USER_EXECUTION",
+"EXPLOITATION_FOR_CREDENTIAL_ACCESS",
+"LINUX_AND_MAC_FILE_AND_DIRECTORY_PERMISSIONS_MODIFICATION",
+"DOMAIN_POLICY_MODIFICATION",
+"DATA_DESTRUCTION",
+"DATA_ENCRYPTED_FOR_IMPACT",
+"SERVICE_STOP",
+"INHIBIT_SYSTEM_RECOVERY",
+"FIRMWARE_CORRUPTION",
+"RESOURCE_HIJACKING",
+"NETWORK_DENIAL_OF_SERVICE",
+"CLOUD_SERVICE_DISCOVERY",
+"STEAL_APPLICATION_ACCESS_TOKEN",
+"ACCOUNT_ACCESS_REMOVAL",
+"TRANSFER_DATA_TO_CLOUD_ACCOUNT",
+"STEAL_WEB_SESSION_COOKIE",
+"CREATE_OR_MODIFY_SYSTEM_PROCESS",
+"EVENT_TRIGGERED_EXECUTION",
+"BOOT_OR_LOGON_AUTOSTART_EXECUTION",
+"KERNEL_MODULES_AND_EXTENSIONS",
+"SHORTCUT_MODIFICATION",
+"ABUSE_ELEVATION_CONTROL_MECHANISM",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SETUID_AND_SETGID",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SUDO_AND_SUDO_CACHING",
+"UNSECURED_CREDENTIALS",
+"CREDENTIALS_IN_FILES",
+"BASH_HISTORY",
+"PRIVATE_KEYS",
+"SUBVERT_TRUST_CONTROL",
+"INSTALL_ROOT_CERTIFICATE",
+"COMPROMISE_HOST_SOFTWARE_BINARY",
+"CREDENTIALS_FROM_PASSWORD_STORES",
+"MODIFY_AUTHENTICATION_PROCESS",
+"PLUGGABLE_AUTHENTICATION_MODULES",
+"MULTI_FACTOR_AUTHENTICATION",
+"IMPAIR_DEFENSES",
+"DISABLE_OR_MODIFY_TOOLS",
+"INDICATOR_BLOCKING",
+"DISABLE_OR_MODIFY_LINUX_AUDIT_SYSTEM",
+"HIDE_ARTIFACTS",
+"HIDDEN_FILES_AND_DIRECTORIES",
+"HIDDEN_USERS",
+"EXFILTRATION_OVER_WEB_SERVICE",
+"EXFILTRATION_TO_CLOUD_STORAGE",
+"DYNAMIC_RESOLUTION",
+"LATERAL_TOOL_TRANSFER",
+"HIJACK_EXECUTION_FLOW",
+"HIJACK_EXECUTION_FLOW_DYNAMIC_LINKER_HIJACKING",
+"MODIFY_CLOUD_COMPUTE_INFRASTRUCTURE",
+"CREATE_SNAPSHOT",
+"CLOUD_INFRASTRUCTURE_DISCOVERY",
+"DEVELOP_CAPABILITIES",
+"DEVELOP_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES",
+"OBTAIN_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES_VULNERABILITIES",
+"ACTIVE_SCANNING",
+"SCANNING_IP_BLOCKS",
+"STAGE_CAPABILITIES",
+"UPLOAD_MALWARE",
+"CONTAINER_ADMINISTRATION_COMMAND",
+"DEPLOY_CONTAINER",
+"ESCAPE_TO_HOST",
+"CONTAINER_AND_RESOURCE_DISCOVERY",
+"REFLECTIVE_CODE_LOADING",
+"STEAL_OR_FORGE_AUTHENTICATION_CERTIFICATES",
+"FINANCIAL_THEFT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"primaryTactic": {
+"enum": [
+"TACTIC_UNSPECIFIED",
+"RECONNAISSANCE",
+"RESOURCE_DEVELOPMENT",
+"INITIAL_ACCESS",
+"EXECUTION",
+"PERSISTENCE",
+"PRIVILEGE_ESCALATION",
+"DEFENSE_EVASION",
+"CREDENTIAL_ACCESS",
+"DISCOVERY",
+"LATERAL_MOVEMENT",
+"COLLECTION",
+"COMMAND_AND_CONTROL",
+"EXFILTRATION",
+"IMPACT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"primaryTechniques": {
+"items": {
+"enum": [
+"TECHNIQUE_UNSPECIFIED",
+"DATA_OBFUSCATION",
+"DATA_OBFUSCATION_STEGANOGRAPHY",
+"OS_CREDENTIAL_DUMPING",
+"OS_CREDENTIAL_DUMPING_PROC_FILESYSTEM",
+"OS_CREDENTIAL_DUMPING_ETC_PASSWORD_AND_ETC_SHADOW",
+"DATA_FROM_LOCAL_SYSTEM",
+"AUTOMATED_EXFILTRATION",
+"OBFUSCATED_FILES_OR_INFO",
+"STEGANOGRAPHY",
+"COMPILE_AFTER_DELIVERY",
+"COMMAND_OBFUSCATION",
+"SCHEDULED_TRANSFER",
+"SYSTEM_OWNER_USER_DISCOVERY",
+"MASQUERADING",
+"MATCH_LEGITIMATE_NAME_OR_LOCATION",
+"BOOT_OR_LOGON_INITIALIZATION_SCRIPTS",
+"STARTUP_ITEMS",
+"NETWORK_SERVICE_DISCOVERY",
+"SCHEDULED_TASK_JOB",
+"SCHEDULED_TASK_JOB_CRON",
+"CONTAINER_ORCHESTRATION_JOB",
+"PROCESS_INJECTION",
+"INPUT_CAPTURE",
+"INPUT_CAPTURE_KEYLOGGING",
+"PROCESS_DISCOVERY",
+"COMMAND_AND_SCRIPTING_INTERPRETER",
+"UNIX_SHELL",
+"PYTHON",
+"EXPLOITATION_FOR_PRIVILEGE_ESCALATION",
+"PERMISSION_GROUPS_DISCOVERY",
+"CLOUD_GROUPS",
+"INDICATOR_REMOVAL",
+"INDICATOR_REMOVAL_CLEAR_LINUX_OR_MAC_SYSTEM_LOGS",
+"INDICATOR_REMOVAL_CLEAR_COMMAND_HISTORY",
+"INDICATOR_REMOVAL_FILE_DELETION",
+"INDICATOR_REMOVAL_TIMESTOMP",
+"INDICATOR_REMOVAL_CLEAR_MAILBOX_DATA",
+"APPLICATION_LAYER_PROTOCOL",
+"DNS",
+"SOFTWARE_DEPLOYMENT_TOOLS",
+"VALID_ACCOUNTS",
+"DEFAULT_ACCOUNTS",
+"LOCAL_ACCOUNTS",
+"CLOUD_ACCOUNTS",
+"FILE_AND_DIRECTORY_DISCOVERY",
+"ACCOUNT_DISCOVERY_LOCAL_ACCOUNT",
+"PROXY",
+"EXTERNAL_PROXY",
+"MULTI_HOP_PROXY",
+"ACCOUNT_MANIPULATION",
+"ADDITIONAL_CLOUD_CREDENTIALS",
+"ADDITIONAL_CLOUD_ROLES",
+"SSH_AUTHORIZED_KEYS",
+"ADDITIONAL_CONTAINER_CLUSTER_ROLES",
+"MULTI_STAGE_CHANNELS",
+"INGRESS_TOOL_TRANSFER",
+"NATIVE_API",
+"BRUTE_FORCE",
+"AUTOMATED_COLLECTION",
+"SHARED_MODULES",
+"DATA_ENCODING",
+"STANDARD_ENCODING",
+"ACCESS_TOKEN_MANIPULATION",
+"TOKEN_IMPERSONATION_OR_THEFT",
+"CREATE_ACCOUNT",
+"LOCAL_ACCOUNT",
+"DEOBFUSCATE_DECODE_FILES_OR_INFO",
+"EXPLOIT_PUBLIC_FACING_APPLICATION",
+"SUPPLY_CHAIN_COMPROMISE",
+"COMPROMISE_SOFTWARE_DEPENDENCIES_AND_DEVELOPMENT_TOOLS",
+"EXPLOITATION_FOR_CLIENT_EXECUTION",
+"USER_EXECUTION",
+"EXPLOITATION_FOR_CREDENTIAL_ACCESS",
+"LINUX_AND_MAC_FILE_AND_DIRECTORY_PERMISSIONS_MODIFICATION",
+"DOMAIN_POLICY_MODIFICATION",
+"DATA_DESTRUCTION",
+"DATA_ENCRYPTED_FOR_IMPACT",
+"SERVICE_STOP",
+"INHIBIT_SYSTEM_RECOVERY",
+"FIRMWARE_CORRUPTION",
+"RESOURCE_HIJACKING",
+"NETWORK_DENIAL_OF_SERVICE",
+"CLOUD_SERVICE_DISCOVERY",
+"STEAL_APPLICATION_ACCESS_TOKEN",
+"ACCOUNT_ACCESS_REMOVAL",
+"TRANSFER_DATA_TO_CLOUD_ACCOUNT",
+"STEAL_WEB_SESSION_COOKIE",
+"CREATE_OR_MODIFY_SYSTEM_PROCESS",
+"EVENT_TRIGGERED_EXECUTION",
+"BOOT_OR_LOGON_AUTOSTART_EXECUTION",
+"KERNEL_MODULES_AND_EXTENSIONS",
+"SHORTCUT_MODIFICATION",
+"ABUSE_ELEVATION_CONTROL_MECHANISM",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SETUID_AND_SETGID",
+"ABUSE_ELEVATION_CONTROL_MECHANISM_SUDO_AND_SUDO_CACHING",
+"UNSECURED_CREDENTIALS",
+"CREDENTIALS_IN_FILES",
+"BASH_HISTORY",
+"PRIVATE_KEYS",
+"SUBVERT_TRUST_CONTROL",
+"INSTALL_ROOT_CERTIFICATE",
+"COMPROMISE_HOST_SOFTWARE_BINARY",
+"CREDENTIALS_FROM_PASSWORD_STORES",
+"MODIFY_AUTHENTICATION_PROCESS",
+"PLUGGABLE_AUTHENTICATION_MODULES",
+"MULTI_FACTOR_AUTHENTICATION",
+"IMPAIR_DEFENSES",
+"DISABLE_OR_MODIFY_TOOLS",
+"INDICATOR_BLOCKING",
+"DISABLE_OR_MODIFY_LINUX_AUDIT_SYSTEM",
+"HIDE_ARTIFACTS",
+"HIDDEN_FILES_AND_DIRECTORIES",
+"HIDDEN_USERS",
+"EXFILTRATION_OVER_WEB_SERVICE",
+"EXFILTRATION_TO_CLOUD_STORAGE",
+"DYNAMIC_RESOLUTION",
+"LATERAL_TOOL_TRANSFER",
+"HIJACK_EXECUTION_FLOW",
+"HIJACK_EXECUTION_FLOW_DYNAMIC_LINKER_HIJACKING",
+"MODIFY_CLOUD_COMPUTE_INFRASTRUCTURE",
+"CREATE_SNAPSHOT",
+"CLOUD_INFRASTRUCTURE_DISCOVERY",
+"DEVELOP_CAPABILITIES",
+"DEVELOP_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES",
+"OBTAIN_CAPABILITIES_MALWARE",
+"OBTAIN_CAPABILITIES_VULNERABILITIES",
+"ACTIVE_SCANNING",
+"SCANNING_IP_BLOCKS",
+"STAGE_CAPABILITIES",
+"UPLOAD_MALWARE",
+"CONTAINER_ADMINISTRATION_COMMAND",
+"DEPLOY_CONTAINER",
+"ESCAPE_TO_HOST",
+"CONTAINER_AND_RESOURCE_DISCOVERY",
+"REFLECTIVE_CODE_LOADING",
+"STEAL_OR_FORGE_AUTHENTICATION_CERTIFICATES",
+"FINANCIAL_THEFT"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"type": "array"
+},
+"version": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"MuteInfo": {
+"id": "MuteInfo",
+"properties": {
+"dynamicMuteRecords": {
+"items": {
+"$ref": "DynamicMuteRecord"
+},
+"type": "array"
+},
+"staticMute": {
+"$ref": "StaticMute"
+}
+},
+"type": "object"
+},
+"Network": {
+"id": "Network",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Node": {
+"id": "Node",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"NodePool": {
+"id": "NodePool",
+"properties": {
+"name": {
+"type": "string"
+},
+"nodes": {
+"items": {
+"$ref": "Node"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Notebook": {
+"id": "Notebook",
+"properties": {
+"lastAuthor": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"notebookUpdateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"service": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Object": {
+"id": "Object",
+"properties": {
+"containers": {
+"items": {
+"$ref": "Container"
+},
+"type": "array"
+},
+"group": {
+"type": "string"
+},
+"kind": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"OrgPolicy": {
+"id": "OrgPolicy",
+"properties": {
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Package": {
+"id": "Package",
+"properties": {
+"cpeUri": {
+"type": "string"
+},
+"packageName": {
+"type": "string"
+},
+"packageType": {
+"type": "string"
+},
+"packageVersion": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Pipeline": {
+"id": "Pipeline",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Pod": {
+"id": "Pod",
+"properties": {
+"containers": {
+"items": {
+"$ref": "Container"
+},
+"type": "array"
+},
+"labels": {
+"items": {
+"$ref": "Label"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"PolicyDriftDetails": {
+"id": "PolicyDriftDetails",
+"properties": {
+"detectedValue": {
+"type": "string"
+},
+"expectedValue": {
+"type": "string"
+},
+"field": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"PolicyViolationSummary": {
+"id": "PolicyViolationSummary",
+"properties": {
+"conformantResourcesCount": {
+"format": "int64",
+"type": "string"
+},
+"evaluationErrorsCount": {
+"format": "int64",
+"type": "string"
+},
+"outOfScopeResourcesCount": {
+"format": "int64",
+"type": "string"
+},
+"policyViolationsCount": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"PortRange": {
+"id": "PortRange",
+"properties": {
+"max": {
+"format": "int64",
+"type": "string"
+},
+"min": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"Process": {
+"id": "Process",
+"properties": {
+"args": {
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"argumentsTruncated": {
+"type": "boolean"
+},
+"binary": {
+"$ref": "File"
+},
+"envVariables": {
+"items": {
+"$ref": "EnvironmentVariable"
+},
+"type": "array"
+},
+"envVariablesTruncated": {
+"type": "boolean"
+},
+"libraries": {
+"items": {
+"$ref": "File"
+},
+"type": "array"
+},
+"name": {
+"type": "string"
+},
+"parentPid": {
+"format": "int64",
+"type": "string"
+},
+"pid": {
+"format": "int64",
+"type": "string"
+},
+"script": {
+"$ref": "File"
+},
+"userId": {
+"format": "int64",
+"type": "string"
+}
+},
+"type": "object"
+},
+"ProcessSignature": {
+"id": "ProcessSignature",
+"properties": {
+"memoryHashSignature": {
+"$ref": "MemoryHashSignature"
+},
+"signatureType": {
+"enum": [
+"SIGNATURE_TYPE_UNSPECIFIED",
+"SIGNATURE_TYPE_PROCESS",
+"SIGNATURE_TYPE_FILE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"yaraRuleSignature": {
+"$ref": "YaraRuleSignature"
+}
+},
+"type": "object"
+},
+"RapidVulnerabilityDetectionSettings": {
+"id": "RapidVulnerabilityDetectionSettings",
+"properties": {
+"modules": {
+"additionalProperties": {
+"$ref": "Config"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+},
+"serviceEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"Reference": {
+"id": "Reference",
+"properties": {
+"source": {
+"type": "string"
+},
+"uri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Requests": {
+"id": "Requests",
+"properties": {
+"longTermAllowed": {
+"format": "int32",
+"type": "integer"
+},
+"longTermDenied": {
+"format": "int32",
+"type": "integer"
+},
+"ratio": {
+"format": "double",
+"type": "number"
+},
+"shortTermAllowed": {
+"format": "int32",
+"type": "integer"
+}
+},
+"type": "object"
+},
+"ResourcePath": {
+"id": "ResourcePath",
+"properties": {
+"nodes": {
+"items": {
+"$ref": "ResourcePathNode"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"ResourcePathNode": {
+"id": "ResourcePathNode",
+"properties": {
+"displayName": {
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"nodeType": {
+"enum": [
+"RESOURCE_PATH_NODE_TYPE_UNSPECIFIED",
+"GCP_ORGANIZATION",
+"GCP_FOLDER",
+"GCP_PROJECT",
+"AWS_ORGANIZATION",
+"AWS_ORGANIZATIONAL_UNIT",
+"AWS_ACCOUNT",
+"AZURE_MANAGEMENT_GROUP",
+"AZURE_SUBSCRIPTION",
+"AZURE_RESOURCE_GROUP"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Role": {
+"id": "Role",
+"properties": {
+"kind": {
+"enum": [
+"KIND_UNSPECIFIED",
+"ROLE",
+"CLUSTER_ROLE"
+],
+"enumDescriptions": [
+"",
+"",
+""
+],
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Secret": {
+"id": "Secret",
+"properties": {
+"environmentVariable": {
+"$ref": "SecretEnvironmentVariable"
+},
+"filePath": {
+"$ref": "SecretFilePath"
+},
+"status": {
+"$ref": "SecretStatus"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecretEnvironmentVariable": {
+"id": "SecretEnvironmentVariable",
+"properties": {
+"key": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecretFilePath": {
+"id": "SecretFilePath",
+"properties": {
+"path": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecretStatus": {
+"id": "SecretStatus",
+"properties": {
+"lastUpdatedTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"validity": {
+"enum": [
+"SECRET_VALIDITY_UNSPECIFIED",
+"SECRET_VALIDITY_UNSUPPORTED",
+"SECRET_VALIDITY_FAILED",
+"SECRET_VALIDITY_INVALID",
+"SECRET_VALIDITY_VALID"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecurityBulletin": {
+"id": "SecurityBulletin",
+"properties": {
+"bulletinId": {
+"type": "string"
+},
+"submissionTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"suggestedUpgradeVersion": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecurityCenterSettings": {
+"id": "SecurityCenterSettings",
+"properties": {
+"cryptoKeyName": {
+"type": "string"
+},
+"logSinkProject": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"onboardingTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+},
+"orgServiceAccount": {
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecurityHealthAnalyticsSettings": {
+"id": "SecurityHealthAnalyticsSettings",
+"properties": {
+"modules": {
+"additionalProperties": {
+"$ref": "Config"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+},
+"serviceAccount": {
+"readOnly": true,
+"type": "string"
+},
+"serviceEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecurityMarks": {
+"id": "SecurityMarks",
+"properties": {
+"canonicalName": {
+"type": "string"
+},
+"marks": {
+"additionalProperties": {
+"type": "string"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecurityPolicy": {
+"id": "SecurityPolicy",
+"properties": {
+"name": {
+"type": "string"
+},
+"preview": {
+"type": "boolean"
+},
+"type": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SecurityPosture": {
+"id": "SecurityPosture",
+"properties": {
+"changedPolicy": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"policy": {
+"type": "string"
+},
+"policyDriftDetails": {
+"items": {
+"$ref": "PolicyDriftDetails"
+},
+"type": "array"
+},
+"policySet": {
+"type": "string"
+},
+"postureDeployment": {
+"type": "string"
+},
+"postureDeploymentResource": {
+"type": "string"
+},
+"revisionId": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"SensitivityScore": {
+"id": "SensitivityScore",
+"properties": {
+"score": {
+"enum": [
+"SENSITIVITY_SCORE_LEVEL_UNSPECIFIED",
+"SENSITIVITY_LOW",
+"SENSITIVITY_UNKNOWN",
+"SENSITIVITY_MODERATE",
+"SENSITIVITY_HIGH"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"ServiceAccountDelegationInfo": {
+"id": "ServiceAccountDelegationInfo",
+"properties": {
+"principalEmail": {
+"type": "string"
+},
+"principalSubject": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"StaticMute": {
+"id": "StaticMute",
+"properties": {
+"applyTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"state": {
+"enum": [
+"MUTE_UNSPECIFIED",
+"MUTED",
+"UNMUTED",
+"UNDEFINED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"Subject": {
+"id": "Subject",
+"properties": {
+"kind": {
+"enum": [
+"AUTH_TYPE_UNSPECIFIED",
+"USER",
+"SERVICEACCOUNT",
+"GROUP"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"ns": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Subscription": {
+"id": "Subscription",
+"properties": {
+"details": {
+"$ref": "Details"
+},
+"name": {
+"type": "string"
+},
+"tier": {
+"enum": [
+"TIER_UNSPECIFIED",
+"STANDARD",
+"PREMIUM",
+"ENTERPRISE",
+"ENTERPRISE_MC"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+"",
+""
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"TicketInfo": {
+"id": "TicketInfo",
+"properties": {
+"assignee": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"id": {
+"type": "string"
+},
+"status": {
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"type": "string"
+},
+"uri": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"ToxicCombination": {
+"id": "ToxicCombination",
+"properties": {
+"attackExposureScore": {
+"format": "double",
+"type": "number"
+},
+"relatedFindings": {
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"VertexAi": {
+"id": "VertexAi",
+"properties": {
+"datasets": {
+"items": {
+"$ref": "Dataset"
+},
+"type": "array"
+},
+"pipelines": {
+"items": {
+"$ref": "Pipeline"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"VirtualMachineThreatDetectionSettings": {
+"id": "VirtualMachineThreatDetectionSettings",
+"properties": {
+"modules": {
+"additionalProperties": {
+"$ref": "Config"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+},
+"serviceAccount": {
+"readOnly": true,
+"type": "string"
+},
+"serviceEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"Vulnerability": {
+"id": "Vulnerability",
+"properties": {
+"cve": {
+"$ref": "Cve"
+},
+"cwes": {
+"items": {
+"$ref": "Cwe"
+},
+"type": "array"
+},
+"fixedPackage": {
+"$ref": "Package"
+},
+"offendingPackage": {
+"$ref": "Package"
+},
+"providerRiskScore": {
+"format": "int64",
+"type": "string"
+},
+"reachable": {
+"type": "boolean"
+},
+"securityBulletin": {
+"$ref": "SecurityBulletin"
+}
+},
+"type": "object"
+},
+"VulnerabilityCountBySeverity": {
+"id": "VulnerabilityCountBySeverity",
+"properties": {
+"severityToFindingCount": {
+"additionalProperties": {
+"format": "int64",
+"type": "string"
+},
+"type": "object"
+}
+},
+"type": "object"
+},
+"VulnerabilitySnapshot": {
+"id": "VulnerabilitySnapshot",
+"properties": {
+"cloudProvider": {
+"enum": [
+"CLOUD_PROVIDER_UNSPECIFIED",
+"GOOGLE_CLOUD_PLATFORM",
+"AMAZON_WEB_SERVICES",
+"MICROSOFT_AZURE"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"findingCount": {
+"$ref": "VulnerabilityCountBySeverity"
+},
+"name": {
+"type": "string"
+},
+"snapshotTime": {
+"format": "google-datetime",
+"type": "string"
+}
+},
+"type": "object"
+},
+"WebSecurityScannerSettings": {
+"id": "WebSecurityScannerSettings",
+"properties": {
+"modules": {
+"additionalProperties": {
+"$ref": "Config"
+},
+"type": "object"
+},
+"name": {
+"type": "string"
+},
+"serviceEnablementState": {
+"enum": [
+"ENABLEMENT_STATE_UNSPECIFIED",
+"INHERITED",
+"ENABLED",
+"DISABLED"
+],
+"enumDescriptions": [
+"",
+"",
+"",
+""
+],
+"type": "string"
+},
+"updateTime": {
+"format": "google-datetime",
+"readOnly": true,
+"type": "string"
+}
+},
+"type": "object"
+},
+"YaraRuleSignature": {
+"id": "YaraRuleSignature",
+"properties": {
+"yaraRule": {
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"servicePath": "",
+"title": "Security Command Center API",
+"version": "v1beta2",
+"version_module": true
+}

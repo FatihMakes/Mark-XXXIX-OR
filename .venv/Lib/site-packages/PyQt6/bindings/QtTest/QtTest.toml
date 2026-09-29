@@ -1,0 +1,6 @@
+# Automatically generated configuration for PyQt6.QtTest.
+
+sip-version = "6.15.3"
+sip-abi-version = "13.8"
+module-tags = ["Qt_6_11_0", "Windows"]
+module-disabled-features = ["PyQt_OpenGL_ES2", "PyQt_XCB", "PyQt_Wayland", "PyQt_Vulkan"]

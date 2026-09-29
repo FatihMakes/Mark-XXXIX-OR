@@ -1,0 +1,131 @@
+name: Build PortAudio lib
+on:
+  push:
+    branches-ignore:
+      - master
+permissions:
+  # This is needed for pushing a new commit to the repo:
+  contents: write
+env:
+  CMAKE_POLICY_VERSION_MINIMUM: "3.5"
+
+jobs:
+
+  macos:
+    runs-on: macos-latest
+    env:
+      CMAKE_OSX_ARCHITECTURES: "arm64;x86_64"
+      MACOSX_DEPLOYMENT_TARGET: "10.9"
+    steps:
+      - name: checkout portaudio
+        uses: actions/checkout@v5
+        with:
+          repository: PortAudio/portaudio
+          ref: v19.7.0
+          path: portaudio
+      - name: cmake configure
+        run: |
+          cmake -S portaudio -B build -D CMAKE_BUILD_TYPE=Release
+      - name: cmake build
+        run: |
+          cmake --build build
+      - name: move dylib
+        run: |
+          mv build/libportaudio.dylib .
+      - name: show some information about dylib
+        run: |
+          file libportaudio.dylib
+          otool -L libportaudio.dylib
+      - name: upload dylib
+        uses: actions/upload-artifact@v5
+        with:
+          name: macos-dylib
+          path: libportaudio.dylib
+
+  windows:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        platform: [x64, Win32, ARM64]
+        asio: ["", "-asio"]
+        include:
+          - platform: x64
+            platform-suffix: 64bit
+          - platform: Win32
+            platform-suffix: 32bit
+          - platform: ARM64
+            platform-suffix: arm64
+
+    env:
+      # Reproducible build by avoiding time stamp
+      LDFLAGS: "/Brepro"
+    steps:
+      - name: checkout portaudio
+        uses: actions/checkout@v5
+        with:
+          repository: PortAudio/portaudio
+          ref: v19.7.0
+          path: portaudio
+      # The next portaudio release will have an auto-download feature:
+      - name: download and extract ASIO SDK
+        if: matrix.asio
+        run: |
+          curl -L -o asiosdk.zip https://www.steinberg.net/asiosdk
+          7z x asiosdk.zip
+      - name: cmake configure
+        run: |
+          cmake -S portaudio -B build -A ${{ matrix.platform }} -D PA_USE_ASIO=${{ matrix.asio && 'ON' || 'OFF' }}
+      - name: cmake build
+        run: |
+          cmake --build build --config Release
+      - name: rename DLL
+        run: |
+          mv build/Release/portaudio_*.dll libportaudio${{ matrix.platform-suffix }}${{ matrix.asio }}.dll
+      - name: show some information about DLL
+        run: |
+          ldd libportaudio${{ matrix.platform-suffix }}${{ matrix.asio }}.dll
+      - name: upload DLL
+        uses: actions/upload-artifact@v5
+        with:
+          name: windows-${{ matrix.platform }}-dll${{ matrix.asio }}
+          path: libportaudio${{ matrix.platform-suffix }}${{ matrix.asio }}.dll
+
+  push:
+    runs-on: ubuntu-latest
+    needs: [macos, windows]
+    steps:
+      - name: Clone Git repository
+        uses: actions/checkout@v5
+      - name: Retrieve dylib
+        uses: actions/download-artifact@v6
+        with:
+          name: macos-dylib
+      - name: Retrieve x64 DLL
+        uses: actions/download-artifact@v6
+        with:
+          name: windows-x64-dll
+      - name: Retrieve x64 DLL with ASIO support
+        uses: actions/download-artifact@v6
+        with:
+          name: windows-x64-dll-asio
+      - name: Retrieve Win32 DLL
+        uses: actions/download-artifact@v6
+        with:
+          name: windows-Win32-dll
+      - name: Retrieve Win32 DLL with ASIO support
+        uses: actions/download-artifact@v6
+        with:
+          name: windows-Win32-dll-asio
+      - name: Retrieve ARM64 DLL
+        uses: actions/download-artifact@v6
+        with:
+          name: windows-ARM64-dll
+      - name: Retrieve ARM64 DLL with ASIO support
+        uses: actions/download-artifact@v6
+        with:
+          name: windows-ARM64-dll-asio
+      - name: Commit and push binaries (if there are changes)
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -am "Update binaries" && git push || true

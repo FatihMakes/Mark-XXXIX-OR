@@ -1,0 +1,22 @@
+module QtQuick.Controls.Universal.impl
+linktarget Qt6::qtquickcontrols2universalstyleimplplugin
+optional plugin qtquickcontrols2universalstyleimplplugin
+classname QtQuickControls2UniversalStyleImplPlugin
+typeinfo plugins.qmltypes
+depends QtQuick auto
+prefer :/qt-project.org/imports/QtQuick/Controls/Universal/impl/
+CheckIndicator 6.0 CheckIndicator.qml
+CheckIndicator 2.0 CheckIndicator.qml
+CopyAction 6.11 CopyAction.qml
+CutAction 6.11 CutAction.qml
+DeleteAction 6.11 DeleteAction.qml
+PasteAction 6.11 PasteAction.qml
+RadioIndicator 6.0 RadioIndicator.qml
+RadioIndicator 2.0 RadioIndicator.qml
+RedoAction 6.11 RedoAction.qml
+SelectAllAction 6.11 SelectAllAction.qml
+SwitchIndicator 6.0 SwitchIndicator.qml
+SwitchIndicator 2.0 SwitchIndicator.qml
+TextEditingContextMenu 6.11 TextEditingContextMenu.qml
+UndoAction 6.11 UndoAction.qml
+

@@ -1,0 +1,20 @@
+module QtQuick.Controls.Windows.impl
+linktarget Qt6::qtquickcontrols2windowsstyleimplplugin
+optional plugin qtquickcontrols2windowsstyleimplplugin
+classname QtQuickControls2WindowsStyleImplPlugin
+typeinfo QuickControls2WindowsStyleImpl.qmltypes
+depends QtQuick auto
+prefer :/qt-project.org/imports/QtQuick/Controls/Windows/impl/
+CheckIndicator 6.0 CheckIndicator.qml
+CheckIndicator 2.0 CheckIndicator.qml
+CopyAction 6.11 CopyAction.qml
+CutAction 6.11 CutAction.qml
+DeleteAction 6.11 DeleteAction.qml
+PasteAction 6.11 PasteAction.qml
+RedoAction 6.11 RedoAction.qml
+SelectAllAction 6.11 SelectAllAction.qml
+SwitchIndicator 6.0 SwitchIndicator.qml
+SwitchIndicator 2.0 SwitchIndicator.qml
+TextEditingContextMenu 6.11 TextEditingContextMenu.qml
+UndoAction 6.11 UndoAction.qml
+

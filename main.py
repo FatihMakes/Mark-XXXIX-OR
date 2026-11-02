@@ -9,6 +9,7 @@ import sounddevice as sd
 from google import genai
 from google.genai import types
 from ui import JarvisUI
+from core.voice_input import build_voice_system_instruction
 from memory.memory_manager import (
     load_memory, update_memory, format_memory_for_prompt,
     should_extract_memory, extract_memory
@@ -554,16 +555,13 @@ class JarvisLive:
             f"Use this to calculate exact times for reminders.\n\n"
         )
 
-        parts = [time_ctx]
-        if mem_str:
-            parts.append(mem_str)
-        parts.append(sys_prompt)
-
         return types.LiveConnectConfig(
             response_modalities=["AUDIO"],
             output_audio_transcription={},
             input_audio_transcription={},
-            system_instruction="\n".join(parts),
+            system_instruction=build_voice_system_instruction(
+                time_ctx, mem_str, sys_prompt
+            ),
             tools=[{"function_declarations": TOOL_DECLARATIONS}],
             session_resumption=types.SessionResumptionConfig(),
             speech_config=types.SpeechConfig(

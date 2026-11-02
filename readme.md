@@ -51,6 +51,10 @@ python main.py
 
 > ⚠️ **Installation Note:** To keep the repository lightweight, some OS-specific dependencies are not bundled in `requirements.txt`. If you run into a `ModuleNotFoundError`, simply install the missing package via `pip install <module_name>` for your specific system.
 
+### Voice recognition
+
+Live voice continues to use Gemini Live input-audio transcription. Its session prompt now prioritizes English, including varied English accents, and asks the assistant to preserve spoken names and technical terms or clarify genuinely unclear audio rather than guess. This is prompt-based guidance, not a new offline recognition model, so results can still depend on microphone quality and background noise.
+
 ---
 
 ## 📋 Requirements
